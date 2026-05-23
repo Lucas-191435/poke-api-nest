@@ -6,6 +6,7 @@ import {
   ApiResponse,
   ApiQuery,
 } from '@nestjs/swagger';
+import { Public } from 'src/common/auth/public.decorator';
 
 
 @ApiTags('pokemon')
@@ -13,6 +14,7 @@ import {
 export class PokemonController {
   constructor(private readonly pokemonService: PokemonService) {}
 
+  @Public()
   @Get()
   @ApiOperation({ summary: 'Lista paginada de Pokémon' })
   @ApiQuery({
