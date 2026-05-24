@@ -19,10 +19,21 @@ export class AuthController {
     schema: {
       type: 'object',
       properties: {
-        accessToken: { type: 'string', description: 'Token de acesso JWT' },
+        user: {
+          type: 'object',
+          properties: {
+            id: { type: 'string' },
+            avatar: { type: 'string', nullable: true },
+            email: { type: 'string' },
+            name: { type: 'string' },
+            role: { type: 'string' },
+          },
+        },
+        token: { type: 'string', description: 'Token JWT de acesso' },
       },
     },
   })
+  @ApiResponse({ status: 401, description: 'Credenciais inválidas' })
   login(@Body() dto: LoginDto) {
     return this.authService.login(dto.email, dto.password);
   }
