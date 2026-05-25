@@ -11,4 +11,14 @@ export class AuthRepository {
             where: { email },
         });
     }
+
+    async savePasswordResetToken(userId: string, token: string, expires: Date) {
+        return this.prisma.user.update({
+            where: { id: userId },
+            data: {
+                resetToken: token,
+                resetTokenExpiry: expires,
+            },
+        });
+    }
 }

@@ -10,10 +10,6 @@ export class AuthService {
           private readonly authRepository: AuthRepository,
   ) {}
 
-  getHello(): string {
-    return 'Hello World!';
-  }
-
   async login(email: string, password: string){
     const user = await this.authRepository.findUserByEmail(email);
     if (!user) {
@@ -39,5 +35,20 @@ export class AuthService {
         }, 
         token: token
       };
+  }
+
+  async resetPassword(email : string) {
+    const user = await this.authRepository.findUserByEmail(email);
+    if (!user) {
+      Logger.warn(`User not found: ${email}`);
+      throw new UnauthorizedException('Credenciais inválidas');
+    }
+
+    const token = crypto.randomBytes(32).toString("hex");
+      const expires = new Date(Date.now() + 1000 * 60 * 30); // 30 min
+
+    await this.authRepository.savePasswordResetToken(user.id, token, expires);
+
+    return token;
   }
 }

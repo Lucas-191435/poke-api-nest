@@ -8,12 +8,27 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
 
-  const config = new DocumentBuilder()
-    .setTitle('Poke API')
-    .setDescription('API de Pokémon construída com NestJS')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
+const config = new DocumentBuilder()
+  .setTitle('🧩 Poké API')
+  .setDescription(`
+## 🧩 API RESTful desenvolvida por **Lucas-191435** com **Node.js**, **TypeScript** e **Prisma ORM**.
+
+A API integra dados da PokéAPI e oferece recursos para gerenciamento de pokémons, movimentos, itens e usuários autenticados.
+
+### 📦 Módulos disponíveis
+- 🐾 Pokémon
+- 🎒 My Pokémon
+- ⚔️ Moves
+- 🔗 Pokémon Moves
+- 🧪 Items
+- 👤 User
+
+### 🔐 Autenticação
+Os endpoints protegidos utilizam autenticação via **Bearer Token (JWT)**.
+`)
+  .setVersion('1.0')
+  .addBearerAuth()
+  .build();
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
