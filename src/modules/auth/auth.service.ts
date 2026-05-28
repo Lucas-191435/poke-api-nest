@@ -7,10 +7,10 @@ import { JsonWebTokenError, sign } from "jsonwebtoken";
 @Injectable()
 export class AuthService {
   constructor(
-          private readonly authRepository: AuthRepository,
-  ) {}
+    private readonly authRepository: AuthRepository,
+  ) { }
 
-  async login(email: string, password: string){
+  async login(email: string, password: string) {
     const user = await this.authRepository.findUserByEmail(email);
     if (!user) {
       Logger.warn(`User not found: ${email}`);
@@ -23,21 +23,28 @@ export class AuthService {
       throw new UnauthorizedException('Credenciais inválidas');
     }
 
-    const token = sign({ id: user.id }, String(authConfig.secret), { expiresIn: '64h', algorithm: "HS512", })
+    const token = sign(
+      { id: user.id },
+      String(authConfig.secret),
+      {
+        expiresIn: authConfig.expiresIn,
+        algorithm: authConfig.algorithm
+      }
+    );
 
     return {
-        user: {
-          id: user.id,
-          avatar: user.avatar,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-        }, 
-        token: token
-      };
+      user: {
+        id: user.id,
+        avatar: user.avatar,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+      },
+      token: token
+    };
   }
 
-  async resetPassword(email : string) {
+  async resetPassword(email: string) {
     const user = await this.authRepository.findUserByEmail(email);
     if (!user) {
       Logger.warn(`User not found: ${email}`);
@@ -45,7 +52,7 @@ export class AuthService {
     }
 
     const token = crypto.randomBytes(32).toString("hex");
-      const expires = new Date(Date.now() + 1000 * 60 * 30); // 30 min
+    const expires = new Date(Date.now() + 1000 * 60 * 30); // 30 min
 
     await this.authRepository.savePasswordResetToken(user.id, token, expires);
 

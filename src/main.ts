@@ -27,11 +27,28 @@ A API integra dados da PokéAPI e oferece recursos para gerenciamento de pokémo
 Os endpoints protegidos utilizam autenticação via **Bearer Token (JWT)**.
 `)
   .setVersion('1.0')
+  .setContact(
+    'Lucas-191435',
+    'https://github.com/Lucas-191435',
+    ""
+  )
   .addBearerAuth()
   .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document);
+  SwaggerModule.setup('docs', app, document, {
+     customSiteTitle: 'Poké API Docs',
+      customfavIcon: 'https://www.clipartmax.com/png/middle/22-227332_pokemon-icon-png.png',
+  customCss: `
+    .topbar {
+      background-color: #1e293b;
+    }
+  `,
+    swaggerOptions: {
+      
+      defaultModelsExpandDepth: -1,
+    },
+  });
 
   const port = process.env.PORT ?? 3333;
   await app.listen(port);
