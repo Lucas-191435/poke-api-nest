@@ -7,6 +7,7 @@ import { PokemonModule } from './modules/pokemon/pokemon.module';
 import { PrismaModule } from './common/database/prisma.module';
 import { AuthModule as JwtGuardModule } from './common/auth/auth.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { MyPokemonModule } from './modules/my-pokemon/myPokemon.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { AuthModule } from './modules/auth/auth.module';
     JwtGuardModule,
     AuthModule,
     PokemonModule,
+    MyPokemonModule,
   ],
   controllers: [AppController],
   providers: [

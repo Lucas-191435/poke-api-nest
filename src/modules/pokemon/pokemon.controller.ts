@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { BadRequestException, Controller, Get, Param, Query } from '@nestjs/common';
 import { PokemonService } from './pokemon.service';
 import {
   ApiTags,
@@ -12,7 +12,7 @@ import { Public } from 'src/common/auth/public.decorator';
 @ApiTags('pokemon')
 @Controller("pokemon")
 export class PokemonController {
-  constructor(private readonly pokemonService: PokemonService) {}
+  constructor(private readonly pokemonService: PokemonService) { }
 
   @Public()
   @Get()
@@ -57,7 +57,21 @@ export class PokemonController {
     @Query('types') types?: string[],
     @Query('weight') weight?: string,
     @Query('query') query?: string,
-  ){
+  ) {
     return this.pokemonService.getPokemons({ page, pageSize, types, weight, query, });
+  }
+
+  @Public()
+  @Get(':id')
+  @ApiResponse({
+    status: 200,
+    description: 'Detalhes do Pokémon retornados com sucesso',
+  })
+  @ApiOperation({ summary: 'Detalhes de um Pokémon' })
+  async getPokemon(@Param('id') id: string) {
+    if (!id) {
+      throw new BadRequestException('ID é obrigatório');
+    }
+    return this.pokemonService.getPokemon(id);
   }
 }

@@ -19,5 +19,9 @@ export class PokemonService {
         const pokemons = await this.pokemonRepository.getPokemons({ page, pageSize, query, types, weight });
         return pokemons;
     }
-}
 
+    async getPokemon(id: string) {
+        const pokemon = await this.pokemonRepository.getPokemon(id);
+        return pokemon;
+    }
+}

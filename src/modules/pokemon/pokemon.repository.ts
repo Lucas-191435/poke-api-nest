@@ -82,4 +82,13 @@ export class PokemonRepository {
 
         return {pokes, pokesCount};
     }
+
+    async getPokemon(id: string) {
+        const pokemon = await this.prisma.pokemon.findUnique({
+            where: {
+                id: id,
+            },
+        });
+        return pokemon;
+    }
 }
