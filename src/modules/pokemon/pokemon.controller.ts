@@ -14,7 +14,7 @@ import { Public } from 'src/common/auth/public.decorator';
 export class PokemonController {
   constructor(private readonly pokemonService: PokemonService) { }
 
-  @Public()
+  
   @Get()
   @ApiOperation({ summary: 'Lista paginada de Pokémon' })
   @ApiQuery({
@@ -61,7 +61,6 @@ export class PokemonController {
     return this.pokemonService.getPokemons({ page, pageSize, types, weight, query, });
   }
 
-  @Public()
   @Get(':id')
   @ApiResponse({
     status: 200,

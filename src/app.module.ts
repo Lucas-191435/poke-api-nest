@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { AppController } from './app.controller';
@@ -8,6 +8,7 @@ import { PrismaModule } from './common/database/prisma.module';
 import { AuthModule as JwtGuardModule } from './common/auth/auth.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { MyPokemonModule } from './modules/my-pokemon/myPokemon.module';
+import { LoggerMiddleware } from './common/middleware/logger.middleware';
 
 @Module({
   imports: [
@@ -32,4 +33,8 @@ import { MyPokemonModule } from './modules/my-pokemon/myPokemon.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

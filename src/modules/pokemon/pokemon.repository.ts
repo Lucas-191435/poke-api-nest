@@ -80,7 +80,7 @@ export class PokemonRepository {
         
 
 
-        return {pokes, pokesCount};
+        return {pokemon: pokes.map(p => ({ ...p, number: p.pokeId })), pokesCount};
     }
 
     async getPokemon(id: string) {

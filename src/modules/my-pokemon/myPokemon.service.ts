@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MyPokemonRepository } from './myPokemon.repository';
-import { CapturePokemonDto, LeavePokemonDto, UpdatePokemonTeamDto } from './dto';
+import { CapturePokemonDto,  UpdatePokemonMovesDto, UpdatePokemonTeamDto } from './dto';
 
 @Injectable()
 export class MyPokemonService {
@@ -13,19 +13,23 @@ export class MyPokemonService {
         return pokemon;
     }
 
-    async capturePokemon(dto: CapturePokemonDto) {
+    async capturePokemon(dto: CapturePokemonDto & { userId: string }) {
         const pokemon = await this.myPokemonRepository.capturePokemon(dto);
         return pokemon;
     }
 
-    async leavePokemon(dto: LeavePokemonDto) {
+    async leavePokemon(dto: { pokemonId: string, userId: string }) {
         const result = await this.myPokemonRepository.leavePokemon(dto);
         return result;
     }
 
-    async updatePokemonTeam(dto: UpdatePokemonTeamDto) {
+    async updatePokemonTeam(dto: UpdatePokemonTeamDto & { userId: string }) {
         const result = await this.myPokemonRepository.updatePokemonTeam(dto);
         return result;
     }
 
+    async updatePokemonMoves(dto:  { userId: string, data: UpdatePokemonMovesDto }) {
+        const result = await this.myPokemonRepository.updatePokemonMoves(dto);
+        return result;
+    }
 }

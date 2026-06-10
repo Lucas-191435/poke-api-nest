@@ -1,6 +1,7 @@
 import { Injectable, BadRequestException, Logger } from "@nestjs/common";
 import { PrismaService } from "src/common/database/prisma.service";
 import { Prisma } from "src/generated/prisma/client";
+import { UpdatePokemonMovesDto } from "./dto";
 
 @Injectable()
 export class MyPokemonRepository {
@@ -128,4 +129,19 @@ export class MyPokemonRepository {
             details: result,
         };
     };
+
+    updatePokemonMoves = async ({ userId, data }: { userId: string, data: UpdatePokemonMovesDto }) => {
+        const { myPokemonId, teamName, moves } = data;
+
+        const result = await this.prisma.myPokemon.update({
+            where: {
+                userId: userId,
+                id: myPokemonId
+            },
+            data: {
+                [teamName + "Move"]: moves
+            }
+        });
+        return result;
+    }
 }

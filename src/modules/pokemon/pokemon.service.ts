@@ -15,8 +15,13 @@ export class PokemonService {
         types,
         weight,
     }: { page?: number; pageSize?: number; query?: string; types?: string[]; weight?: string }) {
-
-        const pokemons = await this.pokemonRepository.getPokemons({ page, pageSize, query, types, weight });
+        const pokemons = await this.pokemonRepository.getPokemons({ 
+            page: parseInt(String(page)), 
+            pageSize: parseInt(String(pageSize)), 
+            query, 
+            types, 
+            weight 
+        });
         return pokemons;
     }
 

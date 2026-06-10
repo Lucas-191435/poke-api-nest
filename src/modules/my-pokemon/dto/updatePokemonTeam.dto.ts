@@ -2,12 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdatePokemonTeamDto {
     @ApiProperty({
-        description: 'ID do usuário que deseja atualizar o time de Pokémons',
-        example: '123e4567-e89b-12d3-a456-426614174000',
-    })
-    userId!: string;
-
-    @ApiProperty({
         description: 'Nome do time que será atualizado',
         example: 'teamAlpha',
     })
