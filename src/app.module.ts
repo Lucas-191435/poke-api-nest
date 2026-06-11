@@ -9,6 +9,7 @@ import { AuthModule as JwtGuardModule } from './common/auth/auth.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { MyPokemonModule } from './modules/my-pokemon/myPokemon.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { PokemonMoveModule } from './modules/pokemonMove/pokeMove.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
     AuthModule,
     PokemonModule,
     MyPokemonModule,
+    PokemonMoveModule,
   ],
   controllers: [AppController],
   providers: [
