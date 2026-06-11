@@ -7,6 +7,7 @@ import {
 } from '@nestjs/swagger';
 import { Public } from 'src/common/auth/public.decorator';
 import { ItemsService } from './items.service';
+import { Throttle } from '@nestjs/throttler';
 
 
 @ApiTags('items')
@@ -14,8 +15,14 @@ import { ItemsService } from './items.service';
 export class ItemsController {
   constructor(private readonly itemsService: ItemsService) { }
 
-  
+
   @Get()
+  @Throttle({
+    default: {
+      limit: 70,
+      ttl: 60000,
+    },
+  })
   @ApiOperation({ summary: 'Lista paginada de items' })
   @ApiQuery({
     name: 'page',
