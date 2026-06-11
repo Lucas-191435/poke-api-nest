@@ -1,7 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/common/database/prisma.service";
 import { Prisma } from "src/generated/prisma/client";
-
+import { transformPokemonData } from "./util";
+import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 @Injectable()
 export class PokemonRepository {
     constructor(private readonly prisma: PrismaService) { }
@@ -65,8 +66,8 @@ export class PokemonRepository {
             AND: conditions.length > 0 ? conditions : undefined,
         };
 
-        
-        const [pokes, pokesCount] = await Promise.all([
+
+        const [pokes, count] = await Promise.all([
             this.prisma.pokemon.findMany({
                 orderBy: {
                     pokeId: 'asc',
@@ -77,18 +78,34 @@ export class PokemonRepository {
             }),
             this.prisma.pokemon.count({ where }),
         ]);
-        
 
+        const pokedex = pokes.map(p => transformPokemonData(p))
 
-        return {pokemon: pokes.map(p => ({ ...p, number: p.pokeId })), pokesCount};
+        return { pokemon: pokedex, count };
     }
 
-    async getPokemon(id: string) {
-        const pokemon = await this.prisma.pokemon.findUnique({
+    async getPokemon(Id: string) {
+        const value = Id;
+
+        const isNumeric = !isNaN(Number(value));
+        const pokeId = isNumeric ? Number(value) : undefined;
+        const id = !isNumeric ? value : undefined;
+
+        const conditions: Array<Record<string, any>> = [];
+        if (id) conditions.push({ id });
+        if (pokeId !== undefined) conditions.push({ pokeId });
+
+        const pokemon = await this.prisma.pokemon.findFirst({
             where: {
-                id: id,
+                OR: conditions,
             },
         });
-        return pokemon;
+
+        if (!pokemon) {
+            throw new UnauthorizedException('Pokémon não encontrado')
+        }
+
+        const pk = transformPokemonData(pokemon);
+        return pk
     }
 }
