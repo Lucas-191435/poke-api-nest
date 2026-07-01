@@ -7,6 +7,7 @@ import {
   ApiQuery,
 } from '@nestjs/swagger';
 import { Public } from 'src/common/auth/public.decorator';
+import { Throttle } from '@nestjs/throttler';
 
 
 @ApiTags('pokemon')
@@ -16,6 +17,12 @@ export class PokemonController {
 
   
   @Get()
+  @Throttle({
+  default: {
+    limit: 100,
+    ttl: 60000,
+  },
+})
   @ApiOperation({ summary: 'Lista paginada de Pokémon' })
   @ApiQuery({
     name: 'page',

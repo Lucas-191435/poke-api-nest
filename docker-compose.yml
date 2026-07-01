@@ -1,0 +1,13 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        DATABASE_URL: ${DATABASE_URL}
+
+    env_file:
+      - .env.production.local
+
+    ports:
+      - "4001:4001"
