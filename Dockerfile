@@ -1,5 +1,8 @@
 FROM node:22-alpine AS builder
 
+ARG DATABASE_URL
+ENV DATABASE_URL=$DATABASE_URL
+
 WORKDIR /app
 
 COPY package.json yarn.lock* ./
@@ -19,5 +22,3 @@ RUN yarn install --production
 
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
-
-CMD ["node", "dist/src/main.js"]
