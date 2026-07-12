@@ -58,7 +58,8 @@ export const ModelName = {
   PokemonMove: 'PokemonMove',
   MyPokemon: 'MyPokemon',
   ChatMessage: 'ChatMessage',
-  ChatRoom: 'ChatRoom'
+  ChatRoom: 'ChatRoom',
+  ChatRoomUser: 'ChatRoomUser'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -232,6 +233,16 @@ export const ChatRoomScalarFieldEnum = {
 export type ChatRoomScalarFieldEnum = (typeof ChatRoomScalarFieldEnum)[keyof typeof ChatRoomScalarFieldEnum]
 
 
+export const ChatRoomUserScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  chatRoomId: 'chatRoomId',
+  joinedAt: 'joinedAt'
+} as const
+
+export type ChatRoomUserScalarFieldEnum = (typeof ChatRoomUserScalarFieldEnum)[keyof typeof ChatRoomUserScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -363,4 +374,13 @@ export const ChatRoomOrderByRelevanceFieldEnum = {
 } as const
 
 export type ChatRoomOrderByRelevanceFieldEnum = (typeof ChatRoomOrderByRelevanceFieldEnum)[keyof typeof ChatRoomOrderByRelevanceFieldEnum]
+
+
+export const ChatRoomUserOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  chatRoomId: 'chatRoomId'
+} as const
+
+export type ChatRoomUserOrderByRelevanceFieldEnum = (typeof ChatRoomUserOrderByRelevanceFieldEnum)[keyof typeof ChatRoomUserOrderByRelevanceFieldEnum]
 

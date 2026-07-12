@@ -391,7 +391,8 @@ export const ModelName = {
   PokemonMove: 'PokemonMove',
   MyPokemon: 'MyPokemon',
   ChatMessage: 'ChatMessage',
-  ChatRoom: 'ChatRoom'
+  ChatRoom: 'ChatRoom',
+  ChatRoomUser: 'ChatRoomUser'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -407,7 +408,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "pokemon" | "item" | "move" | "pokemonMove" | "myPokemon" | "chatMessage" | "chatRoom"
+    modelProps: "user" | "pokemon" | "item" | "move" | "pokemonMove" | "myPokemon" | "chatMessage" | "chatRoom" | "chatRoomUser"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -939,6 +940,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ChatRoomUser: {
+      payload: Prisma.$ChatRoomUserPayload<ExtArgs>
+      fields: Prisma.ChatRoomUserFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ChatRoomUserFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatRoomUserPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ChatRoomUserFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatRoomUserPayload>
+        }
+        findFirst: {
+          args: Prisma.ChatRoomUserFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatRoomUserPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ChatRoomUserFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatRoomUserPayload>
+        }
+        findMany: {
+          args: Prisma.ChatRoomUserFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatRoomUserPayload>[]
+        }
+        create: {
+          args: Prisma.ChatRoomUserCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatRoomUserPayload>
+        }
+        createMany: {
+          args: Prisma.ChatRoomUserCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.ChatRoomUserDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatRoomUserPayload>
+        }
+        update: {
+          args: Prisma.ChatRoomUserUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatRoomUserPayload>
+        }
+        deleteMany: {
+          args: Prisma.ChatRoomUserDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ChatRoomUserUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.ChatRoomUserUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatRoomUserPayload>
+        }
+        aggregate: {
+          args: Prisma.ChatRoomUserAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateChatRoomUser>
+        }
+        groupBy: {
+          args: Prisma.ChatRoomUserGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ChatRoomUserGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ChatRoomUserCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ChatRoomUserCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1133,6 +1200,16 @@ export const ChatRoomScalarFieldEnum = {
 export type ChatRoomScalarFieldEnum = (typeof ChatRoomScalarFieldEnum)[keyof typeof ChatRoomScalarFieldEnum]
 
 
+export const ChatRoomUserScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  chatRoomId: 'chatRoomId',
+  joinedAt: 'joinedAt'
+} as const
+
+export type ChatRoomUserScalarFieldEnum = (typeof ChatRoomUserScalarFieldEnum)[keyof typeof ChatRoomUserScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1264,6 +1341,15 @@ export const ChatRoomOrderByRelevanceFieldEnum = {
 } as const
 
 export type ChatRoomOrderByRelevanceFieldEnum = (typeof ChatRoomOrderByRelevanceFieldEnum)[keyof typeof ChatRoomOrderByRelevanceFieldEnum]
+
+
+export const ChatRoomUserOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  chatRoomId: 'chatRoomId'
+} as const
+
+export type ChatRoomUserOrderByRelevanceFieldEnum = (typeof ChatRoomUserOrderByRelevanceFieldEnum)[keyof typeof ChatRoomUserOrderByRelevanceFieldEnum]
 
 
 
@@ -1466,6 +1552,7 @@ export type GlobalOmitConfig = {
   myPokemon?: Prisma.MyPokemonOmit
   chatMessage?: Prisma.ChatMessageOmit
   chatRoom?: Prisma.ChatRoomOmit
+  chatRoomUser?: Prisma.ChatRoomUserOmit
 }
 
 /* Types for Logging */
