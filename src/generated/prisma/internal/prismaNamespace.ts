@@ -389,7 +389,9 @@ export const ModelName = {
   Item: 'Item',
   Move: 'Move',
   PokemonMove: 'PokemonMove',
-  MyPokemon: 'MyPokemon'
+  MyPokemon: 'MyPokemon',
+  ChatMessage: 'ChatMessage',
+  ChatRoom: 'ChatRoom'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -405,7 +407,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "pokemon" | "item" | "move" | "pokemonMove" | "myPokemon"
+    modelProps: "user" | "pokemon" | "item" | "move" | "pokemonMove" | "myPokemon" | "chatMessage" | "chatRoom"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -805,6 +807,138 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ChatMessage: {
+      payload: Prisma.$ChatMessagePayload<ExtArgs>
+      fields: Prisma.ChatMessageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ChatMessageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatMessagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ChatMessageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatMessagePayload>
+        }
+        findFirst: {
+          args: Prisma.ChatMessageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatMessagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ChatMessageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatMessagePayload>
+        }
+        findMany: {
+          args: Prisma.ChatMessageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatMessagePayload>[]
+        }
+        create: {
+          args: Prisma.ChatMessageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatMessagePayload>
+        }
+        createMany: {
+          args: Prisma.ChatMessageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.ChatMessageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatMessagePayload>
+        }
+        update: {
+          args: Prisma.ChatMessageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatMessagePayload>
+        }
+        deleteMany: {
+          args: Prisma.ChatMessageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ChatMessageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.ChatMessageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatMessagePayload>
+        }
+        aggregate: {
+          args: Prisma.ChatMessageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateChatMessage>
+        }
+        groupBy: {
+          args: Prisma.ChatMessageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ChatMessageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ChatMessageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ChatMessageCountAggregateOutputType> | number
+        }
+      }
+    }
+    ChatRoom: {
+      payload: Prisma.$ChatRoomPayload<ExtArgs>
+      fields: Prisma.ChatRoomFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ChatRoomFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatRoomPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ChatRoomFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatRoomPayload>
+        }
+        findFirst: {
+          args: Prisma.ChatRoomFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatRoomPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ChatRoomFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatRoomPayload>
+        }
+        findMany: {
+          args: Prisma.ChatRoomFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatRoomPayload>[]
+        }
+        create: {
+          args: Prisma.ChatRoomCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatRoomPayload>
+        }
+        createMany: {
+          args: Prisma.ChatRoomCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.ChatRoomDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatRoomPayload>
+        }
+        update: {
+          args: Prisma.ChatRoomUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatRoomPayload>
+        }
+        deleteMany: {
+          args: Prisma.ChatRoomDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ChatRoomUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.ChatRoomUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatRoomPayload>
+        }
+        aggregate: {
+          args: Prisma.ChatRoomAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateChatRoom>
+        }
+        groupBy: {
+          args: Prisma.ChatRoomGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ChatRoomGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ChatRoomCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ChatRoomCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -977,6 +1111,28 @@ export const MyPokemonScalarFieldEnum = {
 export type MyPokemonScalarFieldEnum = (typeof MyPokemonScalarFieldEnum)[keyof typeof MyPokemonScalarFieldEnum]
 
 
+export const ChatMessageScalarFieldEnum = {
+  id: 'id',
+  text: 'text',
+  createdAt: 'createdAt',
+  userId: 'userId',
+  chatRoomId: 'chatRoomId',
+  deletedAt: 'deletedAt'
+} as const
+
+export type ChatMessageScalarFieldEnum = (typeof ChatMessageScalarFieldEnum)[keyof typeof ChatMessageScalarFieldEnum]
+
+
+export const ChatRoomScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ChatRoomScalarFieldEnum = (typeof ChatRoomScalarFieldEnum)[keyof typeof ChatRoomScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1090,6 +1246,24 @@ export const MyPokemonOrderByRelevanceFieldEnum = {
 } as const
 
 export type MyPokemonOrderByRelevanceFieldEnum = (typeof MyPokemonOrderByRelevanceFieldEnum)[keyof typeof MyPokemonOrderByRelevanceFieldEnum]
+
+
+export const ChatMessageOrderByRelevanceFieldEnum = {
+  id: 'id',
+  text: 'text',
+  userId: 'userId',
+  chatRoomId: 'chatRoomId'
+} as const
+
+export type ChatMessageOrderByRelevanceFieldEnum = (typeof ChatMessageOrderByRelevanceFieldEnum)[keyof typeof ChatMessageOrderByRelevanceFieldEnum]
+
+
+export const ChatRoomOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name'
+} as const
+
+export type ChatRoomOrderByRelevanceFieldEnum = (typeof ChatRoomOrderByRelevanceFieldEnum)[keyof typeof ChatRoomOrderByRelevanceFieldEnum]
 
 
 
@@ -1290,6 +1464,8 @@ export type GlobalOmitConfig = {
   move?: Prisma.MoveOmit
   pokemonMove?: Prisma.PokemonMoveOmit
   myPokemon?: Prisma.MyPokemonOmit
+  chatMessage?: Prisma.ChatMessageOmit
+  chatRoom?: Prisma.ChatRoomOmit
 }
 
 /* Types for Logging */

@@ -41,21 +41,22 @@ enum ItemCategory {
 }
 
 model User {
-  id               String      @id @default(uuid())
-  email            String      @unique
+  id               String        @id @default(uuid())
+  email            String        @unique
   password         String?
-  role             Role        @default(CLIENT)
+  role             Role          @default(CLIENT)
   name             String
   avatar           String?
   birthday         DateTime?
-  oauthId          String?     @unique
+  oauthId          String?       @unique
   oauthProvider    String?
   oauthProfileUrl  String?
-  resetToken       String?     @unique
+  resetToken       String?       @unique
   resetTokenExpiry DateTime?
-  createdAt        DateTime    @default(now())
-  updatedAt        DateTime    @updatedAt
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
   myPokemons       MyPokemon[]
+  messages         ChatMessage[]
 
   @@map("users") // Nome da tabela no banco de dados
 }
@@ -199,6 +200,35 @@ model MyPokemon {
   // myPokemonMoves MyPokemonMoves[]
   @@unique([userId, pokemonId]) // Esta linha cria a constraint única
   @@map("my_pokemon")
+}
+
+model ChatMessage {
+  id String @id @default(uuid())
+
+  text String
+
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  chatRoomId String
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
+
+  deletedAt DateTime?
+
+  @@index([createdAt(sort: Desc)])
+}
+
+model ChatRoom {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  messages ChatMessage[]
+
+  @@map("chat_rooms")
 }
 
 // model MyPokemonMoves {

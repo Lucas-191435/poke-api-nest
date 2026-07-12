@@ -47,3 +47,13 @@ export type PokemonMove = Prisma.PokemonMoveModel
  * 
  */
 export type MyPokemon = Prisma.MyPokemonModel
+/**
+ * Model ChatMessage
+ * 
+ */
+export type ChatMessage = Prisma.ChatMessageModel
+/**
+ * Model ChatRoom
+ * 
+ */
+export type ChatRoom = Prisma.ChatRoomModel

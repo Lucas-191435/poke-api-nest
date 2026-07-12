@@ -255,6 +255,7 @@ export type UserWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   myPokemons?: Prisma.MyPokemonListRelationFilter
+  messages?: Prisma.ChatMessageListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -273,6 +274,7 @@ export type UserOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   myPokemons?: Prisma.MyPokemonOrderByRelationAggregateInput
+  messages?: Prisma.ChatMessageOrderByRelationAggregateInput
   _relevance?: Prisma.UserOrderByRelevanceInput
 }
 
@@ -295,6 +297,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   myPokemons?: Prisma.MyPokemonListRelationFilter
+  messages?: Prisma.ChatMessageListRelationFilter
 }, "id" | "email" | "oauthId" | "resetToken">
 
 export type UserOrderByWithAggregationInput = {
@@ -353,6 +356,7 @@ export type UserCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   myPokemons?: Prisma.MyPokemonCreateNestedManyWithoutUserInput
+  messages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -371,6 +375,7 @@ export type UserUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   myPokemons?: Prisma.MyPokemonUncheckedCreateNestedManyWithoutUserInput
+  messages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -389,6 +394,7 @@ export type UserUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   myPokemons?: Prisma.MyPokemonUpdateManyWithoutUserNestedInput
+  messages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -407,6 +413,7 @@ export type UserUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   myPokemons?: Prisma.MyPokemonUncheckedUpdateManyWithoutUserNestedInput
+  messages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -556,6 +563,20 @@ export type UserUpdateOneRequiredWithoutMyPokemonsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMyPokemonsInput, Prisma.UserUpdateWithoutMyPokemonsInput>, Prisma.UserUncheckedUpdateWithoutMyPokemonsInput>
 }
 
+export type UserCreateNestedOneWithoutMessagesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMessagesInput, Prisma.UserUncheckedCreateWithoutMessagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMessagesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutMessagesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMessagesInput, Prisma.UserUncheckedCreateWithoutMessagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMessagesInput
+  upsert?: Prisma.UserUpsertWithoutMessagesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMessagesInput, Prisma.UserUpdateWithoutMessagesInput>, Prisma.UserUncheckedUpdateWithoutMessagesInput>
+}
+
 export type UserCreateWithoutMyPokemonsInput = {
   id?: string
   email: string
@@ -571,6 +592,7 @@ export type UserCreateWithoutMyPokemonsInput = {
   resetTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  messages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutMyPokemonsInput = {
@@ -588,6 +610,7 @@ export type UserUncheckedCreateWithoutMyPokemonsInput = {
   resetTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  messages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutMyPokemonsInput = {
@@ -621,6 +644,7 @@ export type UserUpdateWithoutMyPokemonsInput = {
   resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  messages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMyPokemonsInput = {
@@ -638,6 +662,95 @@ export type UserUncheckedUpdateWithoutMyPokemonsInput = {
   resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  messages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutMessagesInput = {
+  id?: string
+  email: string
+  password?: string | null
+  role?: $Enums.Role
+  name: string
+  avatar?: string | null
+  birthday?: Date | string | null
+  oauthId?: string | null
+  oauthProvider?: string | null
+  oauthProfileUrl?: string | null
+  resetToken?: string | null
+  resetTokenExpiry?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  myPokemons?: Prisma.MyPokemonCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutMessagesInput = {
+  id?: string
+  email: string
+  password?: string | null
+  role?: $Enums.Role
+  name: string
+  avatar?: string | null
+  birthday?: Date | string | null
+  oauthId?: string | null
+  oauthProvider?: string | null
+  oauthProfileUrl?: string | null
+  resetToken?: string | null
+  resetTokenExpiry?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  myPokemons?: Prisma.MyPokemonUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutMessagesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutMessagesInput, Prisma.UserUncheckedCreateWithoutMessagesInput>
+}
+
+export type UserUpsertWithoutMessagesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutMessagesInput, Prisma.UserUncheckedUpdateWithoutMessagesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutMessagesInput, Prisma.UserUncheckedCreateWithoutMessagesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutMessagesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutMessagesInput, Prisma.UserUncheckedUpdateWithoutMessagesInput>
+}
+
+export type UserUpdateWithoutMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthday?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  oauthId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  oauthProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  oauthProfileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  myPokemons?: Prisma.MyPokemonUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthday?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  oauthId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  oauthProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  oauthProfileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  myPokemons?: Prisma.MyPokemonUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -647,10 +760,12 @@ export type UserUncheckedUpdateWithoutMyPokemonsInput = {
 
 export type UserCountOutputType = {
   myPokemons: number
+  messages: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   myPokemons?: boolean | UserCountOutputTypeCountMyPokemonsArgs
+  messages?: boolean | UserCountOutputTypeCountMessagesArgs
 }
 
 /**
@@ -670,6 +785,13 @@ export type UserCountOutputTypeCountMyPokemonsArgs<ExtArgs extends runtime.Types
   where?: Prisma.MyPokemonWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ChatMessageWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -687,6 +809,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   myPokemons?: boolean | Prisma.User$myPokemonsArgs<ExtArgs>
+  messages?: boolean | Prisma.User$messagesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -712,6 +835,7 @@ export type UserSelectScalar = {
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "role" | "name" | "avatar" | "birthday" | "oauthId" | "oauthProvider" | "oauthProfileUrl" | "resetToken" | "resetTokenExpiry" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   myPokemons?: boolean | Prisma.User$myPokemonsArgs<ExtArgs>
+  messages?: boolean | Prisma.User$messagesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -719,6 +843,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "User"
   objects: {
     myPokemons: Prisma.$MyPokemonPayload<ExtArgs>[]
+    messages: Prisma.$ChatMessagePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1076,6 +1201,7 @@ readonly fields: UserFieldRefs;
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   myPokemons<T extends Prisma.User$myPokemonsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$myPokemonsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MyPokemonPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  messages<T extends Prisma.User$messagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChatMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1488,6 +1614,30 @@ export type User$myPokemonsArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.MyPokemonScalarFieldEnum | Prisma.MyPokemonScalarFieldEnum[]
+}
+
+/**
+ * User.messages
+ */
+export type User$messagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ChatMessage
+   */
+  select?: Prisma.ChatMessageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ChatMessage
+   */
+  omit?: Prisma.ChatMessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ChatMessageInclude<ExtArgs> | null
+  where?: Prisma.ChatMessageWhereInput
+  orderBy?: Prisma.ChatMessageOrderByWithRelationInput | Prisma.ChatMessageOrderByWithRelationInput[]
+  cursor?: Prisma.ChatMessageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ChatMessageScalarFieldEnum | Prisma.ChatMessageScalarFieldEnum[]
 }
 
 /**
