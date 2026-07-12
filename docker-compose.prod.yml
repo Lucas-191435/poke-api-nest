@@ -1,9 +1,11 @@
 services:
   app:
-    build: .
-    args:
-        DATABASE_URL: ${DATABASE_URL}
-        
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - DATABASE_URL=${DATABASE_URL}
+
     container_name: poke-api-nest
 
     restart: unless-stopped
