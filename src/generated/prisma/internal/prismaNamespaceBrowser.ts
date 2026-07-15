@@ -56,7 +56,10 @@ export const ModelName = {
   Item: 'Item',
   Move: 'Move',
   PokemonMove: 'PokemonMove',
-  MyPokemon: 'MyPokemon'
+  MyPokemon: 'MyPokemon',
+  ChatMessage: 'ChatMessage',
+  ChatRoom: 'ChatRoom',
+  ChatRoomUser: 'ChatRoomUser'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -208,6 +211,38 @@ export const MyPokemonScalarFieldEnum = {
 export type MyPokemonScalarFieldEnum = (typeof MyPokemonScalarFieldEnum)[keyof typeof MyPokemonScalarFieldEnum]
 
 
+export const ChatMessageScalarFieldEnum = {
+  id: 'id',
+  text: 'text',
+  createdAt: 'createdAt',
+  userId: 'userId',
+  chatRoomId: 'chatRoomId',
+  deletedAt: 'deletedAt'
+} as const
+
+export type ChatMessageScalarFieldEnum = (typeof ChatMessageScalarFieldEnum)[keyof typeof ChatMessageScalarFieldEnum]
+
+
+export const ChatRoomScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ChatRoomScalarFieldEnum = (typeof ChatRoomScalarFieldEnum)[keyof typeof ChatRoomScalarFieldEnum]
+
+
+export const ChatRoomUserScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  chatRoomId: 'chatRoomId',
+  joinedAt: 'joinedAt'
+} as const
+
+export type ChatRoomUserScalarFieldEnum = (typeof ChatRoomUserScalarFieldEnum)[keyof typeof ChatRoomUserScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -321,4 +356,31 @@ export const MyPokemonOrderByRelevanceFieldEnum = {
 } as const
 
 export type MyPokemonOrderByRelevanceFieldEnum = (typeof MyPokemonOrderByRelevanceFieldEnum)[keyof typeof MyPokemonOrderByRelevanceFieldEnum]
+
+
+export const ChatMessageOrderByRelevanceFieldEnum = {
+  id: 'id',
+  text: 'text',
+  userId: 'userId',
+  chatRoomId: 'chatRoomId'
+} as const
+
+export type ChatMessageOrderByRelevanceFieldEnum = (typeof ChatMessageOrderByRelevanceFieldEnum)[keyof typeof ChatMessageOrderByRelevanceFieldEnum]
+
+
+export const ChatRoomOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name'
+} as const
+
+export type ChatRoomOrderByRelevanceFieldEnum = (typeof ChatRoomOrderByRelevanceFieldEnum)[keyof typeof ChatRoomOrderByRelevanceFieldEnum]
+
+
+export const ChatRoomUserOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  chatRoomId: 'chatRoomId'
+} as const
+
+export type ChatRoomUserOrderByRelevanceFieldEnum = (typeof ChatRoomUserOrderByRelevanceFieldEnum)[keyof typeof ChatRoomUserOrderByRelevanceFieldEnum]
 
