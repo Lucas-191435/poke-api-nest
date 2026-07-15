@@ -19,8 +19,9 @@ export class ChatRepository {
             throw new UnauthorizedException('Token inválido ou expirado.');
         }
 
+        // console.log('ChatRepository.validateToken called with payload:', payload);
         const user = await this.prisma.user.findFirst({
-            where: { id: payload.sub },
+            where: { id: payload?.id },
         });
 
         if (!user) {
@@ -74,16 +75,60 @@ export class ChatRepository {
         });
     }
 
-    getMessages(chatRoomId: string, page = 1, limit = 50) {
-        const skip = (page - 1) * limit;
-        return this.prisma.chatMessage.findMany({
-            where: { chatRoomId, deletedAt: null },
-            include: {
-                user: { select: { id: true, name: true, avatar: true } },
+    async getMessages(
+        chatRoomId: string,
+        cursor?: string,
+        limit = 25,
+    ) {
+        const messages = await this.prisma.chatMessage.findMany({
+            where: {
+                chatRoomId,
+                deletedAt: null,
             },
-            orderBy: { createdAt: 'desc' },
-            skip,
+            include: {
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        avatar: true,
+                    },
+                },
+            },
+            orderBy: {
+                createdAt: 'desc',
+            },
             take: limit,
+            ...(cursor && {
+                cursor: { id: cursor },
+                skip: 1,
+            }),
         });
+
+        const nextCursor =
+            messages.length === limit
+                ? messages[messages.length - 1].id
+                : null;
+
+        return {
+            messages: messages,
+            nextCursor,
+            hasMore: !!nextCursor,
+        };
+    }
+
+
+    async getChatRoomOfUser(userId: string) {
+        const chatRooms = await this.prisma.chatRoomUser.findMany({
+            where: {
+                userId,
+            },
+            include: {
+                chatRoom: true,
+            },
+        });
+
+        // console.log(chatRooms);
+
+        return chatRooms.map((cru) => cru.chatRoom);
     }
 }

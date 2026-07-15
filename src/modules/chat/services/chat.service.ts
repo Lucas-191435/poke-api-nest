@@ -30,9 +30,31 @@ export class ChatService {
         return this.chatRepository.createMessage(userId, chatRoomId, text);
     }
 
-    async getMessages(userId: string, chatRoomId: string, page?: number, limit?: number) {
-        const inRoom = await this.chatRepository.isUserInRoom(userId, chatRoomId);
-        if (!inRoom) throw new ForbiddenException('Você não está nessa sala de chat.');
-        return this.chatRepository.getMessages(chatRoomId, page, limit);
+    async getMessages(
+        userId: string,
+        chatRoomId: string,
+        cursor?: string,
+        limit = 50,
+    ) {
+        const inRoom = await this.chatRepository.isUserInRoom(
+            userId,
+            chatRoomId,
+        );
+
+        if (!inRoom) {
+            throw new ForbiddenException(
+                'Você não está nessa sala de chat.',
+            );
+        }
+
+        return this.chatRepository.getMessages(
+            chatRoomId,
+            cursor,
+            limit,
+        );
+    }
+
+    async getChatRoomOfUser(userId: string) {
+        return this.chatRepository.getChatRoomOfUser(userId);
     }
 }

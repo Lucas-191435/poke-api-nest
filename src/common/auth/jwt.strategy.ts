@@ -7,6 +7,7 @@ export interface JwtPayload {
   sub: string;
   iat: number;
   exp: number;
+  id: string;
 }
 
 @Injectable()
@@ -21,7 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: JwtPayload) {
     const user = await this.prisma.user.findFirst({
-      where: { id: payload.sub },
+      where: { id: payload.id ?? payload.sub },
     });
 
     if (!user) {

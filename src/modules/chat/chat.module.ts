@@ -3,6 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ChatService } from './services/chat.service';
 import { ChatRepository } from './repositories/chat.repository';
 import { ChatGateway } from './gateways/chat.gateway';
+import { ChatController } from './chat.controller';
 import authConfig from 'src/config/authConfig';
 
 @Module({
@@ -15,6 +16,7 @@ import authConfig from 'src/config/authConfig';
       },
     }),
   ],
+  controllers: [ChatController],
   providers: [ChatGateway, ChatService, ChatRepository],
 })
 export class ChatModule {}

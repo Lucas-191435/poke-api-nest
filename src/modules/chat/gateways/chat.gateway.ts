@@ -37,6 +37,8 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
         try {
             const token = client.handshake.auth.token as string | undefined;
 
+            // console.log('ChatGateway.handleConnection called with token:', token);
+
             if (!token) {
                 client.disconnect();
                 return;
@@ -77,6 +79,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
         const user = client.data.user;
         if (!user) throw new WsException('Não autenticado.');
 
+        console.log('ChatGateway.send called with:', { userId: user.id, roomId: dto.roomId, message: dto.message });
         const message = await this.chatService.sendMessage(user.id, dto.roomId, dto.message);
 
         // Emite para todos na sala (incluindo o remetente)
@@ -85,15 +88,15 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
         return message;
     }
 
-    @SubscribeMessage("get-messages")
-    async getMessages(
-        @ConnectedSocket() client: AuthenticatedSocket,
-        @MessageBody() dto: GetMessagesDto,
-    ) {
-        const user = client.data.user;
-        if (!user) throw new WsException('Não autenticado.');
+    // @SubscribeMessage("get-messages")
+    // async getMessages(
+    //     @ConnectedSocket() client: AuthenticatedSocket,
+    //     @MessageBody() dto: GetMessagesDto,
+    // ) {
+    //     const user = client.data.user;
+    //     if (!user) throw new WsException('Não autenticado.');
 
-        return this.chatService.getMessages(user.id, dto.chatRoomId, dto.page, dto.limit);
-    }
+    //     return this.chatService.getMessages(user.id, dto.chatRoomId, dto.page, dto.limit);
+    // }
 }
 
