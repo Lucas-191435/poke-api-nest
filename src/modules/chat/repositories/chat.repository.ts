@@ -131,4 +131,17 @@ export class ChatRepository {
 
         return chatRooms.map((cru) => cru.chatRoom);
     }
+
+    async deleteMessage(userId: string, chatRoomId: string, messageId: string) {
+        const isOfUser = await this.prisma.chatMessage.findFirst({
+            where: { id: messageId, userId, chatRoomId },
+        });
+
+        if (!isOfUser) {
+            throw new UnauthorizedException('Você não tem permissão para deletar esta mensagem.');
+        }
+        return this.prisma.chatMessage.delete({
+            where: { id: messageId, userId, chatRoomId },
+        });
+    }
 }

@@ -30,6 +30,12 @@ export class ChatService {
         return this.chatRepository.createMessage(userId, chatRoomId, text);
     }
 
+    async deleteMessage(userId: string, chatRoomId: string, messageId: string) {
+        const inRoom = await this.chatRepository.isUserInRoom(userId, chatRoomId);
+        if (!inRoom) throw new ForbiddenException('Você não está nessa sala de chat.');
+        return this.chatRepository.deleteMessage(userId, chatRoomId, messageId);
+    }
+
     async getMessages(
         userId: string,
         chatRoomId: string,
