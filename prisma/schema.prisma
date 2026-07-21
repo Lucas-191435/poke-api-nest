@@ -206,7 +206,7 @@ model MyPokemon {
 model ChatMessage {
   id String @id @default(uuid())
 
-  text String
+  text String @db.LongText
 
   createdAt DateTime @default(now())
 

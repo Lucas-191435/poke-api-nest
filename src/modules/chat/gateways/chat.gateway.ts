@@ -15,6 +15,7 @@ import { SendMessageDto } from "../dto/send-message.dto";
 import { JoinRoomDto } from "../dto/join-room.dto";
 import { GetMessagesDto } from "../dto/get-messages.dto";
 import { User } from "src/generated/prisma/client";
+import { DeleteMessageDto } from "../dto/delete-message.dto";
 
 // Socket.io data é tipado como `any` por padrão; usamos Omit para sobrescrever
 type AuthenticatedSocket = Omit<Socket, 'data'> & { data: { user: User } };
@@ -84,6 +85,23 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
         // Emite para todos na sala (incluindo o remetente)
         this.server.to(dto.roomId).emit('new-message', message);
+
+        return message;
+    }
+
+    @SubscribeMessage("delete-message")
+    async delete(
+        @ConnectedSocket() client: AuthenticatedSocket,
+        @MessageBody() dto: DeleteMessageDto,
+    ) {
+        const user = client.data.user;
+        if (!user) throw new WsException('Não autenticado.');
+
+        console.log('ChatGateway.delete called with:', { userId: user.id, roomId: dto.roomId, messageId: dto.messageId });
+        const message = await this.chatService.deleteMessage(user.id, dto.roomId, dto.messageId);
+
+        // Emite para todos na sala (incluindo o remetente)
+        this.server.to(dto.roomId).emit('delete-message', message);
 
         return message;
     }
