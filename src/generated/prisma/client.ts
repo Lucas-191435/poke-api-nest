@@ -84,3 +84,28 @@ export type ChatRoom = Prisma.ChatRoomModel
  * 
  */
 export type ChatRoomUser = Prisma.ChatRoomUserModel
+/**
+ * Model Battle
+ * 
+ */
+export type Battle = Prisma.BattleModel
+/**
+ * Model BattleParticipant
+ * 
+ */
+export type BattleParticipant = Prisma.BattleParticipantModel
+/**
+ * Model BattlePokemon
+ * 
+ */
+export type BattlePokemon = Prisma.BattlePokemonModel
+/**
+ * Model BattlePokemonMove
+ * 
+ */
+export type BattlePokemonMove = Prisma.BattlePokemonMoveModel
+/**
+ * Model BattleTurnLog
+ * 
+ */
+export type BattleTurnLog = Prisma.BattleTurnLogModel

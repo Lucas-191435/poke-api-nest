@@ -228,6 +228,7 @@ export type MyPokemonWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"MyPokemon"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   pokemon?: Prisma.XOR<Prisma.PokemonScalarRelationFilter, Prisma.PokemonWhereInput>
+  battlePokemons?: Prisma.BattlePokemonListRelationFilter
 }
 
 export type MyPokemonOrderByWithRelationInput = {
@@ -245,6 +246,7 @@ export type MyPokemonOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   pokemon?: Prisma.PokemonOrderByWithRelationInput
+  battlePokemons?: Prisma.BattlePokemonOrderByRelationAggregateInput
   _relevance?: Prisma.MyPokemonOrderByRelevanceInput
 }
 
@@ -267,6 +269,7 @@ export type MyPokemonWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"MyPokemon"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   pokemon?: Prisma.XOR<Prisma.PokemonScalarRelationFilter, Prisma.PokemonWhereInput>
+  battlePokemons?: Prisma.BattlePokemonListRelationFilter
 }, "id" | "userId_pokemonId">
 
 export type MyPokemonOrderByWithAggregationInput = {
@@ -318,6 +321,7 @@ export type MyPokemonCreateInput = {
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutMyPokemonsInput
   pokemon: Prisma.PokemonCreateNestedOneWithoutMyPokemonsInput
+  battlePokemons?: Prisma.BattlePokemonCreateNestedManyWithoutMyPokemonInput
 }
 
 export type MyPokemonUncheckedCreateInput = {
@@ -333,6 +337,7 @@ export type MyPokemonUncheckedCreateInput = {
   teamGammaMove?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  battlePokemons?: Prisma.BattlePokemonUncheckedCreateNestedManyWithoutMyPokemonInput
 }
 
 export type MyPokemonUpdateInput = {
@@ -348,6 +353,7 @@ export type MyPokemonUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutMyPokemonsNestedInput
   pokemon?: Prisma.PokemonUpdateOneRequiredWithoutMyPokemonsNestedInput
+  battlePokemons?: Prisma.BattlePokemonUpdateManyWithoutMyPokemonNestedInput
 }
 
 export type MyPokemonUncheckedUpdateInput = {
@@ -363,6 +369,7 @@ export type MyPokemonUncheckedUpdateInput = {
   teamGammaMove?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  battlePokemons?: Prisma.BattlePokemonUncheckedUpdateManyWithoutMyPokemonNestedInput
 }
 
 export type MyPokemonCreateManyInput = {
@@ -468,6 +475,11 @@ export type MyPokemonMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type MyPokemonScalarRelationFilter = {
+  is?: Prisma.MyPokemonWhereInput
+  isNot?: Prisma.MyPokemonWhereInput
+}
+
 export type MyPokemonCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.MyPokemonCreateWithoutUserInput, Prisma.MyPokemonUncheckedCreateWithoutUserInput> | Prisma.MyPokemonCreateWithoutUserInput[] | Prisma.MyPokemonUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.MyPokemonCreateOrConnectWithoutUserInput | Prisma.MyPokemonCreateOrConnectWithoutUserInput[]
@@ -556,6 +568,20 @@ export type NullableBoolFieldUpdateOperationsInput = {
   set?: boolean | null
 }
 
+export type MyPokemonCreateNestedOneWithoutBattlePokemonsInput = {
+  create?: Prisma.XOR<Prisma.MyPokemonCreateWithoutBattlePokemonsInput, Prisma.MyPokemonUncheckedCreateWithoutBattlePokemonsInput>
+  connectOrCreate?: Prisma.MyPokemonCreateOrConnectWithoutBattlePokemonsInput
+  connect?: Prisma.MyPokemonWhereUniqueInput
+}
+
+export type MyPokemonUpdateOneRequiredWithoutBattlePokemonsNestedInput = {
+  create?: Prisma.XOR<Prisma.MyPokemonCreateWithoutBattlePokemonsInput, Prisma.MyPokemonUncheckedCreateWithoutBattlePokemonsInput>
+  connectOrCreate?: Prisma.MyPokemonCreateOrConnectWithoutBattlePokemonsInput
+  upsert?: Prisma.MyPokemonUpsertWithoutBattlePokemonsInput
+  connect?: Prisma.MyPokemonWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MyPokemonUpdateToOneWithWhereWithoutBattlePokemonsInput, Prisma.MyPokemonUpdateWithoutBattlePokemonsInput>, Prisma.MyPokemonUncheckedUpdateWithoutBattlePokemonsInput>
+}
+
 export type MyPokemonCreateWithoutUserInput = {
   id?: string
   nickname?: string | null
@@ -568,6 +594,7 @@ export type MyPokemonCreateWithoutUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   pokemon: Prisma.PokemonCreateNestedOneWithoutMyPokemonsInput
+  battlePokemons?: Prisma.BattlePokemonCreateNestedManyWithoutMyPokemonInput
 }
 
 export type MyPokemonUncheckedCreateWithoutUserInput = {
@@ -582,6 +609,7 @@ export type MyPokemonUncheckedCreateWithoutUserInput = {
   teamGammaMove?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  battlePokemons?: Prisma.BattlePokemonUncheckedCreateNestedManyWithoutMyPokemonInput
 }
 
 export type MyPokemonCreateOrConnectWithoutUserInput = {
@@ -640,6 +668,7 @@ export type MyPokemonCreateWithoutPokemonInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutMyPokemonsInput
+  battlePokemons?: Prisma.BattlePokemonCreateNestedManyWithoutMyPokemonInput
 }
 
 export type MyPokemonUncheckedCreateWithoutPokemonInput = {
@@ -654,6 +683,7 @@ export type MyPokemonUncheckedCreateWithoutPokemonInput = {
   teamGammaMove?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  battlePokemons?: Prisma.BattlePokemonUncheckedCreateNestedManyWithoutMyPokemonInput
 }
 
 export type MyPokemonCreateOrConnectWithoutPokemonInput = {
@@ -682,6 +712,82 @@ export type MyPokemonUpdateManyWithWhereWithoutPokemonInput = {
   data: Prisma.XOR<Prisma.MyPokemonUpdateManyMutationInput, Prisma.MyPokemonUncheckedUpdateManyWithoutPokemonInput>
 }
 
+export type MyPokemonCreateWithoutBattlePokemonsInput = {
+  id?: string
+  nickname?: string | null
+  teamAlpha?: boolean | null
+  teamBeta?: boolean | null
+  teamGamma?: boolean | null
+  teamAlphaMove?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  teamBetaMove?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  teamGammaMove?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutMyPokemonsInput
+  pokemon: Prisma.PokemonCreateNestedOneWithoutMyPokemonsInput
+}
+
+export type MyPokemonUncheckedCreateWithoutBattlePokemonsInput = {
+  id?: string
+  userId: string
+  pokemonId: string
+  nickname?: string | null
+  teamAlpha?: boolean | null
+  teamBeta?: boolean | null
+  teamGamma?: boolean | null
+  teamAlphaMove?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  teamBetaMove?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  teamGammaMove?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type MyPokemonCreateOrConnectWithoutBattlePokemonsInput = {
+  where: Prisma.MyPokemonWhereUniqueInput
+  create: Prisma.XOR<Prisma.MyPokemonCreateWithoutBattlePokemonsInput, Prisma.MyPokemonUncheckedCreateWithoutBattlePokemonsInput>
+}
+
+export type MyPokemonUpsertWithoutBattlePokemonsInput = {
+  update: Prisma.XOR<Prisma.MyPokemonUpdateWithoutBattlePokemonsInput, Prisma.MyPokemonUncheckedUpdateWithoutBattlePokemonsInput>
+  create: Prisma.XOR<Prisma.MyPokemonCreateWithoutBattlePokemonsInput, Prisma.MyPokemonUncheckedCreateWithoutBattlePokemonsInput>
+  where?: Prisma.MyPokemonWhereInput
+}
+
+export type MyPokemonUpdateToOneWithWhereWithoutBattlePokemonsInput = {
+  where?: Prisma.MyPokemonWhereInput
+  data: Prisma.XOR<Prisma.MyPokemonUpdateWithoutBattlePokemonsInput, Prisma.MyPokemonUncheckedUpdateWithoutBattlePokemonsInput>
+}
+
+export type MyPokemonUpdateWithoutBattlePokemonsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teamAlpha?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  teamBeta?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  teamGamma?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  teamAlphaMove?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  teamBetaMove?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  teamGammaMove?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutMyPokemonsNestedInput
+  pokemon?: Prisma.PokemonUpdateOneRequiredWithoutMyPokemonsNestedInput
+}
+
+export type MyPokemonUncheckedUpdateWithoutBattlePokemonsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  pokemonId?: Prisma.StringFieldUpdateOperationsInput | string
+  nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teamAlpha?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  teamBeta?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  teamGamma?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  teamAlphaMove?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  teamBetaMove?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  teamGammaMove?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type MyPokemonCreateManyUserInput = {
   id?: string
   pokemonId: string
@@ -708,6 +814,7 @@ export type MyPokemonUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pokemon?: Prisma.PokemonUpdateOneRequiredWithoutMyPokemonsNestedInput
+  battlePokemons?: Prisma.BattlePokemonUpdateManyWithoutMyPokemonNestedInput
 }
 
 export type MyPokemonUncheckedUpdateWithoutUserInput = {
@@ -722,6 +829,7 @@ export type MyPokemonUncheckedUpdateWithoutUserInput = {
   teamGammaMove?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  battlePokemons?: Prisma.BattlePokemonUncheckedUpdateManyWithoutMyPokemonNestedInput
 }
 
 export type MyPokemonUncheckedUpdateManyWithoutUserInput = {
@@ -764,6 +872,7 @@ export type MyPokemonUpdateWithoutPokemonInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutMyPokemonsNestedInput
+  battlePokemons?: Prisma.BattlePokemonUpdateManyWithoutMyPokemonNestedInput
 }
 
 export type MyPokemonUncheckedUpdateWithoutPokemonInput = {
@@ -778,6 +887,7 @@ export type MyPokemonUncheckedUpdateWithoutPokemonInput = {
   teamGammaMove?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  battlePokemons?: Prisma.BattlePokemonUncheckedUpdateManyWithoutMyPokemonNestedInput
 }
 
 export type MyPokemonUncheckedUpdateManyWithoutPokemonInput = {
@@ -795,6 +905,35 @@ export type MyPokemonUncheckedUpdateManyWithoutPokemonInput = {
 }
 
 
+/**
+ * Count Type MyPokemonCountOutputType
+ */
+
+export type MyPokemonCountOutputType = {
+  battlePokemons: number
+}
+
+export type MyPokemonCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  battlePokemons?: boolean | MyPokemonCountOutputTypeCountBattlePokemonsArgs
+}
+
+/**
+ * MyPokemonCountOutputType without action
+ */
+export type MyPokemonCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MyPokemonCountOutputType
+   */
+  select?: Prisma.MyPokemonCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * MyPokemonCountOutputType without action
+ */
+export type MyPokemonCountOutputTypeCountBattlePokemonsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BattlePokemonWhereInput
+}
+
 
 export type MyPokemonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -811,6 +950,8 @@ export type MyPokemonSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   pokemon?: boolean | Prisma.PokemonDefaultArgs<ExtArgs>
+  battlePokemons?: boolean | Prisma.MyPokemon$battlePokemonsArgs<ExtArgs>
+  _count?: boolean | Prisma.MyPokemonCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["myPokemon"]>
 
 
@@ -834,6 +975,8 @@ export type MyPokemonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type MyPokemonInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   pokemon?: boolean | Prisma.PokemonDefaultArgs<ExtArgs>
+  battlePokemons?: boolean | Prisma.MyPokemon$battlePokemonsArgs<ExtArgs>
+  _count?: boolean | Prisma.MyPokemonCountOutputTypeDefaultArgs<ExtArgs>
 }
 
 export type $MyPokemonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -841,6 +984,7 @@ export type $MyPokemonPayload<ExtArgs extends runtime.Types.Extensions.InternalA
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
     pokemon: Prisma.$PokemonPayload<ExtArgs>
+    battlePokemons: Prisma.$BattlePokemonPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1197,6 +1341,7 @@ export interface Prisma__MyPokemonClient<T, Null = never, ExtArgs extends runtim
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   pokemon<T extends Prisma.PokemonDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PokemonDefaultArgs<ExtArgs>>): Prisma.Prisma__PokemonClient<runtime.Types.Result.GetResult<Prisma.$PokemonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  battlePokemons<T extends Prisma.MyPokemon$battlePokemonsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MyPokemon$battlePokemonsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BattlePokemonPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1583,6 +1728,30 @@ export type MyPokemonDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Limit how many MyPokemon to delete.
    */
   limit?: number
+}
+
+/**
+ * MyPokemon.battlePokemons
+ */
+export type MyPokemon$battlePokemonsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BattlePokemon
+   */
+  select?: Prisma.BattlePokemonSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BattlePokemon
+   */
+  omit?: Prisma.BattlePokemonOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BattlePokemonInclude<ExtArgs> | null
+  where?: Prisma.BattlePokemonWhereInput
+  orderBy?: Prisma.BattlePokemonOrderByWithRelationInput | Prisma.BattlePokemonOrderByWithRelationInput[]
+  cursor?: Prisma.BattlePokemonWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BattlePokemonScalarFieldEnum | Prisma.BattlePokemonScalarFieldEnum[]
 }
 
 /**

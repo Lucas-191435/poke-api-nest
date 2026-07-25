@@ -441,6 +441,7 @@ export type MoveWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Move"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Move"> | Date | string
   pokemons?: Prisma.PokemonMoveListRelationFilter
+  battlePokemonMoves?: Prisma.BattlePokemonMoveListRelationFilter
 }
 
 export type MoveOrderByWithRelationInput = {
@@ -471,6 +472,7 @@ export type MoveOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   pokemons?: Prisma.PokemonMoveOrderByRelationAggregateInput
+  battlePokemonMoves?: Prisma.BattlePokemonMoveOrderByRelationAggregateInput
   _relevance?: Prisma.MoveOrderByRelevanceInput
 }
 
@@ -505,6 +507,7 @@ export type MoveWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Move"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Move"> | Date | string
   pokemons?: Prisma.PokemonMoveListRelationFilter
+  battlePokemonMoves?: Prisma.BattlePokemonMoveListRelationFilter
 }, "id" | "pokeMoveId" | "name">
 
 export type MoveOrderByWithAggregationInput = {
@@ -601,6 +604,7 @@ export type MoveCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   pokemons?: Prisma.PokemonMoveCreateNestedManyWithoutMoveInput
+  battlePokemonMoves?: Prisma.BattlePokemonMoveCreateNestedManyWithoutMoveInput
 }
 
 export type MoveUncheckedCreateInput = {
@@ -631,6 +635,7 @@ export type MoveUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   pokemons?: Prisma.PokemonMoveUncheckedCreateNestedManyWithoutMoveInput
+  battlePokemonMoves?: Prisma.BattlePokemonMoveUncheckedCreateNestedManyWithoutMoveInput
 }
 
 export type MoveUpdateInput = {
@@ -661,6 +666,7 @@ export type MoveUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pokemons?: Prisma.PokemonMoveUpdateManyWithoutMoveNestedInput
+  battlePokemonMoves?: Prisma.BattlePokemonMoveUpdateManyWithoutMoveNestedInput
 }
 
 export type MoveUncheckedUpdateInput = {
@@ -691,6 +697,7 @@ export type MoveUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pokemons?: Prisma.PokemonMoveUncheckedUpdateManyWithoutMoveNestedInput
+  battlePokemonMoves?: Prisma.BattlePokemonMoveUncheckedUpdateManyWithoutMoveNestedInput
 }
 
 export type MoveCreateManyInput = {
@@ -928,6 +935,20 @@ export type MoveUpdateOneRequiredWithoutPokemonsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.MoveUpdateToOneWithWhereWithoutPokemonsInput, Prisma.MoveUpdateWithoutPokemonsInput>, Prisma.MoveUncheckedUpdateWithoutPokemonsInput>
 }
 
+export type MoveCreateNestedOneWithoutBattlePokemonMovesInput = {
+  create?: Prisma.XOR<Prisma.MoveCreateWithoutBattlePokemonMovesInput, Prisma.MoveUncheckedCreateWithoutBattlePokemonMovesInput>
+  connectOrCreate?: Prisma.MoveCreateOrConnectWithoutBattlePokemonMovesInput
+  connect?: Prisma.MoveWhereUniqueInput
+}
+
+export type MoveUpdateOneRequiredWithoutBattlePokemonMovesNestedInput = {
+  create?: Prisma.XOR<Prisma.MoveCreateWithoutBattlePokemonMovesInput, Prisma.MoveUncheckedCreateWithoutBattlePokemonMovesInput>
+  connectOrCreate?: Prisma.MoveCreateOrConnectWithoutBattlePokemonMovesInput
+  upsert?: Prisma.MoveUpsertWithoutBattlePokemonMovesInput
+  connect?: Prisma.MoveWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MoveUpdateToOneWithWhereWithoutBattlePokemonMovesInput, Prisma.MoveUpdateWithoutBattlePokemonMovesInput>, Prisma.MoveUncheckedUpdateWithoutBattlePokemonMovesInput>
+}
+
 export type MoveCreateWithoutPokemonsInput = {
   id?: string
   pokeMoveId: number
@@ -955,6 +976,7 @@ export type MoveCreateWithoutPokemonsInput = {
   stat_chance?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  battlePokemonMoves?: Prisma.BattlePokemonMoveCreateNestedManyWithoutMoveInput
 }
 
 export type MoveUncheckedCreateWithoutPokemonsInput = {
@@ -984,6 +1006,7 @@ export type MoveUncheckedCreateWithoutPokemonsInput = {
   stat_chance?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  battlePokemonMoves?: Prisma.BattlePokemonMoveUncheckedCreateNestedManyWithoutMoveInput
 }
 
 export type MoveCreateOrConnectWithoutPokemonsInput = {
@@ -1029,6 +1052,7 @@ export type MoveUpdateWithoutPokemonsInput = {
   stat_chance?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  battlePokemonMoves?: Prisma.BattlePokemonMoveUpdateManyWithoutMoveNestedInput
 }
 
 export type MoveUncheckedUpdateWithoutPokemonsInput = {
@@ -1058,6 +1082,143 @@ export type MoveUncheckedUpdateWithoutPokemonsInput = {
   stat_chance?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  battlePokemonMoves?: Prisma.BattlePokemonMoveUncheckedUpdateManyWithoutMoveNestedInput
+}
+
+export type MoveCreateWithoutBattlePokemonMovesInput = {
+  id?: string
+  pokeMoveId: number
+  name: string
+  accuracy?: number | null
+  power?: number | null
+  pp?: number | null
+  priority?: number | null
+  type?: string | null
+  description?: string | null
+  target?: string | null
+  damage_class?: string | null
+  effect?: string | null
+  effect_chance?: number | null
+  ailment?: string | null
+  category?: string | null
+  crit_rate?: number | null
+  drain?: number | null
+  flinch_chance?: number | null
+  healing?: number | null
+  min_hits?: number | null
+  max_hits?: number | null
+  min_turns?: number | null
+  max_turns?: number | null
+  stat_chance?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pokemons?: Prisma.PokemonMoveCreateNestedManyWithoutMoveInput
+}
+
+export type MoveUncheckedCreateWithoutBattlePokemonMovesInput = {
+  id?: string
+  pokeMoveId: number
+  name: string
+  accuracy?: number | null
+  power?: number | null
+  pp?: number | null
+  priority?: number | null
+  type?: string | null
+  description?: string | null
+  target?: string | null
+  damage_class?: string | null
+  effect?: string | null
+  effect_chance?: number | null
+  ailment?: string | null
+  category?: string | null
+  crit_rate?: number | null
+  drain?: number | null
+  flinch_chance?: number | null
+  healing?: number | null
+  min_hits?: number | null
+  max_hits?: number | null
+  min_turns?: number | null
+  max_turns?: number | null
+  stat_chance?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pokemons?: Prisma.PokemonMoveUncheckedCreateNestedManyWithoutMoveInput
+}
+
+export type MoveCreateOrConnectWithoutBattlePokemonMovesInput = {
+  where: Prisma.MoveWhereUniqueInput
+  create: Prisma.XOR<Prisma.MoveCreateWithoutBattlePokemonMovesInput, Prisma.MoveUncheckedCreateWithoutBattlePokemonMovesInput>
+}
+
+export type MoveUpsertWithoutBattlePokemonMovesInput = {
+  update: Prisma.XOR<Prisma.MoveUpdateWithoutBattlePokemonMovesInput, Prisma.MoveUncheckedUpdateWithoutBattlePokemonMovesInput>
+  create: Prisma.XOR<Prisma.MoveCreateWithoutBattlePokemonMovesInput, Prisma.MoveUncheckedCreateWithoutBattlePokemonMovesInput>
+  where?: Prisma.MoveWhereInput
+}
+
+export type MoveUpdateToOneWithWhereWithoutBattlePokemonMovesInput = {
+  where?: Prisma.MoveWhereInput
+  data: Prisma.XOR<Prisma.MoveUpdateWithoutBattlePokemonMovesInput, Prisma.MoveUncheckedUpdateWithoutBattlePokemonMovesInput>
+}
+
+export type MoveUpdateWithoutBattlePokemonMovesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  pokeMoveId?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  accuracy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  power?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  pp?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  priority?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  target?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damage_class?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  effect?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  effect_chance?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ailment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  crit_rate?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  drain?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  flinch_chance?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  healing?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  min_hits?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  max_hits?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  min_turns?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  max_turns?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  stat_chance?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pokemons?: Prisma.PokemonMoveUpdateManyWithoutMoveNestedInput
+}
+
+export type MoveUncheckedUpdateWithoutBattlePokemonMovesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  pokeMoveId?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  accuracy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  power?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  pp?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  priority?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  target?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damage_class?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  effect?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  effect_chance?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ailment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  crit_rate?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  drain?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  flinch_chance?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  healing?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  min_hits?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  max_hits?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  min_turns?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  max_turns?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  stat_chance?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pokemons?: Prisma.PokemonMoveUncheckedUpdateManyWithoutMoveNestedInput
 }
 
 
@@ -1067,10 +1228,12 @@ export type MoveUncheckedUpdateWithoutPokemonsInput = {
 
 export type MoveCountOutputType = {
   pokemons: number
+  battlePokemonMoves: number
 }
 
 export type MoveCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   pokemons?: boolean | MoveCountOutputTypeCountPokemonsArgs
+  battlePokemonMoves?: boolean | MoveCountOutputTypeCountBattlePokemonMovesArgs
 }
 
 /**
@@ -1088,6 +1251,13 @@ export type MoveCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
  */
 export type MoveCountOutputTypeCountPokemonsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.PokemonMoveWhereInput
+}
+
+/**
+ * MoveCountOutputType without action
+ */
+export type MoveCountOutputTypeCountBattlePokemonMovesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BattlePokemonMoveWhereInput
 }
 
 
@@ -1119,6 +1289,7 @@ export type MoveSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   pokemons?: boolean | Prisma.Move$pokemonsArgs<ExtArgs>
+  battlePokemonMoves?: boolean | Prisma.Move$battlePokemonMovesArgs<ExtArgs>
   _count?: boolean | Prisma.MoveCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["move"]>
 
@@ -1156,6 +1327,7 @@ export type MoveSelectScalar = {
 export type MoveOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pokeMoveId" | "name" | "accuracy" | "power" | "pp" | "priority" | "type" | "description" | "target" | "damage_class" | "effect" | "effect_chance" | "ailment" | "category" | "crit_rate" | "drain" | "flinch_chance" | "healing" | "min_hits" | "max_hits" | "min_turns" | "max_turns" | "stat_chance" | "createdAt" | "updatedAt", ExtArgs["result"]["move"]>
 export type MoveInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   pokemons?: boolean | Prisma.Move$pokemonsArgs<ExtArgs>
+  battlePokemonMoves?: boolean | Prisma.Move$battlePokemonMovesArgs<ExtArgs>
   _count?: boolean | Prisma.MoveCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -1163,6 +1335,7 @@ export type $MovePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "Move"
   objects: {
     pokemons: Prisma.$PokemonMovePayload<ExtArgs>[]
+    battlePokemonMoves: Prisma.$BattlePokemonMovePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1532,6 +1705,7 @@ readonly fields: MoveFieldRefs;
 export interface Prisma__MoveClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   pokemons<T extends Prisma.Move$pokemonsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Move$pokemonsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PokemonMovePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  battlePokemonMoves<T extends Prisma.Move$battlePokemonMovesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Move$battlePokemonMovesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BattlePokemonMovePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1956,6 +2130,30 @@ export type Move$pokemonsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.PokemonMoveScalarFieldEnum | Prisma.PokemonMoveScalarFieldEnum[]
+}
+
+/**
+ * Move.battlePokemonMoves
+ */
+export type Move$battlePokemonMovesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BattlePokemonMove
+   */
+  select?: Prisma.BattlePokemonMoveSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BattlePokemonMove
+   */
+  omit?: Prisma.BattlePokemonMoveOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BattlePokemonMoveInclude<ExtArgs> | null
+  where?: Prisma.BattlePokemonMoveWhereInput
+  orderBy?: Prisma.BattlePokemonMoveOrderByWithRelationInput | Prisma.BattlePokemonMoveOrderByWithRelationInput[]
+  cursor?: Prisma.BattlePokemonMoveWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BattlePokemonMoveScalarFieldEnum | Prisma.BattlePokemonMoveScalarFieldEnum[]
 }
 
 /**

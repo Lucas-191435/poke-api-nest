@@ -57,3 +57,45 @@ export const LearnMethod = {
 } as const
 
 export type LearnMethod = (typeof LearnMethod)[keyof typeof LearnMethod]
+
+
+export const BattleStatus = {
+  WAITING_OPPONENT: 'WAITING_OPPONENT',
+  SELECTING_LEAD: 'SELECTING_LEAD',
+  IN_PROGRESS: 'IN_PROGRESS',
+  FINISHED: 'FINISHED'
+} as const
+
+export type BattleStatus = (typeof BattleStatus)[keyof typeof BattleStatus]
+
+
+export const BattleTurnState = {
+  WAITING_ACTION: 'WAITING_ACTION',
+  ACTION_SUBMITTED: 'ACTION_SUBMITTED',
+  WAITING_FORCED_SWITCH: 'WAITING_FORCED_SWITCH'
+} as const
+
+export type BattleTurnState = (typeof BattleTurnState)[keyof typeof BattleTurnState]
+
+
+export const BattleActionType = {
+  MOVE: 'MOVE',
+  SWITCH: 'SWITCH',
+  ITEM: 'ITEM',
+  FORFEIT: 'FORFEIT'
+} as const
+
+export type BattleActionType = (typeof BattleActionType)[keyof typeof BattleActionType]
+
+
+export const StatusCondition = {
+  NONE: 'NONE',
+  PARALYZED: 'PARALYZED',
+  POISONED: 'POISONED',
+  BURNED: 'BURNED',
+  ASLEEP: 'ASLEEP',
+  FROZEN: 'FROZEN',
+  CONFUSED: 'CONFUSED'
+} as const
+
+export type StatusCondition = (typeof StatusCondition)[keyof typeof StatusCondition]

@@ -59,7 +59,12 @@ export const ModelName = {
   MyPokemon: 'MyPokemon',
   ChatMessage: 'ChatMessage',
   ChatRoom: 'ChatRoom',
-  ChatRoomUser: 'ChatRoomUser'
+  ChatRoomUser: 'ChatRoomUser',
+  Battle: 'Battle',
+  BattleParticipant: 'BattleParticipant',
+  BattlePokemon: 'BattlePokemon',
+  BattlePokemonMove: 'BattlePokemonMove',
+  BattleTurnLog: 'BattleTurnLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -243,6 +248,80 @@ export const ChatRoomUserScalarFieldEnum = {
 export type ChatRoomUserScalarFieldEnum = (typeof ChatRoomUserScalarFieldEnum)[keyof typeof ChatRoomUserScalarFieldEnum]
 
 
+export const BattleScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  playerAId: 'playerAId',
+  playerBId: 'playerBId',
+  turnNumber: 'turnNumber',
+  winnerId: 'winnerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
+} as const
+
+export type BattleScalarFieldEnum = (typeof BattleScalarFieldEnum)[keyof typeof BattleScalarFieldEnum]
+
+
+export const BattleParticipantScalarFieldEnum = {
+  id: 'id',
+  battleId: 'battleId',
+  userId: 'userId',
+  teamName: 'teamName',
+  activeSlot: 'activeSlot',
+  turnState: 'turnState',
+  pendingAction: 'pendingAction',
+  forfeited: 'forfeited'
+} as const
+
+export type BattleParticipantScalarFieldEnum = (typeof BattleParticipantScalarFieldEnum)[keyof typeof BattleParticipantScalarFieldEnum]
+
+
+export const BattlePokemonScalarFieldEnum = {
+  id: 'id',
+  battleParticipantId: 'battleParticipantId',
+  myPokemonId: 'myPokemonId',
+  position: 'position',
+  maxHp: 'maxHp',
+  currentHp: 'currentHp',
+  atk: 'atk',
+  def: 'def',
+  spAtk: 'spAtk',
+  spDef: 'spDef',
+  speed: 'speed',
+  statStages: 'statStages',
+  statusCondition: 'statusCondition',
+  statusCounter: 'statusCounter',
+  fainted: 'fainted'
+} as const
+
+export type BattlePokemonScalarFieldEnum = (typeof BattlePokemonScalarFieldEnum)[keyof typeof BattlePokemonScalarFieldEnum]
+
+
+export const BattlePokemonMoveScalarFieldEnum = {
+  id: 'id',
+  battlePokemonId: 'battlePokemonId',
+  moveId: 'moveId',
+  maxPp: 'maxPp',
+  currentPp: 'currentPp'
+} as const
+
+export type BattlePokemonMoveScalarFieldEnum = (typeof BattlePokemonMoveScalarFieldEnum)[keyof typeof BattlePokemonMoveScalarFieldEnum]
+
+
+export const BattleTurnLogScalarFieldEnum = {
+  id: 'id',
+  battleId: 'battleId',
+  turnNumber: 'turnNumber',
+  actorParticipantId: 'actorParticipantId',
+  actionType: 'actionType',
+  payload: 'payload',
+  createdAt: 'createdAt'
+} as const
+
+export type BattleTurnLogScalarFieldEnum = (typeof BattleTurnLogScalarFieldEnum)[keyof typeof BattleTurnLogScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -256,6 +335,14 @@ export const JsonNullValueInput = {
 } as const
 
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const NullsOrder = {
@@ -383,4 +470,52 @@ export const ChatRoomUserOrderByRelevanceFieldEnum = {
 } as const
 
 export type ChatRoomUserOrderByRelevanceFieldEnum = (typeof ChatRoomUserOrderByRelevanceFieldEnum)[keyof typeof ChatRoomUserOrderByRelevanceFieldEnum]
+
+
+export const BattleOrderByRelevanceFieldEnum = {
+  id: 'id',
+  playerAId: 'playerAId',
+  playerBId: 'playerBId',
+  winnerId: 'winnerId',
+  userId: 'userId'
+} as const
+
+export type BattleOrderByRelevanceFieldEnum = (typeof BattleOrderByRelevanceFieldEnum)[keyof typeof BattleOrderByRelevanceFieldEnum]
+
+
+export const BattleParticipantOrderByRelevanceFieldEnum = {
+  id: 'id',
+  battleId: 'battleId',
+  userId: 'userId',
+  teamName: 'teamName'
+} as const
+
+export type BattleParticipantOrderByRelevanceFieldEnum = (typeof BattleParticipantOrderByRelevanceFieldEnum)[keyof typeof BattleParticipantOrderByRelevanceFieldEnum]
+
+
+export const BattlePokemonOrderByRelevanceFieldEnum = {
+  id: 'id',
+  battleParticipantId: 'battleParticipantId',
+  myPokemonId: 'myPokemonId'
+} as const
+
+export type BattlePokemonOrderByRelevanceFieldEnum = (typeof BattlePokemonOrderByRelevanceFieldEnum)[keyof typeof BattlePokemonOrderByRelevanceFieldEnum]
+
+
+export const BattlePokemonMoveOrderByRelevanceFieldEnum = {
+  id: 'id',
+  battlePokemonId: 'battlePokemonId',
+  moveId: 'moveId'
+} as const
+
+export type BattlePokemonMoveOrderByRelevanceFieldEnum = (typeof BattlePokemonMoveOrderByRelevanceFieldEnum)[keyof typeof BattlePokemonMoveOrderByRelevanceFieldEnum]
+
+
+export const BattleTurnLogOrderByRelevanceFieldEnum = {
+  id: 'id',
+  battleId: 'battleId',
+  actorParticipantId: 'actorParticipantId'
+} as const
+
+export type BattleTurnLogOrderByRelevanceFieldEnum = (typeof BattleTurnLogOrderByRelevanceFieldEnum)[keyof typeof BattleTurnLogOrderByRelevanceFieldEnum]
 

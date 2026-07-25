@@ -361,6 +361,125 @@ export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
   _max?: Prisma.NestedJsonFilter<$PrismaModel>
 }
 
+export type EnumBattleStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.BattleStatus | Prisma.EnumBattleStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.BattleStatus[]
+  notIn?: $Enums.BattleStatus[]
+  not?: Prisma.NestedEnumBattleStatusFilter<$PrismaModel> | $Enums.BattleStatus
+}
+
+export type EnumBattleStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BattleStatus | Prisma.EnumBattleStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.BattleStatus[]
+  notIn?: $Enums.BattleStatus[]
+  not?: Prisma.NestedEnumBattleStatusWithAggregatesFilter<$PrismaModel> | $Enums.BattleStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBattleStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBattleStatusFilter<$PrismaModel>
+}
+
+export type EnumBattleTurnStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.BattleTurnState | Prisma.EnumBattleTurnStateFieldRefInput<$PrismaModel>
+  in?: $Enums.BattleTurnState[]
+  notIn?: $Enums.BattleTurnState[]
+  not?: Prisma.NestedEnumBattleTurnStateFilter<$PrismaModel> | $Enums.BattleTurnState
+}
+
+export type JsonNullableFilter<$PrismaModel = never> =
+| Prisma.PatchUndefined<
+    Prisma.Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+    Required<JsonNullableFilterBase<$PrismaModel>>
+  >
+| Prisma.OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+export type JsonNullableFilterBase<$PrismaModel = never> = {
+  equals?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
+  path?: string
+  mode?: Prisma.QueryMode | Prisma.EnumQueryModeFieldRefInput<$PrismaModel>
+  string_contains?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  string_starts_with?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  string_ends_with?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  array_starts_with?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | null
+  array_ends_with?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | null
+  array_contains?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | null
+  lt?: runtime.InputJsonValue
+  lte?: runtime.InputJsonValue
+  gt?: runtime.InputJsonValue
+  gte?: runtime.InputJsonValue
+  not?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
+}
+
+export type EnumBattleTurnStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BattleTurnState | Prisma.EnumBattleTurnStateFieldRefInput<$PrismaModel>
+  in?: $Enums.BattleTurnState[]
+  notIn?: $Enums.BattleTurnState[]
+  not?: Prisma.NestedEnumBattleTurnStateWithAggregatesFilter<$PrismaModel> | $Enums.BattleTurnState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBattleTurnStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBattleTurnStateFilter<$PrismaModel>
+}
+
+export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+| Prisma.PatchUndefined<
+    Prisma.Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+    Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+  >
+| Prisma.OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+  equals?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
+  path?: string
+  mode?: Prisma.QueryMode | Prisma.EnumQueryModeFieldRefInput<$PrismaModel>
+  string_contains?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  string_starts_with?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  string_ends_with?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  array_starts_with?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | null
+  array_ends_with?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | null
+  array_contains?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | null
+  lt?: runtime.InputJsonValue
+  lte?: runtime.InputJsonValue
+  gt?: runtime.InputJsonValue
+  gte?: runtime.InputJsonValue
+  not?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedJsonNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedJsonNullableFilter<$PrismaModel>
+}
+
+export type EnumStatusConditionFilter<$PrismaModel = never> = {
+  equals?: $Enums.StatusCondition | Prisma.EnumStatusConditionFieldRefInput<$PrismaModel>
+  in?: $Enums.StatusCondition[]
+  notIn?: $Enums.StatusCondition[]
+  not?: Prisma.NestedEnumStatusConditionFilter<$PrismaModel> | $Enums.StatusCondition
+}
+
+export type EnumStatusConditionWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.StatusCondition | Prisma.EnumStatusConditionFieldRefInput<$PrismaModel>
+  in?: $Enums.StatusCondition[]
+  notIn?: $Enums.StatusCondition[]
+  not?: Prisma.NestedEnumStatusConditionWithAggregatesFilter<$PrismaModel> | $Enums.StatusCondition
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumStatusConditionFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumStatusConditionFilter<$PrismaModel>
+}
+
+export type EnumBattleActionTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.BattleActionType | Prisma.EnumBattleActionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.BattleActionType[]
+  notIn?: $Enums.BattleActionType[]
+  not?: Prisma.NestedEnumBattleActionTypeFilter<$PrismaModel> | $Enums.BattleActionType
+}
+
+export type EnumBattleActionTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BattleActionType | Prisma.EnumBattleActionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.BattleActionType[]
+  notIn?: $Enums.BattleActionType[]
+  not?: Prisma.NestedEnumBattleActionTypeWithAggregatesFilter<$PrismaModel> | $Enums.BattleActionType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBattleActionTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBattleActionTypeFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[]
@@ -685,6 +804,98 @@ export type NestedJsonFilterBase<$PrismaModel = never> = {
   gt?: runtime.InputJsonValue
   gte?: runtime.InputJsonValue
   not?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
+}
+
+export type NestedEnumBattleStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.BattleStatus | Prisma.EnumBattleStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.BattleStatus[]
+  notIn?: $Enums.BattleStatus[]
+  not?: Prisma.NestedEnumBattleStatusFilter<$PrismaModel> | $Enums.BattleStatus
+}
+
+export type NestedEnumBattleStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BattleStatus | Prisma.EnumBattleStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.BattleStatus[]
+  notIn?: $Enums.BattleStatus[]
+  not?: Prisma.NestedEnumBattleStatusWithAggregatesFilter<$PrismaModel> | $Enums.BattleStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBattleStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBattleStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumBattleTurnStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.BattleTurnState | Prisma.EnumBattleTurnStateFieldRefInput<$PrismaModel>
+  in?: $Enums.BattleTurnState[]
+  notIn?: $Enums.BattleTurnState[]
+  not?: Prisma.NestedEnumBattleTurnStateFilter<$PrismaModel> | $Enums.BattleTurnState
+}
+
+export type NestedEnumBattleTurnStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BattleTurnState | Prisma.EnumBattleTurnStateFieldRefInput<$PrismaModel>
+  in?: $Enums.BattleTurnState[]
+  notIn?: $Enums.BattleTurnState[]
+  not?: Prisma.NestedEnumBattleTurnStateWithAggregatesFilter<$PrismaModel> | $Enums.BattleTurnState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBattleTurnStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBattleTurnStateFilter<$PrismaModel>
+}
+
+export type NestedJsonNullableFilter<$PrismaModel = never> =
+| Prisma.PatchUndefined<
+    Prisma.Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+    Required<NestedJsonNullableFilterBase<$PrismaModel>>
+  >
+| Prisma.OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+  equals?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
+  path?: string
+  mode?: Prisma.QueryMode | Prisma.EnumQueryModeFieldRefInput<$PrismaModel>
+  string_contains?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  string_starts_with?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  string_ends_with?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  array_starts_with?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | null
+  array_ends_with?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | null
+  array_contains?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | null
+  lt?: runtime.InputJsonValue
+  lte?: runtime.InputJsonValue
+  gt?: runtime.InputJsonValue
+  gte?: runtime.InputJsonValue
+  not?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
+}
+
+export type NestedEnumStatusConditionFilter<$PrismaModel = never> = {
+  equals?: $Enums.StatusCondition | Prisma.EnumStatusConditionFieldRefInput<$PrismaModel>
+  in?: $Enums.StatusCondition[]
+  notIn?: $Enums.StatusCondition[]
+  not?: Prisma.NestedEnumStatusConditionFilter<$PrismaModel> | $Enums.StatusCondition
+}
+
+export type NestedEnumStatusConditionWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.StatusCondition | Prisma.EnumStatusConditionFieldRefInput<$PrismaModel>
+  in?: $Enums.StatusCondition[]
+  notIn?: $Enums.StatusCondition[]
+  not?: Prisma.NestedEnumStatusConditionWithAggregatesFilter<$PrismaModel> | $Enums.StatusCondition
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumStatusConditionFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumStatusConditionFilter<$PrismaModel>
+}
+
+export type NestedEnumBattleActionTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.BattleActionType | Prisma.EnumBattleActionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.BattleActionType[]
+  notIn?: $Enums.BattleActionType[]
+  not?: Prisma.NestedEnumBattleActionTypeFilter<$PrismaModel> | $Enums.BattleActionType
+}
+
+export type NestedEnumBattleActionTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BattleActionType | Prisma.EnumBattleActionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.BattleActionType[]
+  notIn?: $Enums.BattleActionType[]
+  not?: Prisma.NestedEnumBattleActionTypeWithAggregatesFilter<$PrismaModel> | $Enums.BattleActionType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBattleActionTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBattleActionTypeFilter<$PrismaModel>
 }
 
 
