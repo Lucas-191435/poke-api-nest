@@ -1,12 +1,5 @@
-import { BadRequestException, Body, Controller, Get, HttpCode, Param, Post, Query } from '@nestjs/common';
-import {
-    ApiTags,
-    ApiOperation,
-    ApiResponse,
-    ApiQuery,
-} from '@nestjs/swagger';
-import { Public } from 'src/common/auth/public.decorator';
-import { Throttle } from '@nestjs/throttler';
+import { Body, Controller, Get, HttpCode, Param, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { BattleService } from './services/battle.services';
 import { GetUser } from 'src/common/guard/getuser.decorator';
 import { CreateBattleDto } from './dto/create-battle.dto';
@@ -19,28 +12,35 @@ export class BattleController {
 
     @Post()
     @HttpCode(200)
-    async getMessages(
+    async createBattle(
         @GetUser('id') userId: string,
         @Body() dto: CreateBattleDto,
     ) {
-
+        return this.battleService.createBattle({
+            userId,
+            teamName: dto.teamName,
+        });
     }
 
-    @Post('/:id/join')
+    @Post(':id/join')
     @HttpCode(200)
     async joinBattle(
-        @Param('id')
+        @Param('id') battleId: string,
         @GetUser('id') userId: string,
         @Body() dto: JoinBattleDto,
     ) {
-
+        return this.battleService.joinBattle({
+            battleId,
+            userId,
+            teamName: dto.teamName,
+        });
     }
 
-    @Get('/battle/:id')
-    async getChatRoomOfUser(
-        @Param('id')
+    @Get(':id')
+    async getBattle(
+        @Param('id') battleId: string,
         @GetUser('id') userId: string,
     ) {
-
+        return this.battleService.getBattleSnapshot({ battleId, userId });
     }
 }
