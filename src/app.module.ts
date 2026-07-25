@@ -12,6 +12,7 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { PokemonMoveModule } from './modules/pokemonMove/pokeMove.module';
 import { ItemsModule } from './modules/items/items.module';
 import { ChatModule } from './modules/chat/chat.module';
+import { BattleModule } from './modules/battle/battle.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { ChatModule } from './modules/chat/chat.module';
     PokemonMoveModule,
     ItemsModule,
     ChatModule,
+    BattleModule,
   ],
   controllers: [AppController],
   providers: [
