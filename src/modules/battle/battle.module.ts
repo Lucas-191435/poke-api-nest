@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { BattleService } from './services/battle.services';
+import { BattleEngineService } from './services/battle-engine.service';
 import { BattleRepository } from './repositories/battle.repository';
 import { BattleGateway } from './gateways/battle.gateway';
 import { BattleController } from './battle.controller';
@@ -17,7 +18,7 @@ import authConfig from 'src/config/authConfig';
     }),
   ],
   controllers: [BattleController],
-  providers: [BattleGateway, BattleService, BattleRepository],
+  providers: [BattleGateway, BattleService, BattleEngineService, BattleRepository],
 })
 export class BattleModule {}
 

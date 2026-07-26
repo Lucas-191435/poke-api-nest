@@ -132,18 +132,40 @@ export class BattleGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         const user = client.data.user;
         if (!user) throw new WsException('Não autenticado.');
         const battleId = this.getBattleIdOrThrow(client);
+        const room = this.roomName(battleId);
 
-        const participant = await this.battleService.submitAction({
+        const result = await this.battleService.submitAction({
             battleId,
             userId: user.id,
             action: { ...dto },
         });
 
-        // A resolução do turno (dano, PP, efeitos) fica pro battle-engine.service,
-        // que ainda não existe — por enquanto só registra a ação pendente e avisa o oponente.
-        this.server.to(this.roomName(battleId)).emit('opponent-action-submitted', {
-            participantId: participant.id,
+        if (result.status === 'waiting-for-opponent') {
+            this.server.to(room).emit('opponent-action-submitted', { userId: user.id });
+            return { received: true };
+        }
+
+        if (result.status === 'forced-switch-resolved') {
+            this.server.to(room).emit('battle-updated', { userId: user.id, forcedSwitchResolved: true });
+            return { received: true };
+        }
+
+        this.server.to(room).emit('turn-resolved', {
+            turnNumber: result.turnNumber,
+            log: result.log,
+            forcedSwitchParticipantIds: result.forcedSwitchParticipantIds,
         });
+
+        if (result.finished) {
+            this.server.to(room).emit('battle-ended', {
+                winnerId: result.winnerUserId,
+                reason: 'faint',
+            });
+        } else {
+            for (const participantId of result.forcedSwitchParticipantIds) {
+                this.server.to(room).emit('forced-switch-required', { participantId });
+            }
+        }
 
         return { received: true };
     }

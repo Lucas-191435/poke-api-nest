@@ -3,8 +3,9 @@ import { JwtService } from "@nestjs/jwt";
 import { JwtPayload } from "src/common/auth/jwt.strategy";
 import { PrismaService } from "src/common/database/prisma.service";
 import { Move, MyPokemon, Pokemon, Prisma } from "src/generated/prisma/client";
-import { BattleStatus } from "src/generated/prisma/enums";
+import { BattleActionType, BattleStatus, BattleTurnState } from "src/generated/prisma/enums";
 import { RECENT_TURN_LOGS_LIMIT } from "../battle.constants";
+import { ResolveTurnResult, TurnLogEntry } from "../services/battle-engine.service";
 
 export type TeamName = "teamAlpha" | "teamBeta" | "teamGamma";
 
@@ -13,6 +14,20 @@ export type TeamMemberForBattle = {
     pokemon: Pokemon;
     moves: Move[];
 };
+
+const participantForResolutionInclude = {
+    pokemons: {
+        orderBy: { position: "asc" },
+        include: {
+            moves: { include: { move: true } },
+            myPokemon: { include: { pokemon: { select: { pokeId: true, name: true, img1: true, types: true } } } },
+        },
+    },
+} satisfies Prisma.BattleParticipantInclude;
+
+export type ParticipantForResolution = Prisma.BattleParticipantGetPayload<{
+    include: typeof participantForResolutionInclude;
+}>;
 
 const battleSnapshotInclude = {
     participants: {
@@ -23,6 +38,7 @@ const battleSnapshotInclude = {
                     moves: {
                         include: { move: true },
                     },
+                    myPokemon: { include: { pokemon: { select: { pokeId: true, name: true, img1: true, types: true } } } }
                 },
             },
         },
@@ -244,9 +260,148 @@ export class BattleRepository {
             where: { id: participantId },
             data: {
                 pendingAction,
-                turnState: "ACTION_SUBMITTED",
+                turnState: BattleTurnState.ACTION_SUBMITTED,
             },
         });
+    }
+
+    /** Estado completo dos dois participantes (Pokémon, PP, tipos da espécie) pra montar o input do battle-engine. */
+    getParticipantsForResolution(battleId: string) {
+        return this.prisma.battleParticipant.findMany({
+            where: { battleId },
+            include: participantForResolutionInclude,
+        });
+    }
+
+    /** Troca aplicada fora do fluxo normal de turno, quando o Pokémon ativo acabou de desmaiar. */
+    async applyForcedSwitch({
+        battleId,
+        turnNumber,
+        participantId,
+        battlePokemonId,
+    }: {
+        battleId: string;
+        turnNumber: number;
+        participantId: string;
+        battlePokemonId: string;
+    }) {
+        const pokemon = await this.prisma.battlePokemon.findFirst({
+            where: { id: battlePokemonId, battleParticipantId: participantId },
+        });
+
+        if (!pokemon) {
+            throw new BadRequestException("Esse Pokémon não pertence ao seu time nesta batalha.");
+        }
+        if (pokemon.fainted) {
+            throw new BadRequestException("Não é possível escolher um Pokémon desmaiado.");
+        }
+
+        return this.prisma.$transaction(async (tx) => {
+            const participant = await tx.battleParticipant.update({
+                where: { id: participantId },
+                data: { activeSlot: pokemon.position, turnState: BattleTurnState.WAITING_ACTION },
+            });
+
+            await tx.battleTurnLog.create({
+                data: {
+                    battleId,
+                    turnNumber,
+                    actorParticipantId: participantId,
+                    actionType: BattleActionType.SWITCH,
+                    payload: { event: "switch", participantId, battlePokemonId },
+                },
+            });
+
+            return participant;
+        });
+    }
+
+    /** Persiste o resultado do battle-engine numa transação: HP/PP/fainted, log do turno e o avanço da batalha. */
+    async persistTurnResolution({
+        battleId,
+        turnNumber,
+        result,
+        participantUserIds,
+    }: {
+        battleId: string;
+        turnNumber: number;
+        result: ResolveTurnResult;
+        participantUserIds: Record<string, string>;
+    }) {
+        return this.prisma.$transaction(async (tx) => {
+            for (const participant of result.participants) {
+                const turnState = result.finished
+                    ? BattleTurnState.WAITING_ACTION
+                    : result.forcedSwitchParticipantIds.includes(participant.participantId)
+                        ? BattleTurnState.WAITING_FORCED_SWITCH
+                        : BattleTurnState.WAITING_ACTION;
+
+                await tx.battleParticipant.update({
+                    where: { id: participant.participantId },
+                    data: {
+                        activeSlot: participant.activeSlot,
+                        pendingAction: Prisma.JsonNull,
+                        turnState,
+                    },
+                });
+
+                for (const pokemon of participant.pokemons) {
+                    await tx.battlePokemon.update({
+                        where: { id: pokemon.battlePokemonId },
+                        data: { currentHp: pokemon.currentHp, fainted: pokemon.fainted },
+                    });
+
+                    for (const move of pokemon.moves) {
+                        await tx.battlePokemonMove.update({
+                            where: { id: move.battlePokemonMoveId },
+                            data: { currentPp: move.currentPp },
+                        });
+                    }
+                }
+            }
+
+            const logEntries = result.log.filter((entry) => entry.event !== "battle-ended");
+
+            if (logEntries.length) {
+                await tx.battleTurnLog.createMany({
+                    data: logEntries.map((entry) => ({
+                        battleId,
+                        turnNumber,
+                        actorParticipantId: "participantId" in entry ? entry.participantId : null,
+                        actionType: this.mapLogEventToActionType(entry),
+                        payload: entry,
+                    })),
+                });
+            }
+
+            return tx.battle.update({
+                where: { id: battleId },
+                data: {
+                    turnNumber: turnNumber + 1,
+                    ...(result.finished
+                        ? {
+                            status: BattleStatus.FINISHED,
+                            winnerId: result.winnerParticipantId
+                                ? participantUserIds[result.winnerParticipantId]
+                                : null,
+                        }
+                        : {}),
+                },
+                include: battleSnapshotInclude,
+            });
+        });
+    }
+
+    private mapLogEventToActionType(entry: Exclude<TurnLogEntry, { event: "battle-ended" }>) {
+        switch (entry.event) {
+            case "switch":
+                return BattleActionType.SWITCH;
+            case "move":
+            case "move-failed":
+                return BattleActionType.MOVE;
+            case "forfeit":
+                return BattleActionType.FORFEIT;
+        }
     }
 
     private getMoveIds(myPokemon: MyPokemon, teamName: TeamName): string[] {
