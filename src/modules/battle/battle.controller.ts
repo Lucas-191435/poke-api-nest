@@ -4,6 +4,7 @@ import { BattleService } from './services/battle.services';
 import { GetUser } from 'src/common/guard/getuser.decorator';
 import { CreateBattleDto } from './dto/create-battle.dto';
 import { JoinBattleDto } from './dto/join-battle.dto';
+import { Throttle } from '@nestjs/throttler';
 
 @ApiTags('battle')
 @Controller("battle")
@@ -37,6 +38,12 @@ export class BattleController {
     }
 
     @Get(':id')
+      @Throttle({
+      default: {
+        limit: 100,
+        ttl: 60000,
+      },
+    })
     async getBattle(
         @Param('id') battleId: string,
         @GetUser('id') userId: string,

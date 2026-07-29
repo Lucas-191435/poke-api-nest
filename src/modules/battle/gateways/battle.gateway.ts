@@ -9,6 +9,7 @@ import {
     ConnectedSocket,
     WsException,
 } from "@nestjs/websockets";
+import { Logger } from "@nestjs/common";
 import { Server, Socket } from "socket.io";
 import { BattleService } from "../services/battle.services";
 
@@ -28,6 +29,8 @@ type AuthenticatedSocket = Omit<Socket, 'data'> & {
     },
 })
 export class BattleGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+    private readonly logger = new Logger(BattleGateway.name);
+
     @WebSocketServer()
     server!: Server;
 
@@ -38,15 +41,23 @@ export class BattleGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
     constructor(private readonly battleService: BattleService) { }
 
-    afterInit() { }
+    afterInit() {
+        this.logger.log('Gateway de batalha inicializado');
+    }
 
     async handleConnection(client: Socket) {
         try {
             const token = client.handshake.auth.token as string | undefined;
-            if (!token) { client.disconnect(); return; }
+            if (!token) {
+                this.logger.warn(`Conexão recusada (sem token) clientId=${client.id}`);
+                client.disconnect();
+                return;
+            }
             const user = await this.battleService.validateToken(token);
             (client.data as { user: User }).user = user;
-        } catch {
+            this.logger.log(`Cliente conectado clientId=${client.id} userId=${user.id}`);
+        } catch (error) {
+            this.logger.warn(`Falha na autenticação clientId=${client.id}: ${(error as Error).message}`);
             client.disconnect();
         }
     }
@@ -67,6 +78,8 @@ export class BattleGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         client.data.battleId = dto.battleId;
         await client.join(this.roomName(dto.battleId));
 
+        this.logger.log(`join-battle userId=${user.id} battleId=${dto.battleId} clientId=${client.id}`);
+
         return battle;
     }
 
@@ -84,6 +97,10 @@ export class BattleGateway implements OnGatewayInit, OnGatewayConnection, OnGate
             userId: user.id,
             battlePokemonId: dto.battlePokemonId,
         });
+
+        this.logger.log(
+            `select-lead battleId=${battleId} userId=${user.id} battlePokemonId=${dto.battlePokemonId}`,
+        );
 
         this.server.to(this.roomName(battleId)).emit('battle-updated', {
             participantId: participant.id,
@@ -107,6 +124,10 @@ export class BattleGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         ready.add(participant.id);
         this.readyParticipants.set(battleId, ready);
 
+        this.logger.log(
+            `ready battleId=${battleId} userId=${user.id} participantId=${participant.id} readyCount=${ready.size}`,
+        );
+
         this.server.to(this.roomName(battleId)).emit('battle-updated', {
             participantId: participant.id,
             ready: true,
@@ -115,6 +136,7 @@ export class BattleGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         if (ready.size >= 2) {
             this.readyParticipants.delete(battleId);
             const battle = await this.battleService.startBattle(battleId);
+            this.logger.log(`battle-started battleId=${battleId} status=${battle.status}`);
             this.server.to(this.roomName(battleId)).emit('battle-updated', {
                 status: battle.status,
                 turnNumber: battle.turnNumber,
@@ -134,6 +156,8 @@ export class BattleGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         const battleId = this.getBattleIdOrThrow(client);
         const room = this.roomName(battleId);
 
+        this.logger.log(`submit-action battleId=${battleId} userId=${user.id} type=${dto.type}`);
+
         const result = await this.battleService.submitAction({
             battleId,
             userId: user.id,
@@ -150,6 +174,10 @@ export class BattleGateway implements OnGatewayInit, OnGatewayConnection, OnGate
             return { received: true };
         }
 
+        this.logger.log(
+            `turn-resolved battleId=${battleId} turnNumber=${result.turnNumber} finished=${result.finished}`,
+        );
+
         this.server.to(room).emit('turn-resolved', {
             turnNumber: result.turnNumber,
             log: result.log,
@@ -157,6 +185,7 @@ export class BattleGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         });
 
         if (result.finished) {
+            this.logger.log(`battle-ended battleId=${battleId} winnerId=${result.winnerUserId ?? '-'}`);
             this.server.to(room).emit('battle-ended', {
                 winnerId: result.winnerUserId,
                 reason: 'faint',
@@ -170,7 +199,9 @@ export class BattleGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         return { received: true };
     }
 
-    handleDisconnect() { }
+    handleDisconnect(client: Socket) {
+        this.logger.log(`Cliente desconectado clientId=${client.id}`);
+    }
 
     private getBattleIdOrThrow(client: AuthenticatedSocket): string {
         if (!client.data.battleId) {

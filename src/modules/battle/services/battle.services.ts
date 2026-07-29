@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, Logger } from '@nestjs/common';
 import { BattleRepository, ParticipantForResolution, TeamName } from '../repositories/battle.repository';
 import { MAX_TEAM_SIZE, MIN_TEAM_SIZE } from '../battle.constants';
 import { BattleTurnState } from 'src/generated/prisma/enums';
@@ -24,6 +24,8 @@ export type SubmitActionResult =
 
 @Injectable()
 export class BattleService {
+    private readonly logger = new Logger(BattleService.name);
+
     constructor(
         private readonly battleRepository: BattleRepository,
         private readonly battleEngineService: BattleEngineService,
@@ -34,6 +36,7 @@ export class BattleService {
     }
 
     async createBattle({ userId, teamName }: { userId: string; teamName: TeamName }) {
+        this.logger.log(`Criando batalha para userId=${userId} teamName=${teamName}`);
         const team = await this.battleRepository.getTeamForBattle({ userId, teamName });
         this.assertValidTeamSize(team.length);
 
@@ -43,6 +46,7 @@ export class BattleService {
             team,
         });
 
+        this.logger.log(`Batalha criada battleId=${battle.id} playerAId=${userId}`);
         return { id: battle.id };
     }
 
@@ -55,6 +59,7 @@ export class BattleService {
         userId: string;
         teamName: TeamName;
     }) {
+        this.logger.log(`userId=${userId} entrando na batalha battleId=${battleId} teamName=${teamName}`);
         const team = await this.battleRepository.getTeamForBattle({ userId, teamName });
         this.assertValidTeamSize(team.length);
 
@@ -65,6 +70,7 @@ export class BattleService {
             team,
         });
 
+        this.logger.log(`userId=${userId} entrou na batalha battleId=${battle.id}`);
         return { id: battle.id };
     }
 
@@ -92,6 +98,9 @@ export class BattleService {
         battlePokemonId: string;
     }) {
         const participant = await this.getParticipantOrThrow(battleId, userId);
+        this.logger.log(
+            `selectLead battleId=${battleId} userId=${userId} battlePokemonId=${battlePokemonId}`,
+        );
         return this.battleRepository.selectLead({
             participantId: participant.id,
             battlePokemonId,
@@ -99,6 +108,7 @@ export class BattleService {
     }
 
     async startBattle(battleId: string) {
+        this.logger.log(`Iniciando batalha battleId=${battleId}`);
         return this.battleRepository.startBattle(battleId);
     }
 
@@ -113,6 +123,10 @@ export class BattleService {
     }): Promise<SubmitActionResult> {
         const participant = await this.getParticipantOrThrow(battleId, userId);
 
+        this.logger.log(
+            `submitAction battleId=${battleId} userId=${userId} type=${action.type} turnState=${participant.turnState}`,
+        );
+
         if (participant.turnState === BattleTurnState.WAITING_FORCED_SWITCH) {
             if (action.type !== 'SWITCH' || !action.targetPokemonId) {
                 throw new BadRequestException('Seu Pokémon desmaiou — escolha outro pra continuar.');
@@ -126,6 +140,10 @@ export class BattleService {
                 battlePokemonId: action.targetPokemonId,
             });
 
+            this.logger.log(
+                `Troca forçada resolvida battleId=${battleId} participantId=${participant.id} novoPokemon=${action.targetPokemonId}`,
+            );
+
             return { status: 'forced-switch-resolved' };
         }
 
@@ -134,6 +152,7 @@ export class BattleService {
         }
 
         if (action.type === 'FORFEIT') {
+            this.logger.log(`participantId=${participant.id} desistiu da batalha battleId=${battleId}`);
             return this.resolveWithActions(battleId, {
                 [participant.id]: { type: 'FORFEIT' },
             });
@@ -152,6 +171,7 @@ export class BattleService {
         const [p1, p2] = participants;
 
         if (!p1?.pendingAction || !p2?.pendingAction) {
+            this.logger.log(`battleId=${battleId} aguardando ação do oponente`);
             return { status: 'waiting-for-opponent' };
         }
 
@@ -173,6 +193,8 @@ export class BattleService {
 
         const battle = await this.battleRepository.getBattleSnapshot(battleId);
 
+        this.logger.log(`Resolvendo turno battleId=${battleId} turnNumber=${battle.turnNumber}`);
+
         const result = this.battleEngineService.resolveTurn({
             turnNumber: battle.turnNumber,
             participants: [this.toEngineParticipant(p1), this.toEngineParticipant(p2)],
@@ -192,6 +214,10 @@ export class BattleService {
         const winnerUserId = result.winnerParticipantId
             ? ({ [p1.id]: p1.userId, [p2.id]: p2.userId }[result.winnerParticipantId] ?? null)
             : null;
+
+        this.logger.log(
+            `Turno resolvido battleId=${battleId} turnNumber=${battle.turnNumber} finished=${result.finished} winnerUserId=${winnerUserId ?? '-'}`,
+        );
 
         return { ...result, status: 'turn-resolved', turnNumber: battle.turnNumber, winnerUserId };
     }

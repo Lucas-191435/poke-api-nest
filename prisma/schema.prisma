@@ -60,8 +60,8 @@ model User {
   chatRooms        ChatRoomUser[]
 
   battleParticipants BattleParticipant[]
-  battlesA           Battle[] @relation("BattlePlayerA")
-  battlesB           Battle[] @relation("BattlePlayerB")
+  battlesA           Battle[]            @relation("BattlePlayerA")
+  battlesB           Battle[]            @relation("BattlePlayerB")
   battles            Battle[]
 
   @@map("users") // Nome da tabela no banco de dados
