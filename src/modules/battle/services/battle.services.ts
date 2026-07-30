@@ -9,6 +9,7 @@ import {
     ResolveTurnResult,
 } from './battle-engine.service';
 import { parsePokemonTypes } from './type-chart';
+import { StatStages } from './stat-stage-moves';
 
 export type SubmitActionInput = {
     type: 'MOVE' | 'SWITCH' | 'ITEM' | 'FORFEIT';
@@ -238,24 +239,47 @@ export class BattleService {
                 spDef: pokemon.spDef,
                 speed: pokemon.speed,
                 fainted: pokemon.fainted,
+                statusCondition: pokemon.statusCondition,
+                statusCounter: pokemon.statusCounter,
+                statStages: this.parseStatStages(pokemon.statStages),
                 moves: pokemon.moves.map((move) => ({
                     battlePokemonMoveId: move.id,
                     currentPp: move.currentPp,
                     move: {
                         id: move.move.id,
+                        name: move.move.name,
                         power: move.move.power,
                         accuracy: move.move.accuracy,
                         priority: move.move.priority,
                         type: move.move.type,
                         damageClass:
-                            move.move.damage_class === 'physical' || move.move.damage_class === 'special'
+                            move.move.damage_class === 'physical' ||
+                                move.move.damage_class === 'special' ||
+                                move.move.damage_class === 'status'
                                 ? move.move.damage_class
                                 : null,
                         critRate: move.move.crit_rate,
+                        ailment: move.move.ailment,
+                        ailmentChance: move.move.effect_chance,
+                        healing: move.move.healing ?? 0,
+                        drain: move.move.drain ?? 0,
                     },
                 })),
             })),
         };
+    }
+
+    private parseStatStages(raw: unknown): StatStages {
+        const empty: StatStages = { atk: 0, def: 0, spAtk: 0, spDef: 0, speed: 0, accuracy: 0, evasion: 0 };
+        if (!raw || typeof raw !== 'object') return empty;
+
+        const parsed = raw as Partial<Record<keyof StatStages, unknown>>;
+        const result = { ...empty };
+        for (const key of Object.keys(empty) as (keyof StatStages)[]) {
+            const value = parsed[key];
+            if (typeof value === 'number') result[key] = value;
+        }
+        return result;
     }
 
     private toEngineAction(raw: SubmitActionInput): EngineAction {
@@ -285,7 +309,10 @@ export class BattleService {
         battle: { playerAId: string; playerBId: string | null },
         userId: string,
     ) {
-        if (battle.playerAId !== userId && battle.playerBId !== userId) {
+        const hasTwoParticipants = battle.playerBId !== null;
+        const isParticipant = battle.playerAId === userId || battle.playerBId === userId;
+
+        if (hasTwoParticipants && !isParticipant) {
             throw new ForbiddenException('Você não participa desta batalha.');
         }
     }

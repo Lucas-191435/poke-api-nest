@@ -68,7 +68,7 @@ export class BattleGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         @MessageBody() dto: { battleId: string },
     ) {
         const user = client.data.user;
-        if (!user) throw new WsException('Não autenticado.');
+        if (!user) throw new WsException('Não autenticado, no join-battle.');
 
         const battle = await this.battleService.getBattleSnapshot({
             battleId: dto.battleId,
@@ -89,7 +89,7 @@ export class BattleGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         @MessageBody() dto: SelectLeadDto,
     ) {
         const user = client.data.user;
-        if (!user) throw new WsException('Não autenticado.');
+        if (!user) throw new WsException('Não autenticado no select-lead.');
         const battleId = this.getBattleIdOrThrow(client);
 
         const participant = await this.battleService.selectLead({
@@ -115,7 +115,7 @@ export class BattleGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         @ConnectedSocket() client: AuthenticatedSocket,
     ) {
         const user = client.data.user;
-        if (!user) throw new WsException('Não autenticado.');
+        if (!user) throw new WsException('Não autenticado, no ready.');
         const battleId = this.getBattleIdOrThrow(client);
 
         const participant = await this.battleService.getParticipantOrThrow(battleId, user.id);
@@ -152,7 +152,7 @@ export class BattleGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         @MessageBody() dto: SubmitActionDto,
     ) {
         const user = client.data.user;
-        if (!user) throw new WsException('Não autenticado.');
+        if (!user) throw new WsException('Não autenticado, no submit-action.');
         const battleId = this.getBattleIdOrThrow(client);
         const room = this.roomName(battleId);
 

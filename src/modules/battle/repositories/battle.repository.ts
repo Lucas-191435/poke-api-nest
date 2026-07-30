@@ -348,7 +348,13 @@ export class BattleRepository {
                 for (const pokemon of participant.pokemons) {
                     await tx.battlePokemon.update({
                         where: { id: pokemon.battlePokemonId },
-                        data: { currentHp: pokemon.currentHp, fainted: pokemon.fainted },
+                        data: {
+                            currentHp: pokemon.currentHp,
+                            fainted: pokemon.fainted,
+                            statusCondition: pokemon.statusCondition,
+                            statusCounter: pokemon.statusCounter,
+                            statStages: pokemon.statStages,
+                        },
                     });
 
                     for (const move of pokemon.moves) {
@@ -392,12 +398,22 @@ export class BattleRepository {
         });
     }
 
-    private mapLogEventToActionType(entry: Exclude<TurnLogEntry, { event: "battle-ended" }>) {
+    private mapLogEventToActionType(entry: Exclude<TurnLogEntry, { event: "battle-ended" }>): BattleActionType {
         switch (entry.event) {
             case "switch":
                 return BattleActionType.SWITCH;
+            // O Prisma não tem um BattleActionType dedicado pra eventos de status/stat —
+            // o payload já carrega o `event` específico pra quem consome o log.
             case "move":
             case "move-failed":
+            case "status-applied":
+            case "status-blocked":
+            case "confusion-hit":
+            case "status-tick":
+            case "status-cured":
+            case "stat-change":
+            case "heal":
+            case "recoil":
                 return BattleActionType.MOVE;
             case "forfeit":
                 return BattleActionType.FORFEIT;
