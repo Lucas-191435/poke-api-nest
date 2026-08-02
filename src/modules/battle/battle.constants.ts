@@ -3,6 +3,9 @@ export const MAX_TEAM_SIZE = 6;
 export const FIXED_LEVEL = 50;
 export const RECENT_TURN_LOGS_LIMIT = 20;
 
+/** Multiplicador global aplicado a todo dano calculado, para deixar as batalhas menos rápidas. */
+export const DAMAGE_MULTIPLIER = 0.55;
+
 // Condições de status — ver docs/battle-plan.md e services/status-conditions.ts
 export const FULL_PARALYSIS_CHANCE = 0.25;
 export const PARALYSIS_SPEED_MULTIPLIER = 0.5;

@@ -16,6 +16,12 @@ services:
     ports:
       - "4001:4001"
 
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
     networks:
       - shared-network
 

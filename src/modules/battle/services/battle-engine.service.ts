@@ -1,5 +1,11 @@
 import { Injectable } from "@nestjs/common";
-import { BURN_ATTACK_MULTIPLIER, CONFUSION_SELF_HIT_POWER, FIXED_LEVEL, PARALYSIS_SPEED_MULTIPLIER } from "../battle.constants";
+import {
+    BURN_ATTACK_MULTIPLIER,
+    CONFUSION_SELF_HIT_POWER,
+    DAMAGE_MULTIPLIER,
+    FIXED_LEVEL,
+    PARALYSIS_SPEED_MULTIPLIER,
+} from "../battle.constants";
 import { describeEffectiveness, EffectivenessLabel, getTypeEffectiveness, PokemonType } from "./type-chart";
 import {
     getBurnDamage,
@@ -324,7 +330,7 @@ export class BattleEngineService {
 
     private computeDamage(power: number, attackStat: number, defenseStat: number, multiplier: number, randomFactor: number): number {
         const base = ((2 * FIXED_LEVEL) / 5 + 2) * power * (attackStat / Math.max(1, defenseStat)) / 50 + 2;
-        return Math.max(1, Math.floor(base * multiplier * randomFactor));
+        return Math.max(1, Math.floor(base * multiplier * randomFactor * DAMAGE_MULTIPLIER));
     }
 
     private getCritChance(critRateStage: number | null): number {

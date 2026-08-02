@@ -203,6 +203,60 @@ export class BattleRepository {
         });
     }
 
+    /** Apaga todas as batalhas do sistema (e registros dependentes), sem distinção de status. */
+    async deleteAllBattles() {
+        return this.prisma.$transaction(async (tx) => {
+            await tx.battlePokemonMove.deleteMany({});
+            await tx.battlePokemon.deleteMany({});
+            await tx.battleTurnLog.deleteMany({});
+            await tx.battleParticipant.deleteMany({});
+            const { count } = await tx.battle.deleteMany({});
+            return { count };
+        });
+    }
+
+    async findBattleRooms({
+        page = 1,
+        pageSize = 10,
+        search,
+    }: {
+        page?: number;
+        pageSize?: number;
+        search?: string;
+    }) {
+        const where: Prisma.BattleWhereInput = {
+            status: BattleStatus.WAITING_OPPONENT,
+            ...(search
+                ? {
+                    playerA: {
+                        OR: [
+                            { name: { contains: search } },
+                            { email: { contains: search } },
+                        ],
+                    },
+                }
+                : {}),
+        };
+
+        const [battles, count] = await Promise.all([
+            this.prisma.battle.findMany({
+                where,
+                orderBy: { createdAt: 'desc' },
+                skip: (page - 1) * pageSize,
+                take: pageSize,
+                select: {
+                    id: true,
+                    status: true,
+                    createdAt: true,
+                    playerA: { select: { id: true, name: true, email: true } },
+                },
+            }),
+            this.prisma.battle.count({ where }),
+        ]);
+
+        return { battles, count, page, pageSize };
+    }
+
     async getBattleSnapshot(battleId: string) {
         const battle = await this.prisma.battle.findUnique({
             where: { id: battleId },

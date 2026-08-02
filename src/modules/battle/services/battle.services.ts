@@ -75,6 +75,29 @@ export class BattleService {
         return { id: battle.id };
     }
 
+    async deleteAllBattles() {
+        this.logger.warn('Apagando todas as batalhas do sistema.');
+        const result = await this.battleRepository.deleteAllBattles();
+        this.logger.warn(`Batalhas apagadas count=${result.count}`);
+        return result;
+    }
+
+    async findBattleRooms({
+        page,
+        pageSize,
+        search,
+    }: {
+        page?: number;
+        pageSize?: number;
+        search?: string;
+    }) {
+        return this.battleRepository.findBattleRooms({
+            page: page ? parseInt(String(page)) : 1,
+            pageSize: pageSize ? parseInt(String(pageSize)) : 10,
+            search,
+        });
+    }
+
     async getBattleSnapshot({ battleId, userId }: { battleId: string; userId: string }) {
         const battle = await this.battleRepository.getBattleSnapshot(battleId);
         this.assertIsParticipant(battle, userId);
