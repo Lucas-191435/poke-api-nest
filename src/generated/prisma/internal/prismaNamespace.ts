@@ -392,7 +392,12 @@ export const ModelName = {
   MyPokemon: 'MyPokemon',
   ChatMessage: 'ChatMessage',
   ChatRoom: 'ChatRoom',
-  ChatRoomUser: 'ChatRoomUser'
+  ChatRoomUser: 'ChatRoomUser',
+  Battle: 'Battle',
+  BattleParticipant: 'BattleParticipant',
+  BattlePokemon: 'BattlePokemon',
+  BattlePokemonMove: 'BattlePokemonMove',
+  BattleTurnLog: 'BattleTurnLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -408,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "pokemon" | "item" | "move" | "pokemonMove" | "myPokemon" | "chatMessage" | "chatRoom" | "chatRoomUser"
+    modelProps: "user" | "pokemon" | "item" | "move" | "pokemonMove" | "myPokemon" | "chatMessage" | "chatRoom" | "chatRoomUser" | "battle" | "battleParticipant" | "battlePokemon" | "battlePokemonMove" | "battleTurnLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1006,6 +1011,336 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Battle: {
+      payload: Prisma.$BattlePayload<ExtArgs>
+      fields: Prisma.BattleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BattleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BattleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePayload>
+        }
+        findFirst: {
+          args: Prisma.BattleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BattleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePayload>
+        }
+        findMany: {
+          args: Prisma.BattleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePayload>[]
+        }
+        create: {
+          args: Prisma.BattleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePayload>
+        }
+        createMany: {
+          args: Prisma.BattleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.BattleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePayload>
+        }
+        update: {
+          args: Prisma.BattleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePayload>
+        }
+        deleteMany: {
+          args: Prisma.BattleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BattleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.BattleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePayload>
+        }
+        aggregate: {
+          args: Prisma.BattleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBattle>
+        }
+        groupBy: {
+          args: Prisma.BattleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BattleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BattleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BattleCountAggregateOutputType> | number
+        }
+      }
+    }
+    BattleParticipant: {
+      payload: Prisma.$BattleParticipantPayload<ExtArgs>
+      fields: Prisma.BattleParticipantFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BattleParticipantFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattleParticipantPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BattleParticipantFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattleParticipantPayload>
+        }
+        findFirst: {
+          args: Prisma.BattleParticipantFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattleParticipantPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BattleParticipantFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattleParticipantPayload>
+        }
+        findMany: {
+          args: Prisma.BattleParticipantFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattleParticipantPayload>[]
+        }
+        create: {
+          args: Prisma.BattleParticipantCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattleParticipantPayload>
+        }
+        createMany: {
+          args: Prisma.BattleParticipantCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.BattleParticipantDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattleParticipantPayload>
+        }
+        update: {
+          args: Prisma.BattleParticipantUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattleParticipantPayload>
+        }
+        deleteMany: {
+          args: Prisma.BattleParticipantDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BattleParticipantUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.BattleParticipantUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattleParticipantPayload>
+        }
+        aggregate: {
+          args: Prisma.BattleParticipantAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBattleParticipant>
+        }
+        groupBy: {
+          args: Prisma.BattleParticipantGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BattleParticipantGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BattleParticipantCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BattleParticipantCountAggregateOutputType> | number
+        }
+      }
+    }
+    BattlePokemon: {
+      payload: Prisma.$BattlePokemonPayload<ExtArgs>
+      fields: Prisma.BattlePokemonFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BattlePokemonFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePokemonPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BattlePokemonFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePokemonPayload>
+        }
+        findFirst: {
+          args: Prisma.BattlePokemonFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePokemonPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BattlePokemonFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePokemonPayload>
+        }
+        findMany: {
+          args: Prisma.BattlePokemonFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePokemonPayload>[]
+        }
+        create: {
+          args: Prisma.BattlePokemonCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePokemonPayload>
+        }
+        createMany: {
+          args: Prisma.BattlePokemonCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.BattlePokemonDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePokemonPayload>
+        }
+        update: {
+          args: Prisma.BattlePokemonUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePokemonPayload>
+        }
+        deleteMany: {
+          args: Prisma.BattlePokemonDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BattlePokemonUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.BattlePokemonUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePokemonPayload>
+        }
+        aggregate: {
+          args: Prisma.BattlePokemonAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBattlePokemon>
+        }
+        groupBy: {
+          args: Prisma.BattlePokemonGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BattlePokemonGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BattlePokemonCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BattlePokemonCountAggregateOutputType> | number
+        }
+      }
+    }
+    BattlePokemonMove: {
+      payload: Prisma.$BattlePokemonMovePayload<ExtArgs>
+      fields: Prisma.BattlePokemonMoveFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BattlePokemonMoveFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePokemonMovePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BattlePokemonMoveFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePokemonMovePayload>
+        }
+        findFirst: {
+          args: Prisma.BattlePokemonMoveFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePokemonMovePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BattlePokemonMoveFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePokemonMovePayload>
+        }
+        findMany: {
+          args: Prisma.BattlePokemonMoveFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePokemonMovePayload>[]
+        }
+        create: {
+          args: Prisma.BattlePokemonMoveCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePokemonMovePayload>
+        }
+        createMany: {
+          args: Prisma.BattlePokemonMoveCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.BattlePokemonMoveDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePokemonMovePayload>
+        }
+        update: {
+          args: Prisma.BattlePokemonMoveUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePokemonMovePayload>
+        }
+        deleteMany: {
+          args: Prisma.BattlePokemonMoveDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BattlePokemonMoveUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.BattlePokemonMoveUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattlePokemonMovePayload>
+        }
+        aggregate: {
+          args: Prisma.BattlePokemonMoveAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBattlePokemonMove>
+        }
+        groupBy: {
+          args: Prisma.BattlePokemonMoveGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BattlePokemonMoveGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BattlePokemonMoveCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BattlePokemonMoveCountAggregateOutputType> | number
+        }
+      }
+    }
+    BattleTurnLog: {
+      payload: Prisma.$BattleTurnLogPayload<ExtArgs>
+      fields: Prisma.BattleTurnLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BattleTurnLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattleTurnLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BattleTurnLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattleTurnLogPayload>
+        }
+        findFirst: {
+          args: Prisma.BattleTurnLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattleTurnLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BattleTurnLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattleTurnLogPayload>
+        }
+        findMany: {
+          args: Prisma.BattleTurnLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattleTurnLogPayload>[]
+        }
+        create: {
+          args: Prisma.BattleTurnLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattleTurnLogPayload>
+        }
+        createMany: {
+          args: Prisma.BattleTurnLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.BattleTurnLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattleTurnLogPayload>
+        }
+        update: {
+          args: Prisma.BattleTurnLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattleTurnLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.BattleTurnLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BattleTurnLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.BattleTurnLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BattleTurnLogPayload>
+        }
+        aggregate: {
+          args: Prisma.BattleTurnLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBattleTurnLog>
+        }
+        groupBy: {
+          args: Prisma.BattleTurnLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BattleTurnLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BattleTurnLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BattleTurnLogCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1210,6 +1545,80 @@ export const ChatRoomUserScalarFieldEnum = {
 export type ChatRoomUserScalarFieldEnum = (typeof ChatRoomUserScalarFieldEnum)[keyof typeof ChatRoomUserScalarFieldEnum]
 
 
+export const BattleScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  playerAId: 'playerAId',
+  playerBId: 'playerBId',
+  turnNumber: 'turnNumber',
+  winnerId: 'winnerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
+} as const
+
+export type BattleScalarFieldEnum = (typeof BattleScalarFieldEnum)[keyof typeof BattleScalarFieldEnum]
+
+
+export const BattleParticipantScalarFieldEnum = {
+  id: 'id',
+  battleId: 'battleId',
+  userId: 'userId',
+  teamName: 'teamName',
+  activeSlot: 'activeSlot',
+  turnState: 'turnState',
+  pendingAction: 'pendingAction',
+  forfeited: 'forfeited'
+} as const
+
+export type BattleParticipantScalarFieldEnum = (typeof BattleParticipantScalarFieldEnum)[keyof typeof BattleParticipantScalarFieldEnum]
+
+
+export const BattlePokemonScalarFieldEnum = {
+  id: 'id',
+  battleParticipantId: 'battleParticipantId',
+  myPokemonId: 'myPokemonId',
+  position: 'position',
+  maxHp: 'maxHp',
+  currentHp: 'currentHp',
+  atk: 'atk',
+  def: 'def',
+  spAtk: 'spAtk',
+  spDef: 'spDef',
+  speed: 'speed',
+  statStages: 'statStages',
+  statusCondition: 'statusCondition',
+  statusCounter: 'statusCounter',
+  fainted: 'fainted'
+} as const
+
+export type BattlePokemonScalarFieldEnum = (typeof BattlePokemonScalarFieldEnum)[keyof typeof BattlePokemonScalarFieldEnum]
+
+
+export const BattlePokemonMoveScalarFieldEnum = {
+  id: 'id',
+  battlePokemonId: 'battlePokemonId',
+  moveId: 'moveId',
+  maxPp: 'maxPp',
+  currentPp: 'currentPp'
+} as const
+
+export type BattlePokemonMoveScalarFieldEnum = (typeof BattlePokemonMoveScalarFieldEnum)[keyof typeof BattlePokemonMoveScalarFieldEnum]
+
+
+export const BattleTurnLogScalarFieldEnum = {
+  id: 'id',
+  battleId: 'battleId',
+  turnNumber: 'turnNumber',
+  actorParticipantId: 'actorParticipantId',
+  actionType: 'actionType',
+  payload: 'payload',
+  createdAt: 'createdAt'
+} as const
+
+export type BattleTurnLogScalarFieldEnum = (typeof BattleTurnLogScalarFieldEnum)[keyof typeof BattleTurnLogScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1223,6 +1632,14 @@ export const JsonNullValueInput = {
 } as const
 
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const NullsOrder = {
@@ -1352,6 +1769,54 @@ export const ChatRoomUserOrderByRelevanceFieldEnum = {
 export type ChatRoomUserOrderByRelevanceFieldEnum = (typeof ChatRoomUserOrderByRelevanceFieldEnum)[keyof typeof ChatRoomUserOrderByRelevanceFieldEnum]
 
 
+export const BattleOrderByRelevanceFieldEnum = {
+  id: 'id',
+  playerAId: 'playerAId',
+  playerBId: 'playerBId',
+  winnerId: 'winnerId',
+  userId: 'userId'
+} as const
+
+export type BattleOrderByRelevanceFieldEnum = (typeof BattleOrderByRelevanceFieldEnum)[keyof typeof BattleOrderByRelevanceFieldEnum]
+
+
+export const BattleParticipantOrderByRelevanceFieldEnum = {
+  id: 'id',
+  battleId: 'battleId',
+  userId: 'userId',
+  teamName: 'teamName'
+} as const
+
+export type BattleParticipantOrderByRelevanceFieldEnum = (typeof BattleParticipantOrderByRelevanceFieldEnum)[keyof typeof BattleParticipantOrderByRelevanceFieldEnum]
+
+
+export const BattlePokemonOrderByRelevanceFieldEnum = {
+  id: 'id',
+  battleParticipantId: 'battleParticipantId',
+  myPokemonId: 'myPokemonId'
+} as const
+
+export type BattlePokemonOrderByRelevanceFieldEnum = (typeof BattlePokemonOrderByRelevanceFieldEnum)[keyof typeof BattlePokemonOrderByRelevanceFieldEnum]
+
+
+export const BattlePokemonMoveOrderByRelevanceFieldEnum = {
+  id: 'id',
+  battlePokemonId: 'battlePokemonId',
+  moveId: 'moveId'
+} as const
+
+export type BattlePokemonMoveOrderByRelevanceFieldEnum = (typeof BattlePokemonMoveOrderByRelevanceFieldEnum)[keyof typeof BattlePokemonMoveOrderByRelevanceFieldEnum]
+
+
+export const BattleTurnLogOrderByRelevanceFieldEnum = {
+  id: 'id',
+  battleId: 'battleId',
+  actorParticipantId: 'actorParticipantId'
+} as const
+
+export type BattleTurnLogOrderByRelevanceFieldEnum = (typeof BattleTurnLogOrderByRelevanceFieldEnum)[keyof typeof BattleTurnLogOrderByRelevanceFieldEnum]
+
+
 
 /**
  * Field references
@@ -1432,6 +1897,34 @@ export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'J
  * Reference to a field of type 'QueryMode'
  */
 export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'BattleStatus'
+ */
+export type EnumBattleStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BattleStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'BattleTurnState'
+ */
+export type EnumBattleTurnStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BattleTurnState'>
+    
+
+
+/**
+ * Reference to a field of type 'StatusCondition'
+ */
+export type EnumStatusConditionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatusCondition'>
+    
+
+
+/**
+ * Reference to a field of type 'BattleActionType'
+ */
+export type EnumBattleActionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BattleActionType'>
     
 
 /**
@@ -1553,6 +2046,11 @@ export type GlobalOmitConfig = {
   chatMessage?: Prisma.ChatMessageOmit
   chatRoom?: Prisma.ChatRoomOmit
   chatRoomUser?: Prisma.ChatRoomUserOmit
+  battle?: Prisma.BattleOmit
+  battleParticipant?: Prisma.BattleParticipantOmit
+  battlePokemon?: Prisma.BattlePokemonOmit
+  battlePokemonMove?: Prisma.BattlePokemonMoveOmit
+  battleTurnLog?: Prisma.BattleTurnLogOmit
 }
 
 /* Types for Logging */

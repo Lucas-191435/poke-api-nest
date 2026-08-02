@@ -59,6 +59,11 @@ model User {
   messages         ChatMessage[]
   chatRooms        ChatRoomUser[]
 
+  battleParticipants BattleParticipant[]
+  battlesA           Battle[]            @relation("BattlePlayerA")
+  battlesB           Battle[]            @relation("BattlePlayerB")
+  battles            Battle[]
+
   @@map("users") // Nome da tabela no banco de dados
 }
 
@@ -104,9 +109,10 @@ model Item {
   isHeldItem       Boolean       @default(false)
   isBattleUse      Boolean       @default(false)
   isDiscardable    Boolean       @default(false)
-  isPokemonUse     Boolean       @default(false)
-  price            Int?
-  regions          String?
+
+  isPokemonUse Boolean @default(false)
+  price        Int?
+  regions      String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -145,7 +151,8 @@ model Move {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  pokemons PokemonMove[]
+  pokemons           PokemonMove[]
+  battlePokemonMoves BattlePokemonMove[]
 
   @@map("moves") // Nome da tabela no banco de dados
 }
@@ -195,8 +202,9 @@ model MyPokemon {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user    User    @relation(fields: [userId], references: [id])
-  pokemon Pokemon @relation(fields: [pokemonId], references: [id])
+  user           User            @relation(fields: [userId], references: [id])
+  pokemon        Pokemon         @relation(fields: [pokemonId], references: [id])
+  battlePokemons BattlePokemon[]
 
   // myPokemonMoves MyPokemonMoves[]
   @@unique([userId, pokemonId]) // Esta linha cria a constraint única
@@ -260,3 +268,117 @@ model ChatRoomUser {
 
 //   @@map("my_pokemon_moves")
 // }
+
+enum BattleStatus {
+  WAITING_OPPONENT
+  SELECTING_LEAD
+  IN_PROGRESS
+  FINISHED
+}
+
+enum BattleTurnState {
+  WAITING_ACTION
+  ACTION_SUBMITTED
+  WAITING_FORCED_SWITCH
+}
+
+enum BattleActionType {
+  MOVE
+  SWITCH
+  ITEM
+  FORFEIT
+}
+
+enum StatusCondition {
+  NONE
+  PARALYZED
+  POISONED
+  BURNED
+  ASLEEP
+  FROZEN
+  CONFUSED
+}
+
+model Battle {
+  id           String              @id @default(uuid())
+  status       BattleStatus        @default(WAITING_OPPONENT)
+  playerAId    String
+  playerBId    String?
+  turnNumber   Int                 @default(0)
+  winnerId     String?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  playerA      User                @relation("BattlePlayerA", fields: [playerAId], references: [id])
+  playerB      User?               @relation("BattlePlayerB", fields: [playerBId], references: [id])
+  participants BattleParticipant[]
+  turnLogs     BattleTurnLog[]
+  user         User?               @relation(fields: [userId], references: [id])
+  userId       String?
+
+  @@map("battles")
+}
+
+model BattleParticipant {
+  id            String          @id @default(uuid())
+  battleId      String
+  userId        String
+  teamName      String // 'teamAlpha' | 'teamBeta' | 'teamGamma' — origem do snapshot
+  activeSlot    Int             @default(0)
+  turnState     BattleTurnState @default(WAITING_ACTION)
+  pendingAction Json?
+  forfeited     Boolean         @default(false)
+  battle        Battle          @relation(fields: [battleId], references: [id])
+  user          User            @relation(fields: [userId], references: [id])
+  pokemons      BattlePokemon[]
+
+  @@unique([battleId, userId])
+  @@map("battle_participants")
+}
+
+model BattlePokemon {
+  id                  String              @id @default(uuid())
+  battleParticipantId String
+  myPokemonId         String
+  position            Int
+  maxHp               Int
+  currentHp           Int
+  atk                 Int
+  def                 Int
+  spAtk               Int
+  spDef               Int
+  speed               Int
+  statStages          Json                @default("{}") // { atk, def, spAtk, spDef, speed, accuracy, evasion } de -6 a 6
+  statusCondition     StatusCondition     @default(NONE)
+  statusCounter       Int                 @default(0)
+  fainted             Boolean             @default(false)
+  participant         BattleParticipant   @relation(fields: [battleParticipantId], references: [id])
+  myPokemon           MyPokemon           @relation(fields: [myPokemonId], references: [id])
+  moves               BattlePokemonMove[]
+
+  @@map("battle_pokemons")
+}
+
+model BattlePokemonMove {
+  id              String        @id @default(uuid())
+  battlePokemonId String
+  moveId          String
+  maxPp           Int
+  currentPp       Int
+  battlePokemon   BattlePokemon @relation(fields: [battlePokemonId], references: [id])
+  move            Move          @relation(fields: [moveId], references: [id])
+
+  @@map("battle_pokemon_moves")
+}
+
+model BattleTurnLog {
+  id                 String           @id @default(uuid())
+  battleId           String
+  turnNumber         Int
+  actorParticipantId String?
+  actionType         BattleActionType
+  payload            Json // moveId, dano, efetividade, crítico, pokémon trocado, etc.
+  createdAt          DateTime         @default(now())
+  battle             Battle           @relation(fields: [battleId], references: [id])
+
+  @@map("battle_turn_logs")
+}
