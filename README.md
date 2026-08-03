@@ -2,97 +2,159 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+<h1 align="center">🧩 Poké API</h1>
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
+<p align="center">
+  API RESTful + WebSocket desenvolvida com <b>NestJS</b>, <b>TypeScript</b> e <b>Prisma ORM</b>, integrando dados da <a href="https://pokeapi.co/">PokéAPI</a> para gerenciamento de pokémons, movimentos, itens, usuários e batalhas PvP em tempo real.
 </p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+## 📦 Sobre o projeto
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+API backend do meu projeto pessoal de Pokémon. Além do CRUD tradicional (pokémons, movimentos, itens, time do treinador), o projeto inclui:
 
-## Project setup
+- **Autenticação** via JWT (login + reset de senha).
+- **Chat em tempo real** entre usuários via WebSocket (Socket.io).
+- **Sistema de batalha PvP por turnos** (também via WebSocket), com cálculo de dano, efetividade de tipos, PP, status (paralisia, veneno, queimadura, sono, congelamento, confusão), stat stages e resolução completa de turno.
 
-```bash
-$ yarn install
+## 🧱 Stack
+
+- [NestJS 11](https://nestjs.com/) — framework backend
+- [Prisma ORM 7](https://www.prisma.io/) + **MariaDB/MySQL** — persistência
+- [Socket.io](https://socket.io/) — comunicação em tempo real (chat e batalha)
+- **JWT** (`@nestjs/jwt`, `passport-jwt`) — autenticação
+- [Swagger](https://docs.nestjs.com/openapi/introduction) — documentação interativa da API
+- **Jest** — testes unitários e e2e
+- **Docker** — build e deploy em produção
+
+## 🗂️ Módulos
+
+| Módulo | Descrição |
+| --- | --- |
+| 👤 `auth` | Login e reset de senha (JWT) |
+| 🐾 `pokemon` | Consulta da dex de pokémons (integrada com a PokéAPI) |
+| 🎒 `my-pokemon` | Pokémons capturados pelo usuário, times (alpha/beta/gamma) e movesets |
+| ⚔️ `pokemonMove` | Relação pokémon ↔ movimento (método e nível de aprendizado) |
+| 🧪 `items` | Itens do jogo (poké bolas, cura, evolução, etc.) |
+| 💬 `chat` | Salas de chat e mensagens em tempo real (WebSocket) |
+| 🥊 `battle` | Motor de batalha PvP por turnos (REST para criar/entrar/listar salas + WebSocket para a partida) |
+
+### Sistema de batalha
+
+O módulo `battle` implementa uma partida PvP completa:
+
+- Criação e entrada em salas (`POST /battle`, `POST /battle/:id/join`), listagem (`GET /battle/rooms`) e exclusão em massa (`DELETE /battle/all`).
+- Partida em tempo real via WebSocket (`namespace: battle`): `join-battle`, `select-lead`, `ready`, `submit-action`.
+- Motor de resolução de turno (`battle-engine`): cálculo de dano, efetividade de tipos, prioridade de movimento, consumo de PP, desmaio (fainted) e condição de vitória.
+- Condições de status (paralisia, veneno, queimadura, sono, congelamento, confusão) e stat stages (-6 a +6).
+- Logging estruturado e rate limiting no endpoint de batalha.
+
+Mais detalhes de design em [`docs/battle-plan.md`](docs/battle-plan.md) e [`docs/battle-damage-and-status.md`](docs/battle-damage-and-status.md).
+
+### Chat em tempo real
+
+WebSocket (`namespace: chat`): `join-room`, `send-message`, `delete-message`, com salas e mensagens persistidas via Prisma.
+
+## 📚 Documentação da API (Swagger)
+
+A API é documentada com [Swagger/OpenAPI](https://docs.nestjs.com/openapi/introduction) via `@nestjs/swagger`. Com o servidor rodando, a documentação interativa fica disponível em:
+
+```
+http://localhost:3333/docs/swagger
 ```
 
-## Compile and run the project
+Nela é possível ver todos os endpoints REST agrupados por módulo (Pokémon, My Pokémon, Moves, Pokémon Moves, Items, User, Battle), testar requisições diretamente pelo navegador e autenticar com o Bearer Token JWT (botão **Authorize**) para acessar as rotas protegidas.
 
-```bash
-# development
-$ yarn run start
+## 🔐 Autenticação
 
-# watch mode
-$ yarn run start:dev
+Endpoints protegidos usam **Bearer Token (JWT)**. Faça login em `POST /auth/login` para obter o token e envie no header:
 
-# production mode
-$ yarn run start:prod
+```
+Authorization: Bearer <token>
 ```
 
-## Run tests
+Nos WebSockets (chat e battle), o token é enviado em `handshake.auth.token`.
 
-```bash
-# unit tests
-$ yarn run test
+## ⚙️ Variáveis de ambiente
 
-# e2e tests
-$ yarn run test:e2e
+Crie um `.env` na raiz com:
 
-# test coverage
-$ yarn run test:cov
+```env
+DATABASE_URL=
+DATABASE_HOST=
+DATABASE_PORT=
+DATABASE_USER=
+DATABASE_PASSWORD=
+DATABASE_NAME=
+
+PORT=3333
+APP_URL=
+
+EMAIL_USER=
+EMAIL_PASS=
+EMAIL_HOST=
+EMAIL_PORT=
 ```
 
-## Deployment
+## 🚀 Rodando o projeto
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+### Pré-requisitos
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+- Node.js 22+
+- MySQL/MariaDB rodando (local ou via Docker)
+
+### Instalação
 
 ```bash
-$ yarn install -g @nestjs/mau
-$ mau deploy
+yarn install
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### Banco de dados (Prisma)
 
-## Resources
+```bash
+npx prisma generate
+npx prisma migrate dev
+yarn seed          # popula pokémons, movimentos e itens a partir da PokéAPI
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+### Desenvolvimento
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```bash
+yarn dev            # watch mode
+```
 
-## Support
+### Produção
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+yarn build
+yarn start:prod
+```
 
-## Stay in touch
+A API sobe por padrão em `http://localhost:3333`, com Swagger disponível em `/docs/swagger`.
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## 🧪 Testes
 
-## License
+```bash
+yarn test           # unitários
+yarn test:cov       # cobertura
+yarn test:e2e       # end-to-end
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## 🐳 Docker
+
+```bash
+# desenvolvimento
+docker compose up -d
+
+# produção
+docker compose -f docker-compose.prod.yml up -d --force-recreate
+```
+
+Documentação adicional de infraestrutura em `docs/`:
+- [`docs/nginx-load-balancing.md`](docs/nginx-load-balancing.md)
+- [`docs/nginx-static-files.md`](docs/nginx-static-files.md)
+- [`docs/nginx-firebase-private-photos.md`](docs/nginx-firebase-private-photos.md)
+- [`docs/vps-docker-log-cleanup.md`](docs/vps-docker-log-cleanup.md)
+
+## 👤 Autor
+
+**Lucas-191435** — [GitHub](https://github.com/Lucas-191435)
