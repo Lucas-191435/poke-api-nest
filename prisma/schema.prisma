@@ -47,6 +47,7 @@ model User {
   role             Role           @default(CLIENT)
   name             String
   avatar           String?
+  description      String?
   birthday         DateTime?
   oauthId          String?        @unique
   oauthProvider    String?

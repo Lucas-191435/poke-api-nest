@@ -13,6 +13,7 @@ import { PokemonMoveModule } from './modules/pokemonMove/pokeMove.module';
 import { ItemsModule } from './modules/items/items.module';
 import { ChatModule } from './modules/chat/chat.module';
 import { BattleModule } from './modules/battle/battle.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { BattleModule } from './modules/battle/battle.module';
     ItemsModule,
     ChatModule,
     BattleModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [
