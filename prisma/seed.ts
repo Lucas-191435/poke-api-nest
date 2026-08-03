@@ -1,5 +1,6 @@
 import prismaClient from './database';
 import { seedUserTeste } from './seeds/create-user-teste.seed';
+import { seedAdminUser } from './seeds/create-admin-user.seed';
 import { seedInsertPokemon } from './seeds/insert-pokemon-in-db.seed';
 import { seedInsertMoves } from './seeds/insert-move-in-db.seed';
 import { seedInsertItems } from './seeds/insert-items-in-db.seed';
@@ -9,6 +10,9 @@ async function main() {
   console.log('🌱 Iniciando seeds do banco de dados...\n');
 
   await seedUserTeste();
+  console.log('');
+
+  await seedAdminUser();
   console.log('');
 
   await seedInsertPokemon();
