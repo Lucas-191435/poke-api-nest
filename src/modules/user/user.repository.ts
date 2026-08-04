@@ -76,6 +76,17 @@ export class UserRepository {
         return { count, rows };
     }
 
+    findUsersTest = async () => {
+        const users = this.prisma.user.findMany({
+                where: {
+                    role: "TEST"
+                },
+                select: userSafeSelect,
+            });
+
+        return users;
+    }
+
     createUser = async ({ email, password, name, avatar, description }: {
         email: string;
         password: string;
