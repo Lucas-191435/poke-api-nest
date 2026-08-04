@@ -4,6 +4,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { JwtStrategy } from './jwt.strategy';
 import { RolesGuard } from '../guard/roles.guard';
+import { TestRoleGuard } from '../guard/test-role.guard';
 
 @Module({
   imports: [PassportModule],
@@ -16,6 +17,10 @@ import { RolesGuard } from '../guard/roles.guard';
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: TestRoleGuard,
     },
   ],
 })

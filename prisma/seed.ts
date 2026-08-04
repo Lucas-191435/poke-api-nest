@@ -5,26 +5,30 @@ import { seedInsertPokemon } from './seeds/insert-pokemon-in-db.seed';
 import { seedInsertMoves } from './seeds/insert-move-in-db.seed';
 import { seedInsertItems } from './seeds/insert-items-in-db.seed';
 import { seedInsertPokemonMoves } from './seeds/insert-pokemove-in-db.seed';
+import { seedTestTrainers } from './seeds/create-test-trainers.seed';
 
 async function main() {
   console.log('🌱 Iniciando seeds do banco de dados...\n');
 
-  await seedUserTeste();
-  console.log('');
+  // await seedUserTeste();
+  // console.log('');
 
-  await seedAdminUser();
-  console.log('');
+  // await seedAdminUser();
+  // console.log('');
 
-  await seedInsertPokemon();
-  console.log('');
+  // await seedInsertPokemon();
+  // console.log('');
 
-  await seedInsertMoves();
-  console.log('');
+  // await seedInsertMoves();
+  // console.log('');
 
-  await seedInsertItems();
-  console.log('');
+  // await seedInsertItems();
+  // console.log('');
 
-  await seedInsertPokemonMoves();
+  // await seedInsertPokemonMoves();
+  // console.log('');
+
+  await seedTestTrainers();
   console.log('');
 }
 
