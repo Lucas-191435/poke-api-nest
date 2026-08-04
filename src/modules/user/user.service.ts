@@ -28,6 +28,10 @@ export class UserService {
     });
   }
 
+  async findUsersTest() {
+    return this.userRepository.findUsersTest();
+  }
+
   async createUser(dto: CreateUserDto) {
     const hashedPassword = await bcrypt.hash(dto.password, 10);
 

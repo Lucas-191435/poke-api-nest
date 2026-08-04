@@ -29,6 +29,15 @@ export class UserController {
     return this.userService.findUsers({ page, pageSize, query });
   }
 
+  @Public()
+  @Get("users-test")
+  @HttpCode(201)
+  @ApiOperation({ summary: 'Lista paginada de usuários test.' })
+  @ApiResponse({ status: 201, description: 'Usuários retornados com sucesso', type: UserResponseDto, isArray: true })
+  findUsersTest() {
+    return this.userService.findUsersTest();
+  }
+
   @Get(':id')
   @HttpCode(200)
   @ApiOperation({ summary: 'Detalhes de um usuário, incluindo estatísticas de batalha' })
