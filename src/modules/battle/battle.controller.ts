@@ -5,6 +5,7 @@ import { GetUser } from 'src/common/guard/getuser.decorator';
 import { CreateBattleDto } from './dto/create-battle.dto';
 import { JoinBattleDto } from './dto/join-battle.dto';
 import { Throttle } from '@nestjs/throttler';
+import { AllowTestRole } from 'src/common/auth/allow-test-role.decorator';
 
 @ApiTags('battle')
 @Controller("battle")
@@ -13,6 +14,7 @@ export class BattleController {
 
     @Post()
     @HttpCode(200)
+    @AllowTestRole()
     async createBattle(
         @GetUser('id') userId: string,
         @Body() dto: CreateBattleDto,
@@ -25,6 +27,7 @@ export class BattleController {
 
     @Post(':id/join')
     @HttpCode(200)
+    @AllowTestRole()
     async joinBattle(
         @Param('id') battleId: string,
         @GetUser('id') userId: string,
