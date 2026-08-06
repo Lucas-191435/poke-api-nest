@@ -9,7 +9,7 @@ import {
     ResolveTurnResult,
 } from './battle-engine.service';
 import { parsePokemonTypes } from './type-chart';
-import { StatStages } from './stat-stage-moves';
+import { parseStatChanges, StatStages } from './stat-stage-moves';
 
 export type SubmitActionInput = {
     type: 'MOVE' | 'SWITCH' | 'ITEM' | 'FORFEIT';
@@ -284,6 +284,9 @@ export class BattleService {
                         critRate: move.move.crit_rate,
                         ailment: move.move.ailment,
                         ailmentChance: move.move.effect_chance,
+                        target: move.move.target,
+                        statChance: move.move.stat_chance,
+                        statChanges: parseStatChanges(move.move.stat_changes),
                         healing: move.move.healing ?? 0,
                         drain: move.move.drain ?? 0,
                     },

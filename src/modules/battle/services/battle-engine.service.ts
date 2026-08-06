@@ -22,7 +22,7 @@ import {
     clampStage,
     getAccuracyMultiplier,
     getStatMultiplier,
-    STAT_STAGE_MOVES,
+    StatChange,
     StatKey,
     StatStages,
 } from "./stat-stage-moves";
@@ -57,6 +57,15 @@ export interface EngineMove {
     ailment: string | null;
     /** Chance (0-100) do ailment se aplicar em golpes de dano (Move.effect_chance). `null` = sempre. */
     ailmentChance: number | null;
+    /** Alvo do move vindo da PokeAPI (Move.target), ex. "user", "selected-pokemon". */
+    target: string | null;
+    /**
+     * Chance (0-100) de `statChanges` se aplicar, vinda de Move.stat_chance.
+     * Por convenção da PokeAPI, `0`/`null` significa "sempre aplica" quando o move tem stat_changes.
+     */
+    statChance: number | null;
+    /** Stat stages que esse move altera (Move.stat_changes), self ou no alvo conforme `target`. */
+    statChanges: StatChange[];
     /** % do HP máximo que o próprio atacante recupera (Move.healing), ex. Recover = 50. `0` = não cura. */
     healing: number;
     /**
@@ -462,15 +471,19 @@ export class BattleEngineService {
             this.tryApplyAilment(defender, defenderParticipantId, move, log);
         }
 
-        const statEffects = STAT_STAGE_MOVES[move.name];
-        if (statEffects) {
-            for (const effect of statEffects) {
-                const isSelf = effect.target === "self";
+        if (move.statChanges.length > 0) {
+            // Convenção da PokeAPI: stat_chance 0 (ou null) significa "sempre aplica".
+            const chance = move.statChance && move.statChance > 0 ? move.statChance : 100;
+            if (Math.random() * 100 < chance) {
+                const isSelf = move.target === "user";
                 const target = isSelf ? attacker : defender;
                 const targetParticipantId = isSelf ? attackerParticipantId : defenderParticipantId;
-                if (target.fainted) continue;
 
-                this.applyStatStage(target, targetParticipantId, effect.stat, effect.stages, log);
+                if (!target.fainted) {
+                    for (const change of move.statChanges) {
+                        this.applyStatStage(target, targetParticipantId, change.stat, change.stages, log);
+                    }
+                }
             }
         }
 

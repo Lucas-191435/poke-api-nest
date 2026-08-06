@@ -136,7 +136,7 @@ model Move {
   description   String?
   target        String?
   damage_class  String?
-  effect        String?
+  effect        String? @db.Text
   effect_chance Int?
   ailment       String?
   category      String?
@@ -149,6 +149,7 @@ model Move {
   min_turns     Int?
   max_turns     Int?
   stat_chance   Int?
+  stat_changes  Json?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -1,12 +1,12 @@
 /**
- * Moves que alteram stat stages — Fase 2 do battle-engine (ver docs/battle-plan.md).
+ * Stat stages — Fase 2 do battle-engine (ver docs/battle-plan.md).
  *
- * `Move` guarda `stat_chance` (a chance do efeito) mas não guarda qual stat
- * muda nem por quanto — o campo `stat_changes` da PokeAPI nunca foi capturado
- * no seed. Por decisão do usuário, cobrimos aqui só os moves de status puro
- * mais conhecidos com uma tabela fixa, em vez de migrar o schema agora.
- * Efeitos secundários de stat em golpes de dano (ex.: Bubble com 10% de
- * chance de baixar speed) ficam fora de escopo.
+ * Os stat changes de cada move vêm de `Move.stat_changes` (JSON capturado do
+ * campo `stat_changes` da PokeAPI no seed — ver `prisma/seeds/insert-move-in-db.seed.ts`),
+ * não mais de uma tabela curada. Isso cobre tanto moves de status puro (Swords
+ * Dance, Growl, ...) quanto efeitos secundários de stat em golpes de dano
+ * (ex.: Bubble com chance de baixar speed do alvo) — todo move que a PokeAPI
+ * marcar com stat_changes passa a funcionar, sem precisar listar cada um à mão.
  */
 
 export type StatKey = "atk" | "def" | "spAtk" | "spDef" | "speed" | "accuracy" | "evasion";
@@ -17,61 +17,43 @@ export function createEmptyStatStages(): StatStages {
     return { atk: 0, def: 0, spAtk: 0, spDef: 0, speed: 0, accuracy: 0, evasion: 0 };
 }
 
-export interface StatStageEffect {
+export interface StatChange {
     stat: StatKey;
     stages: number;
-    target: "self" | "target";
 }
 
-/** Chave = `Move.name` (slug da PokeAPI, ex. "swords-dance"). */
-export const STAT_STAGE_MOVES: Record<string, StatStageEffect[]> = {
-    // Buffs no próprio usuário
-    "swords-dance": [{ stat: "atk", stages: 2, target: "self" }],
-    "dragon-dance": [
-        { stat: "atk", stages: 1, target: "self" },
-        { stat: "speed", stages: 1, target: "self" },
-    ],
-    "nasty-plot": [{ stat: "spAtk", stages: 2, target: "self" }],
-    "calm-mind": [
-        { stat: "spAtk", stages: 1, target: "self" },
-        { stat: "spDef", stages: 1, target: "self" },
-    ],
-    "bulk-up": [
-        { stat: "atk", stages: 1, target: "self" },
-        { stat: "def", stages: 1, target: "self" },
-    ],
-    agility: [{ stat: "speed", stages: 2, target: "self" }],
-    "iron-defense": [{ stat: "def", stages: 2, target: "self" }],
-    amnesia: [{ stat: "spDef", stages: 2, target: "self" }],
-    growth: [
-        { stat: "atk", stages: 1, target: "self" },
-        { stat: "spAtk", stages: 1, target: "self" },
-    ],
-    "work-up": [
-        { stat: "atk", stages: 1, target: "self" },
-        { stat: "spAtk", stages: 1, target: "self" },
-    ],
-    harden: [{ stat: "def", stages: 1, target: "self" }],
-    withdraw: [{ stat: "def", stages: 1, target: "self" }],
-    "acid-armor": [{ stat: "def", stages: 2, target: "self" }],
-    barrier: [{ stat: "def", stages: 2, target: "self" }],
-    "double-team": [{ stat: "evasion", stages: 1, target: "self" }],
-    minimize: [{ stat: "evasion", stages: 2, target: "self" }],
-
-    // Debuffs no oponente
-    growl: [{ stat: "atk", stages: -1, target: "target" }],
-    leer: [{ stat: "def", stages: -1, target: "target" }],
-    "tail-whip": [{ stat: "def", stages: -1, target: "target" }],
-    "sand-attack": [{ stat: "accuracy", stages: -1, target: "target" }],
-    smokescreen: [{ stat: "accuracy", stages: -1, target: "target" }],
-    screech: [{ stat: "def", stages: -2, target: "target" }],
-    "scary-face": [{ stat: "speed", stages: -2, target: "target" }],
-    "cotton-spore": [{ stat: "speed", stages: -2, target: "target" }],
-    "string-shot": [{ stat: "speed", stages: -1, target: "target" }],
-    "metal-sound": [{ stat: "spDef", stages: -2, target: "target" }],
-    charm: [{ stat: "atk", stages: -2, target: "target" }],
-    "feather-dance": [{ stat: "atk", stages: -2, target: "target" }],
+/** Nome do stat como vem da PokeAPI (`stat.name` dentro de `stat_changes`) → `StatKey` interno. */
+const POKEAPI_STAT_TO_KEY: Record<string, StatKey> = {
+    attack: "atk",
+    defense: "def",
+    "special-attack": "spAtk",
+    "special-defense": "spDef",
+    speed: "speed",
+    accuracy: "accuracy",
+    evasion: "evasion",
 };
+
+/**
+ * Converte o JSON cru salvo em `Move.stat_changes` (`{ stat: string; change: number }[]`,
+ * nomes de stat exatamente como a PokeAPI devolve) pro formato interno do engine.
+ * Entradas com stat desconhecido (ex. "hp", que não tem stage) são ignoradas.
+ */
+export function parseStatChanges(raw: unknown): StatChange[] {
+    if (!Array.isArray(raw)) return [];
+
+    const result: StatChange[] = [];
+    for (const entry of raw) {
+        if (!entry || typeof entry !== "object") continue;
+        const { stat, change } = entry as { stat?: unknown; change?: unknown };
+        if (typeof stat !== "string" || typeof change !== "number") continue;
+
+        const key = POKEAPI_STAT_TO_KEY[stat];
+        if (!key) continue;
+
+        result.push({ stat: key, stages: change });
+    }
+    return result;
+}
 
 export function clampStage(value: number): number {
     return Math.max(-6, Math.min(6, value));

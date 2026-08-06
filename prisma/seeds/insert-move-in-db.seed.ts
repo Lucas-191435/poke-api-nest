@@ -37,6 +37,7 @@ type MoveDetail = {
   type: { name: string } | null;
   target: { name: string } | null;
   effect_entries: { effect: string; short_effect: string; language: { name: string } }[];
+  stat_changes: { change: number; stat: { name: string } }[];
   meta: {
     ailment: { name: string } | null;
     category: { name: string } | null;
@@ -76,6 +77,7 @@ type MoveRow = {
   min_turns: number | null;
   max_turns: number | null;
   stat_chance: number;
+  stat_changes: { stat: string; change: number }[];
 };
 
 // ---------------------------------------------------------------------------
@@ -113,6 +115,7 @@ function transformMove(move: MoveDetail): MoveRow {
     min_turns: move.meta?.min_turns ?? null,
     max_turns: move.meta?.max_turns ?? null,
     stat_chance: move.meta?.stat_chance ?? 0,
+    stat_changes: (move.stat_changes ?? []).map((sc) => ({ stat: sc.stat.name, change: sc.change })),
   };
 }
 
@@ -183,27 +186,34 @@ async function fetchMovesInBatches(refs: MoveRef[]): Promise<MoveDetail[]> {
 // ---------------------------------------------------------------------------
 
 async function insertMoveBatches(rows: MoveRow[]): Promise<number> {
-  let totalCreated = 0;
+  let totalUpserted = 0;
   const totalBatches = Math.ceil(rows.length / DB_BATCH_SIZE);
 
   for (let i = 0; i < rows.length; i += DB_BATCH_SIZE) {
     const batch = rows.slice(i, i + DB_BATCH_SIZE);
     console.log(
-      `  💾 Inserindo lote ${Math.floor(i / DB_BATCH_SIZE) + 1}/${totalBatches} (${batch.length} moves)`,
+      `  💾 Upsert lote ${Math.floor(i / DB_BATCH_SIZE) + 1}/${totalBatches} (${batch.length} moves)`,
     );
 
     try {
-      const result = await prismaClient.move.createMany({
-        data: batch,
-        skipDuplicates: true,
-      });
-      totalCreated += result.count;
+      // upsert (não createMany+skipDuplicates) pra que re-rodar o seed também atualize moves já
+      // existentes no banco com campos novos (ex.: stat_changes, capturado a partir desta mudança).
+      await Promise.all(
+        batch.map((row) =>
+          prismaClient.move.upsert({
+            where: { pokeMoveId: row.pokeMoveId },
+            create: row,
+            update: row,
+          }),
+        ),
+      );
+      totalUpserted += batch.length;
     } catch (err) {
       console.error(`  ⚠️  Erro no lote, continuando...`, err);
     }
   }
 
-  return totalCreated;
+  return totalUpserted;
 }
 
 // ---------------------------------------------------------------------------
@@ -221,7 +231,7 @@ export async function seedInsertMoves(): Promise<void> {
 
   console.log('🔄 Transformando e inserindo no banco...');
   const rows = details.map(transformMove);
-  const created = await insertMoveBatches(rows);
+  const upserted = await insertMoveBatches(rows);
 
-  console.log(`✅ ${created} moves inseridos com sucesso.`);
+  console.log(`✅ ${upserted} moves inseridos/atualizados com sucesso.`);
 }

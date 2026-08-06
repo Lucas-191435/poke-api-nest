@@ -19,8 +19,8 @@ async function main() {
   // await seedInsertPokemon();
   // console.log('');
 
-  // await seedInsertMoves();
-  // console.log('');
+  await seedInsertMoves();
+  console.log('');
 
   // await seedInsertItems();
   // console.log('');
@@ -28,8 +28,8 @@ async function main() {
   // await seedInsertPokemonMoves();
   // console.log('');
 
-  await seedTestTrainers();
-  console.log('');
+  // await seedTestTrainers();
+  // console.log('');
 }
 
 (async () => {

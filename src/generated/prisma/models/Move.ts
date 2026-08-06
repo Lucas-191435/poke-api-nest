@@ -145,6 +145,7 @@ export type MoveCountAggregateOutputType = {
   min_turns: number
   max_turns: number
   stat_chance: number
+  stat_changes: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -270,6 +271,7 @@ export type MoveCountAggregateInputType = {
   min_turns?: true
   max_turns?: true
   stat_chance?: true
+  stat_changes?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -386,6 +388,7 @@ export type MoveGroupByOutputType = {
   min_turns: number | null
   max_turns: number | null
   stat_chance: number | null
+  stat_changes: runtime.JsonValue | null
   createdAt: Date
   updatedAt: Date
   _count: MoveCountAggregateOutputType | null
@@ -438,6 +441,7 @@ export type MoveWhereInput = {
   min_turns?: Prisma.IntNullableFilter<"Move"> | number | null
   max_turns?: Prisma.IntNullableFilter<"Move"> | number | null
   stat_chance?: Prisma.IntNullableFilter<"Move"> | number | null
+  stat_changes?: Prisma.JsonNullableFilter<"Move">
   createdAt?: Prisma.DateTimeFilter<"Move"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Move"> | Date | string
   pokemons?: Prisma.PokemonMoveListRelationFilter
@@ -469,6 +473,7 @@ export type MoveOrderByWithRelationInput = {
   min_turns?: Prisma.SortOrderInput | Prisma.SortOrder
   max_turns?: Prisma.SortOrderInput | Prisma.SortOrder
   stat_chance?: Prisma.SortOrderInput | Prisma.SortOrder
+  stat_changes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   pokemons?: Prisma.PokemonMoveOrderByRelationAggregateInput
@@ -504,6 +509,7 @@ export type MoveWhereUniqueInput = Prisma.AtLeast<{
   min_turns?: Prisma.IntNullableFilter<"Move"> | number | null
   max_turns?: Prisma.IntNullableFilter<"Move"> | number | null
   stat_chance?: Prisma.IntNullableFilter<"Move"> | number | null
+  stat_changes?: Prisma.JsonNullableFilter<"Move">
   createdAt?: Prisma.DateTimeFilter<"Move"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Move"> | Date | string
   pokemons?: Prisma.PokemonMoveListRelationFilter
@@ -535,6 +541,7 @@ export type MoveOrderByWithAggregationInput = {
   min_turns?: Prisma.SortOrderInput | Prisma.SortOrder
   max_turns?: Prisma.SortOrderInput | Prisma.SortOrder
   stat_chance?: Prisma.SortOrderInput | Prisma.SortOrder
+  stat_changes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.MoveCountOrderByAggregateInput
@@ -572,6 +579,7 @@ export type MoveScalarWhereWithAggregatesInput = {
   min_turns?: Prisma.IntNullableWithAggregatesFilter<"Move"> | number | null
   max_turns?: Prisma.IntNullableWithAggregatesFilter<"Move"> | number | null
   stat_chance?: Prisma.IntNullableWithAggregatesFilter<"Move"> | number | null
+  stat_changes?: Prisma.JsonNullableWithAggregatesFilter<"Move">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Move"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Move"> | Date | string
 }
@@ -601,6 +609,7 @@ export type MoveCreateInput = {
   min_turns?: number | null
   max_turns?: number | null
   stat_chance?: number | null
+  stat_changes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   pokemons?: Prisma.PokemonMoveCreateNestedManyWithoutMoveInput
@@ -632,6 +641,7 @@ export type MoveUncheckedCreateInput = {
   min_turns?: number | null
   max_turns?: number | null
   stat_chance?: number | null
+  stat_changes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   pokemons?: Prisma.PokemonMoveUncheckedCreateNestedManyWithoutMoveInput
@@ -663,6 +673,7 @@ export type MoveUpdateInput = {
   min_turns?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   max_turns?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stat_chance?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  stat_changes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pokemons?: Prisma.PokemonMoveUpdateManyWithoutMoveNestedInput
@@ -694,6 +705,7 @@ export type MoveUncheckedUpdateInput = {
   min_turns?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   max_turns?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stat_chance?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  stat_changes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pokemons?: Prisma.PokemonMoveUncheckedUpdateManyWithoutMoveNestedInput
@@ -725,6 +737,7 @@ export type MoveCreateManyInput = {
   min_turns?: number | null
   max_turns?: number | null
   stat_chance?: number | null
+  stat_changes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -754,6 +767,7 @@ export type MoveUpdateManyMutationInput = {
   min_turns?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   max_turns?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stat_chance?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  stat_changes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -783,6 +797,7 @@ export type MoveUncheckedUpdateManyInput = {
   min_turns?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   max_turns?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stat_chance?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  stat_changes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -818,6 +833,7 @@ export type MoveCountOrderByAggregateInput = {
   min_turns?: Prisma.SortOrder
   max_turns?: Prisma.SortOrder
   stat_chance?: Prisma.SortOrder
+  stat_changes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -974,6 +990,7 @@ export type MoveCreateWithoutPokemonsInput = {
   min_turns?: number | null
   max_turns?: number | null
   stat_chance?: number | null
+  stat_changes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   battlePokemonMoves?: Prisma.BattlePokemonMoveCreateNestedManyWithoutMoveInput
@@ -1004,6 +1021,7 @@ export type MoveUncheckedCreateWithoutPokemonsInput = {
   min_turns?: number | null
   max_turns?: number | null
   stat_chance?: number | null
+  stat_changes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   battlePokemonMoves?: Prisma.BattlePokemonMoveUncheckedCreateNestedManyWithoutMoveInput
@@ -1050,6 +1068,7 @@ export type MoveUpdateWithoutPokemonsInput = {
   min_turns?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   max_turns?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stat_chance?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  stat_changes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   battlePokemonMoves?: Prisma.BattlePokemonMoveUpdateManyWithoutMoveNestedInput
@@ -1080,6 +1099,7 @@ export type MoveUncheckedUpdateWithoutPokemonsInput = {
   min_turns?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   max_turns?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stat_chance?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  stat_changes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   battlePokemonMoves?: Prisma.BattlePokemonMoveUncheckedUpdateManyWithoutMoveNestedInput
@@ -1110,6 +1130,7 @@ export type MoveCreateWithoutBattlePokemonMovesInput = {
   min_turns?: number | null
   max_turns?: number | null
   stat_chance?: number | null
+  stat_changes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   pokemons?: Prisma.PokemonMoveCreateNestedManyWithoutMoveInput
@@ -1140,6 +1161,7 @@ export type MoveUncheckedCreateWithoutBattlePokemonMovesInput = {
   min_turns?: number | null
   max_turns?: number | null
   stat_chance?: number | null
+  stat_changes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   pokemons?: Prisma.PokemonMoveUncheckedCreateNestedManyWithoutMoveInput
@@ -1186,6 +1208,7 @@ export type MoveUpdateWithoutBattlePokemonMovesInput = {
   min_turns?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   max_turns?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stat_chance?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  stat_changes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pokemons?: Prisma.PokemonMoveUpdateManyWithoutMoveNestedInput
@@ -1216,6 +1239,7 @@ export type MoveUncheckedUpdateWithoutBattlePokemonMovesInput = {
   min_turns?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   max_turns?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stat_chance?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  stat_changes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pokemons?: Prisma.PokemonMoveUncheckedUpdateManyWithoutMoveNestedInput
@@ -1286,6 +1310,7 @@ export type MoveSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   min_turns?: boolean
   max_turns?: boolean
   stat_chance?: boolean
+  stat_changes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   pokemons?: boolean | Prisma.Move$pokemonsArgs<ExtArgs>
@@ -1320,11 +1345,12 @@ export type MoveSelectScalar = {
   min_turns?: boolean
   max_turns?: boolean
   stat_chance?: boolean
+  stat_changes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type MoveOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pokeMoveId" | "name" | "accuracy" | "power" | "pp" | "priority" | "type" | "description" | "target" | "damage_class" | "effect" | "effect_chance" | "ailment" | "category" | "crit_rate" | "drain" | "flinch_chance" | "healing" | "min_hits" | "max_hits" | "min_turns" | "max_turns" | "stat_chance" | "createdAt" | "updatedAt", ExtArgs["result"]["move"]>
+export type MoveOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pokeMoveId" | "name" | "accuracy" | "power" | "pp" | "priority" | "type" | "description" | "target" | "damage_class" | "effect" | "effect_chance" | "ailment" | "category" | "crit_rate" | "drain" | "flinch_chance" | "healing" | "min_hits" | "max_hits" | "min_turns" | "max_turns" | "stat_chance" | "stat_changes" | "createdAt" | "updatedAt", ExtArgs["result"]["move"]>
 export type MoveInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   pokemons?: boolean | Prisma.Move$pokemonsArgs<ExtArgs>
   battlePokemonMoves?: boolean | Prisma.Move$battlePokemonMovesArgs<ExtArgs>
@@ -1362,6 +1388,7 @@ export type $MovePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     min_turns: number | null
     max_turns: number | null
     stat_chance: number | null
+    stat_changes: runtime.JsonValue | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["move"]>
@@ -1759,6 +1786,7 @@ export interface MoveFieldRefs {
   readonly min_turns: Prisma.FieldRef<"Move", 'Int'>
   readonly max_turns: Prisma.FieldRef<"Move", 'Int'>
   readonly stat_chance: Prisma.FieldRef<"Move", 'Int'>
+  readonly stat_changes: Prisma.FieldRef<"Move", 'Json'>
   readonly createdAt: Prisma.FieldRef<"Move", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Move", 'DateTime'>
 }

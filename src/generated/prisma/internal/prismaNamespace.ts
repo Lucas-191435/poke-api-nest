@@ -1475,6 +1475,7 @@ export const MoveScalarFieldEnum = {
   min_turns: 'min_turns',
   max_turns: 'max_turns',
   stat_chance: 'stat_chance',
+  stat_changes: 'stat_changes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1628,19 +1629,19 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
-export const JsonNullValueInput = {
-  JsonNull: JsonNull
-} as const
-
-export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
-
-
 export const NullableJsonNullValueInput = {
   DbNull: DbNull,
   JsonNull: JsonNull
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const NullsOrder = {
@@ -1692,6 +1693,23 @@ export const ItemOrderByRelevanceFieldEnum = {
 export type ItemOrderByRelevanceFieldEnum = (typeof ItemOrderByRelevanceFieldEnum)[keyof typeof ItemOrderByRelevanceFieldEnum]
 
 
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+export const QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+} as const
+
+export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
 export const MoveOrderByRelevanceFieldEnum = {
   id: 'id',
   name: 'name',
@@ -1715,23 +1733,6 @@ export const PokemonMoveOrderByRelevanceFieldEnum = {
 } as const
 
 export type PokemonMoveOrderByRelevanceFieldEnum = (typeof PokemonMoveOrderByRelevanceFieldEnum)[keyof typeof PokemonMoveOrderByRelevanceFieldEnum]
-
-
-export const JsonNullValueFilter = {
-  DbNull: DbNull,
-  JsonNull: JsonNull,
-  AnyNull: AnyNull
-} as const
-
-export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
-
-
-export const QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
-} as const
-
-export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
 export const MyPokemonOrderByRelevanceFieldEnum = {
@@ -1882,13 +1883,6 @@ export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
- * Reference to a field of type 'LearnMethod'
- */
-export type EnumLearnMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LearnMethod'>
-    
-
-
-/**
  * Reference to a field of type 'Json'
  */
 export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
@@ -1899,6 +1893,13 @@ export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'J
  * Reference to a field of type 'QueryMode'
  */
 export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'LearnMethod'
+ */
+export type EnumLearnMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LearnMethod'>
     
 
 

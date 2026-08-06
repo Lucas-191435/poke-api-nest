@@ -20,6 +20,9 @@ function buildMove(overrides: Partial<EngineMove> = {}): EngineMove {
         critRate: 0,
         ailment: null,
         ailmentChance: null,
+        target: 'selected-pokemon',
+        statChance: null,
+        statChanges: [],
         healing: 0,
         drain: 0,
         ...overrides,
@@ -192,8 +195,16 @@ describe('BattleEngineService', () => {
         expect(wakeTurn.log.some((e) => e.event === 'move' && e.participantId === 'A')).toBe(true);
     });
 
-    it('move de status puro não calcula dano e aplica o stat stage da tabela curada', () => {
-        const leer = buildMove({ id: 'move-leer', name: 'leer', power: null, accuracy: 100, damageClass: 'status' });
+    it('move de status puro não calcula dano e aplica o stat stage vindo de Move.stat_changes', () => {
+        const leer = buildMove({
+            id: 'move-leer',
+            name: 'leer',
+            power: null,
+            accuracy: 100,
+            damageClass: 'status',
+            target: 'selected-pokemon',
+            statChanges: [{ stat: 'def', stages: -1 }],
+        });
         const tackle = buildMove({ id: 'move-tackle', name: 'tackle', power: 40, accuracy: 100, damageClass: 'physical' });
 
         const attacker = buildPokemon({
