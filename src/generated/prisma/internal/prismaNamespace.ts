@@ -1570,7 +1570,8 @@ export const BattleParticipantScalarFieldEnum = {
   activeSlot: 'activeSlot',
   turnState: 'turnState',
   pendingAction: 'pendingAction',
-  forfeited: 'forfeited'
+  forfeited: 'forfeited',
+  isBot: 'isBot'
 } as const
 
 export type BattleParticipantScalarFieldEnum = (typeof BattleParticipantScalarFieldEnum)[keyof typeof BattleParticipantScalarFieldEnum]

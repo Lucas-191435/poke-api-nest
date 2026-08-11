@@ -42,6 +42,7 @@ export type BattleParticipantMinAggregateOutputType = {
   activeSlot: number | null
   turnState: $Enums.BattleTurnState | null
   forfeited: boolean | null
+  isBot: boolean | null
 }
 
 export type BattleParticipantMaxAggregateOutputType = {
@@ -52,6 +53,7 @@ export type BattleParticipantMaxAggregateOutputType = {
   activeSlot: number | null
   turnState: $Enums.BattleTurnState | null
   forfeited: boolean | null
+  isBot: boolean | null
 }
 
 export type BattleParticipantCountAggregateOutputType = {
@@ -63,6 +65,7 @@ export type BattleParticipantCountAggregateOutputType = {
   turnState: number
   pendingAction: number
   forfeited: number
+  isBot: number
   _all: number
 }
 
@@ -83,6 +86,7 @@ export type BattleParticipantMinAggregateInputType = {
   activeSlot?: true
   turnState?: true
   forfeited?: true
+  isBot?: true
 }
 
 export type BattleParticipantMaxAggregateInputType = {
@@ -93,6 +97,7 @@ export type BattleParticipantMaxAggregateInputType = {
   activeSlot?: true
   turnState?: true
   forfeited?: true
+  isBot?: true
 }
 
 export type BattleParticipantCountAggregateInputType = {
@@ -104,6 +109,7 @@ export type BattleParticipantCountAggregateInputType = {
   turnState?: true
   pendingAction?: true
   forfeited?: true
+  isBot?: true
   _all?: true
 }
 
@@ -202,6 +208,7 @@ export type BattleParticipantGroupByOutputType = {
   turnState: $Enums.BattleTurnState
   pendingAction: runtime.JsonValue | null
   forfeited: boolean
+  isBot: boolean
   _count: BattleParticipantCountAggregateOutputType | null
   _avg: BattleParticipantAvgAggregateOutputType | null
   _sum: BattleParticipantSumAggregateOutputType | null
@@ -236,6 +243,7 @@ export type BattleParticipantWhereInput = {
   turnState?: Prisma.EnumBattleTurnStateFilter<"BattleParticipant"> | $Enums.BattleTurnState
   pendingAction?: Prisma.JsonNullableFilter<"BattleParticipant">
   forfeited?: Prisma.BoolFilter<"BattleParticipant"> | boolean
+  isBot?: Prisma.BoolFilter<"BattleParticipant"> | boolean
   battle?: Prisma.XOR<Prisma.BattleScalarRelationFilter, Prisma.BattleWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   pokemons?: Prisma.BattlePokemonListRelationFilter
@@ -250,6 +258,7 @@ export type BattleParticipantOrderByWithRelationInput = {
   turnState?: Prisma.SortOrder
   pendingAction?: Prisma.SortOrderInput | Prisma.SortOrder
   forfeited?: Prisma.SortOrder
+  isBot?: Prisma.SortOrder
   battle?: Prisma.BattleOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
   pokemons?: Prisma.BattlePokemonOrderByRelationAggregateInput
@@ -269,6 +278,7 @@ export type BattleParticipantWhereUniqueInput = Prisma.AtLeast<{
   turnState?: Prisma.EnumBattleTurnStateFilter<"BattleParticipant"> | $Enums.BattleTurnState
   pendingAction?: Prisma.JsonNullableFilter<"BattleParticipant">
   forfeited?: Prisma.BoolFilter<"BattleParticipant"> | boolean
+  isBot?: Prisma.BoolFilter<"BattleParticipant"> | boolean
   battle?: Prisma.XOR<Prisma.BattleScalarRelationFilter, Prisma.BattleWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   pokemons?: Prisma.BattlePokemonListRelationFilter
@@ -283,6 +293,7 @@ export type BattleParticipantOrderByWithAggregationInput = {
   turnState?: Prisma.SortOrder
   pendingAction?: Prisma.SortOrderInput | Prisma.SortOrder
   forfeited?: Prisma.SortOrder
+  isBot?: Prisma.SortOrder
   _count?: Prisma.BattleParticipantCountOrderByAggregateInput
   _avg?: Prisma.BattleParticipantAvgOrderByAggregateInput
   _max?: Prisma.BattleParticipantMaxOrderByAggregateInput
@@ -302,6 +313,7 @@ export type BattleParticipantScalarWhereWithAggregatesInput = {
   turnState?: Prisma.EnumBattleTurnStateWithAggregatesFilter<"BattleParticipant"> | $Enums.BattleTurnState
   pendingAction?: Prisma.JsonNullableWithAggregatesFilter<"BattleParticipant">
   forfeited?: Prisma.BoolWithAggregatesFilter<"BattleParticipant"> | boolean
+  isBot?: Prisma.BoolWithAggregatesFilter<"BattleParticipant"> | boolean
 }
 
 export type BattleParticipantCreateInput = {
@@ -311,6 +323,7 @@ export type BattleParticipantCreateInput = {
   turnState?: $Enums.BattleTurnState
   pendingAction?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   forfeited?: boolean
+  isBot?: boolean
   battle: Prisma.BattleCreateNestedOneWithoutParticipantsInput
   user: Prisma.UserCreateNestedOneWithoutBattleParticipantsInput
   pokemons?: Prisma.BattlePokemonCreateNestedManyWithoutParticipantInput
@@ -325,6 +338,7 @@ export type BattleParticipantUncheckedCreateInput = {
   turnState?: $Enums.BattleTurnState
   pendingAction?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   forfeited?: boolean
+  isBot?: boolean
   pokemons?: Prisma.BattlePokemonUncheckedCreateNestedManyWithoutParticipantInput
 }
 
@@ -335,6 +349,7 @@ export type BattleParticipantUpdateInput = {
   turnState?: Prisma.EnumBattleTurnStateFieldUpdateOperationsInput | $Enums.BattleTurnState
   pendingAction?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   forfeited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   battle?: Prisma.BattleUpdateOneRequiredWithoutParticipantsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutBattleParticipantsNestedInput
   pokemons?: Prisma.BattlePokemonUpdateManyWithoutParticipantNestedInput
@@ -349,6 +364,7 @@ export type BattleParticipantUncheckedUpdateInput = {
   turnState?: Prisma.EnumBattleTurnStateFieldUpdateOperationsInput | $Enums.BattleTurnState
   pendingAction?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   forfeited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pokemons?: Prisma.BattlePokemonUncheckedUpdateManyWithoutParticipantNestedInput
 }
 
@@ -361,6 +377,7 @@ export type BattleParticipantCreateManyInput = {
   turnState?: $Enums.BattleTurnState
   pendingAction?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   forfeited?: boolean
+  isBot?: boolean
 }
 
 export type BattleParticipantUpdateManyMutationInput = {
@@ -370,6 +387,7 @@ export type BattleParticipantUpdateManyMutationInput = {
   turnState?: Prisma.EnumBattleTurnStateFieldUpdateOperationsInput | $Enums.BattleTurnState
   pendingAction?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   forfeited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type BattleParticipantUncheckedUpdateManyInput = {
@@ -381,6 +399,7 @@ export type BattleParticipantUncheckedUpdateManyInput = {
   turnState?: Prisma.EnumBattleTurnStateFieldUpdateOperationsInput | $Enums.BattleTurnState
   pendingAction?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   forfeited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type BattleParticipantListRelationFilter = {
@@ -413,6 +432,7 @@ export type BattleParticipantCountOrderByAggregateInput = {
   turnState?: Prisma.SortOrder
   pendingAction?: Prisma.SortOrder
   forfeited?: Prisma.SortOrder
+  isBot?: Prisma.SortOrder
 }
 
 export type BattleParticipantAvgOrderByAggregateInput = {
@@ -427,6 +447,7 @@ export type BattleParticipantMaxOrderByAggregateInput = {
   activeSlot?: Prisma.SortOrder
   turnState?: Prisma.SortOrder
   forfeited?: Prisma.SortOrder
+  isBot?: Prisma.SortOrder
 }
 
 export type BattleParticipantMinOrderByAggregateInput = {
@@ -437,6 +458,7 @@ export type BattleParticipantMinOrderByAggregateInput = {
   activeSlot?: Prisma.SortOrder
   turnState?: Prisma.SortOrder
   forfeited?: Prisma.SortOrder
+  isBot?: Prisma.SortOrder
 }
 
 export type BattleParticipantSumOrderByAggregateInput = {
@@ -557,6 +579,7 @@ export type BattleParticipantCreateWithoutUserInput = {
   turnState?: $Enums.BattleTurnState
   pendingAction?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   forfeited?: boolean
+  isBot?: boolean
   battle: Prisma.BattleCreateNestedOneWithoutParticipantsInput
   pokemons?: Prisma.BattlePokemonCreateNestedManyWithoutParticipantInput
 }
@@ -569,6 +592,7 @@ export type BattleParticipantUncheckedCreateWithoutUserInput = {
   turnState?: $Enums.BattleTurnState
   pendingAction?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   forfeited?: boolean
+  isBot?: boolean
   pokemons?: Prisma.BattlePokemonUncheckedCreateNestedManyWithoutParticipantInput
 }
 
@@ -610,6 +634,7 @@ export type BattleParticipantScalarWhereInput = {
   turnState?: Prisma.EnumBattleTurnStateFilter<"BattleParticipant"> | $Enums.BattleTurnState
   pendingAction?: Prisma.JsonNullableFilter<"BattleParticipant">
   forfeited?: Prisma.BoolFilter<"BattleParticipant"> | boolean
+  isBot?: Prisma.BoolFilter<"BattleParticipant"> | boolean
 }
 
 export type BattleParticipantCreateWithoutBattleInput = {
@@ -619,6 +644,7 @@ export type BattleParticipantCreateWithoutBattleInput = {
   turnState?: $Enums.BattleTurnState
   pendingAction?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   forfeited?: boolean
+  isBot?: boolean
   user: Prisma.UserCreateNestedOneWithoutBattleParticipantsInput
   pokemons?: Prisma.BattlePokemonCreateNestedManyWithoutParticipantInput
 }
@@ -631,6 +657,7 @@ export type BattleParticipantUncheckedCreateWithoutBattleInput = {
   turnState?: $Enums.BattleTurnState
   pendingAction?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   forfeited?: boolean
+  isBot?: boolean
   pokemons?: Prisma.BattlePokemonUncheckedCreateNestedManyWithoutParticipantInput
 }
 
@@ -667,6 +694,7 @@ export type BattleParticipantCreateWithoutPokemonsInput = {
   turnState?: $Enums.BattleTurnState
   pendingAction?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   forfeited?: boolean
+  isBot?: boolean
   battle: Prisma.BattleCreateNestedOneWithoutParticipantsInput
   user: Prisma.UserCreateNestedOneWithoutBattleParticipantsInput
 }
@@ -680,6 +708,7 @@ export type BattleParticipantUncheckedCreateWithoutPokemonsInput = {
   turnState?: $Enums.BattleTurnState
   pendingAction?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   forfeited?: boolean
+  isBot?: boolean
 }
 
 export type BattleParticipantCreateOrConnectWithoutPokemonsInput = {
@@ -705,6 +734,7 @@ export type BattleParticipantUpdateWithoutPokemonsInput = {
   turnState?: Prisma.EnumBattleTurnStateFieldUpdateOperationsInput | $Enums.BattleTurnState
   pendingAction?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   forfeited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   battle?: Prisma.BattleUpdateOneRequiredWithoutParticipantsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutBattleParticipantsNestedInput
 }
@@ -718,6 +748,7 @@ export type BattleParticipantUncheckedUpdateWithoutPokemonsInput = {
   turnState?: Prisma.EnumBattleTurnStateFieldUpdateOperationsInput | $Enums.BattleTurnState
   pendingAction?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   forfeited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type BattleParticipantCreateManyUserInput = {
@@ -728,6 +759,7 @@ export type BattleParticipantCreateManyUserInput = {
   turnState?: $Enums.BattleTurnState
   pendingAction?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   forfeited?: boolean
+  isBot?: boolean
 }
 
 export type BattleParticipantUpdateWithoutUserInput = {
@@ -737,6 +769,7 @@ export type BattleParticipantUpdateWithoutUserInput = {
   turnState?: Prisma.EnumBattleTurnStateFieldUpdateOperationsInput | $Enums.BattleTurnState
   pendingAction?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   forfeited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   battle?: Prisma.BattleUpdateOneRequiredWithoutParticipantsNestedInput
   pokemons?: Prisma.BattlePokemonUpdateManyWithoutParticipantNestedInput
 }
@@ -749,6 +782,7 @@ export type BattleParticipantUncheckedUpdateWithoutUserInput = {
   turnState?: Prisma.EnumBattleTurnStateFieldUpdateOperationsInput | $Enums.BattleTurnState
   pendingAction?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   forfeited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pokemons?: Prisma.BattlePokemonUncheckedUpdateManyWithoutParticipantNestedInput
 }
 
@@ -760,6 +794,7 @@ export type BattleParticipantUncheckedUpdateManyWithoutUserInput = {
   turnState?: Prisma.EnumBattleTurnStateFieldUpdateOperationsInput | $Enums.BattleTurnState
   pendingAction?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   forfeited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type BattleParticipantCreateManyBattleInput = {
@@ -770,6 +805,7 @@ export type BattleParticipantCreateManyBattleInput = {
   turnState?: $Enums.BattleTurnState
   pendingAction?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   forfeited?: boolean
+  isBot?: boolean
 }
 
 export type BattleParticipantUpdateWithoutBattleInput = {
@@ -779,6 +815,7 @@ export type BattleParticipantUpdateWithoutBattleInput = {
   turnState?: Prisma.EnumBattleTurnStateFieldUpdateOperationsInput | $Enums.BattleTurnState
   pendingAction?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   forfeited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   user?: Prisma.UserUpdateOneRequiredWithoutBattleParticipantsNestedInput
   pokemons?: Prisma.BattlePokemonUpdateManyWithoutParticipantNestedInput
 }
@@ -791,6 +828,7 @@ export type BattleParticipantUncheckedUpdateWithoutBattleInput = {
   turnState?: Prisma.EnumBattleTurnStateFieldUpdateOperationsInput | $Enums.BattleTurnState
   pendingAction?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   forfeited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pokemons?: Prisma.BattlePokemonUncheckedUpdateManyWithoutParticipantNestedInput
 }
 
@@ -802,6 +840,7 @@ export type BattleParticipantUncheckedUpdateManyWithoutBattleInput = {
   turnState?: Prisma.EnumBattleTurnStateFieldUpdateOperationsInput | $Enums.BattleTurnState
   pendingAction?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   forfeited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 
@@ -844,6 +883,7 @@ export type BattleParticipantSelect<ExtArgs extends runtime.Types.Extensions.Int
   turnState?: boolean
   pendingAction?: boolean
   forfeited?: boolean
+  isBot?: boolean
   battle?: boolean | Prisma.BattleDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   pokemons?: boolean | Prisma.BattleParticipant$pokemonsArgs<ExtArgs>
@@ -861,9 +901,10 @@ export type BattleParticipantSelectScalar = {
   turnState?: boolean
   pendingAction?: boolean
   forfeited?: boolean
+  isBot?: boolean
 }
 
-export type BattleParticipantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "battleId" | "userId" | "teamName" | "activeSlot" | "turnState" | "pendingAction" | "forfeited", ExtArgs["result"]["battleParticipant"]>
+export type BattleParticipantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "battleId" | "userId" | "teamName" | "activeSlot" | "turnState" | "pendingAction" | "forfeited" | "isBot", ExtArgs["result"]["battleParticipant"]>
 export type BattleParticipantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   battle?: boolean | Prisma.BattleDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -887,6 +928,7 @@ export type $BattleParticipantPayload<ExtArgs extends runtime.Types.Extensions.I
     turnState: $Enums.BattleTurnState
     pendingAction: runtime.JsonValue | null
     forfeited: boolean
+    isBot: boolean
   }, ExtArgs["result"]["battleParticipant"]>
   composites: {}
 }
@@ -1267,6 +1309,7 @@ export interface BattleParticipantFieldRefs {
   readonly turnState: Prisma.FieldRef<"BattleParticipant", 'BattleTurnState'>
   readonly pendingAction: Prisma.FieldRef<"BattleParticipant", 'Json'>
   readonly forfeited: Prisma.FieldRef<"BattleParticipant", 'Boolean'>
+  readonly isBot: Prisma.FieldRef<"BattleParticipant", 'Boolean'>
 }
     
 

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { JwtPayload } from "src/common/auth/jwt.strategy";
 import { PrismaService } from "src/common/database/prisma.service";
@@ -196,6 +196,87 @@ export class BattleRepository {
                 where: { id: battleId },
                 data: {
                     playerBId: userId,
+                    status: BattleStatus.SELECTING_LEAD,
+                },
+                include: battleSnapshotInclude,
+            });
+        });
+    }
+
+    /**
+     * Escolhe o treinador de teste que vai virar o bot: um específico (validado como role TEST),
+     * ou um sorteado entre os `role: TEST` existentes, excluindo o próprio usuário que está chamando
+     * `join-bot` (caso ele mesmo seja uma conta TEST).
+     */
+    async pickTestTrainer({
+        excludeUserId,
+        trainerId,
+    }: {
+        excludeUserId: string;
+        trainerId?: string;
+    }) {
+        if (trainerId) {
+            const trainer = await this.prisma.user.findFirst({
+                where: { id: trainerId, role: "TEST" },
+            });
+            if (!trainer) {
+                throw new BadRequestException("Treinador de teste não encontrado.");
+            }
+            return trainer;
+        }
+
+        const candidates = await this.prisma.user.findMany({
+            where: { role: "TEST", id: { not: excludeUserId } },
+        });
+        if (candidates.length === 0) {
+            throw new BadRequestException("Nenhum treinador de teste disponível.");
+        }
+        return candidates[Math.floor(Math.random() * candidates.length)];
+    }
+
+    /** Mesma validação/transação de `joinBattle`, mas quem entra é um treinador de teste marcado `isBot: true`. */
+    async joinBattleWithBot({
+        battleId,
+        callerUserId,
+        trainerUserId,
+        teamName,
+        team,
+    }: {
+        battleId: string;
+        callerUserId: string;
+        trainerUserId: string;
+        teamName: TeamName;
+        team: TeamMemberForBattle[];
+    }) {
+        return this.prisma.$transaction(async (tx) => {
+            const battle = await tx.battle.findUnique({ where: { id: battleId } });
+
+            if (!battle) {
+                throw new NotFoundException("Batalha não encontrada.");
+            }
+            if (battle.status !== BattleStatus.WAITING_OPPONENT) {
+                throw new BadRequestException("Batalha não está aguardando oponente.");
+            }
+            if (battle.playerAId !== callerUserId) {
+                throw new ForbiddenException("Só quem criou a batalha pode adicionar um bot.");
+            }
+
+            await tx.battleParticipant.create({
+                data: {
+                    battleId,
+                    userId: trainerUserId,
+                    teamName,
+                    isBot: true,
+                    pokemons: {
+                        create: this.buildBattlePokemonsCreateInput(team),
+                    },
+                },
+            });
+
+            return tx.battle.update({
+                where: { id: battleId },
+                data: {
+                    playerBId: trainerUserId,
                     status: BattleStatus.SELECTING_LEAD,
                 },
                 include: battleSnapshotInclude,
