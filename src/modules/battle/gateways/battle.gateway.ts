@@ -133,7 +133,12 @@ export class BattleGateway implements OnGatewayInit, OnGatewayConnection, OnGate
             ready: true,
         });
 
-        if (ready.size >= 2) {
+        // Bot nunca conecta via socket, então nunca manda "ready" de verdade — se o oponente é bot,
+        // basta o humano estar pronto (ver docs/battle-bot-trainer-plan.md seção 5.1).
+        const snapshot = await this.battleService.getBattleSnapshot({ battleId, userId: user.id });
+        const opponentIsBot = snapshot.participants.some((p) => p.isBot);
+
+        if (ready.size >= 2 || opponentIsBot) {
             this.readyParticipants.delete(battleId);
             const battle = await this.battleService.startBattle(battleId);
             this.logger.log(`battle-started battleId=${battleId} status=${battle.status}`);

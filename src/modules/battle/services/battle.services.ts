@@ -8,6 +8,7 @@ import {
     EngineParticipant,
     ResolveTurnResult,
 } from './battle-engine.service';
+import { BattleAiService } from './battle-ai.service';
 import { parsePokemonTypes } from './type-chart';
 import { parseStatChanges, StatStages } from './stat-stage-moves';
 
@@ -30,6 +31,7 @@ export class BattleService {
     constructor(
         private readonly battleRepository: BattleRepository,
         private readonly battleEngineService: BattleEngineService,
+        private readonly battleAiService: BattleAiService,
     ) { }
 
     async validateToken(token: string) {
@@ -73,6 +75,39 @@ export class BattleService {
 
         this.logger.log(`userId=${userId} entrou na batalha battleId=${battle.id}`);
         return { id: battle.id };
+    }
+
+    /**
+     * Entra na batalha com um treinador de teste como oponente (playerB), controlado pelo
+     * `BattleAiService`. Só quem criou a batalha (`playerA`) pode chamar isso — ver
+     * docs/battle-bot-trainer-plan.md seção 3.
+     */
+    async joinBattleWithBot({
+        battleId,
+        userId,
+        trainerId,
+    }: {
+        battleId: string;
+        userId: string;
+        trainerId?: string;
+    }) {
+        this.logger.log(`joinBattleWithBot battleId=${battleId} userId=${userId} trainerId=${trainerId ?? '-'}`);
+
+        const trainer = await this.battleRepository.pickTestTrainer({ excludeUserId: userId, trainerId });
+        const teamName: TeamName = 'teamAlpha';
+        const team = await this.battleRepository.getTeamForBattle({ userId: trainer.id, teamName });
+        this.assertValidTeamSize(team.length);
+
+        const battle = await this.battleRepository.joinBattleWithBot({
+            battleId,
+            callerUserId: userId,
+            trainerUserId: trainer.id,
+            teamName,
+            team,
+        });
+
+        this.logger.log(`Bot trainerId=${trainer.id} (${trainer.name}) entrou na batalha battleId=${battle.id}`);
+        return { id: battle.id, trainerId: trainer.id, trainerName: trainer.name };
     }
 
     async deleteAllBattles() {
@@ -194,6 +229,29 @@ export class BattleService {
         const participants = await this.battleRepository.getParticipantsForResolution(battleId);
         const [p1, p2] = participants;
 
+        // Batalha vs bot: o turno resolve na mesma chamada que o humano usou pra submeter a ação —
+        // não espera um segundo `pendingAction` porque o bot não manda um de verdade (ver
+        // docs/battle-bot-trainer-plan.md seção 5.2).
+        const botParticipant = [p1, p2].find((p) => p?.isBot);
+        const humanParticipant = [p1, p2].find((p) => p && !p.isBot);
+
+        if (botParticipant && humanParticipant) {
+            if (!humanParticipant.pendingAction) {
+                this.logger.log(`battleId=${battleId} aguardando ação do jogador humano`);
+                return { status: 'waiting-for-opponent' };
+            }
+
+            const botAction = this.battleAiService.decideAction(
+                this.toEngineParticipant(botParticipant),
+                this.toEngineParticipant(humanParticipant),
+            );
+
+            return this.resolveWithActions(battleId, {
+                [humanParticipant.id]: this.toEngineAction(humanParticipant.pendingAction as SubmitActionInput),
+                [botParticipant.id]: botAction,
+            });
+        }
+
         if (!p1?.pendingAction || !p2?.pendingAction) {
             this.logger.log(`battleId=${battleId} aguardando ação do oponente`);
             return { status: 'waiting-for-opponent' };
@@ -228,7 +286,7 @@ export class BattleService {
             ],
         });
 
-        await this.battleRepository.persistTurnResolution({
+        const updatedBattle = await this.battleRepository.persistTurnResolution({
             battleId,
             turnNumber: battle.turnNumber,
             result,
@@ -243,7 +301,42 @@ export class BattleService {
             `Turno resolvido battleId=${battleId} turnNumber=${battle.turnNumber} finished=${result.finished} winnerUserId=${winnerUserId ?? '-'}`,
         );
 
-        return { ...result, status: 'turn-resolved', turnNumber: battle.turnNumber, winnerUserId };
+        // Se o bot ficou com o ativo desmaiado, resolve a troca forçada dele agora mesmo — o humano
+        // nunca vê "forced-switch-required" pro lado do bot (ver docs/battle-bot-trainer-plan.md seção 5.3).
+        const remainingForcedSwitchIds: string[] = [];
+        for (const participantId of result.forcedSwitchParticipantIds) {
+            const participant = [p1, p2].find((p) => p.id === participantId);
+            if (!participant?.isBot) {
+                remainingForcedSwitchIds.push(participantId);
+                continue;
+            }
+
+            const botEngineParticipant = result.participants.find((p) => p.participantId === participantId)!;
+            const opponentEngineParticipant = result.participants.find((p) => p.participantId !== participantId)!;
+            const opponentActive = opponentEngineParticipant.pokemons.find(
+                (p) => p.position === opponentEngineParticipant.activeSlot,
+            )!;
+
+            const target = this.battleAiService.decideSwitch(botEngineParticipant, opponentActive);
+            await this.battleRepository.applyForcedSwitch({
+                battleId,
+                turnNumber: updatedBattle.turnNumber,
+                participantId,
+                battlePokemonId: target,
+            });
+
+            this.logger.log(
+                `Troca forçada do bot resolvida battleId=${battleId} participantId=${participantId} novoPokemon=${target}`,
+            );
+        }
+
+        return {
+            ...result,
+            forcedSwitchParticipantIds: remainingForcedSwitchIds,
+            status: 'turn-resolved',
+            turnNumber: battle.turnNumber,
+            winnerUserId,
+        };
     }
 
     private toEngineParticipant(participant: ParticipantForResolution): EngineParticipant {

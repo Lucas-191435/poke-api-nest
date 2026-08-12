@@ -330,6 +330,7 @@ model BattleParticipant {
   turnState     BattleTurnState @default(WAITING_ACTION)
   pendingAction Json?
   forfeited     Boolean         @default(false)
+  isBot         Boolean         @default(false) // controlado pelo BattleAiService, setado só via POST /battle/:id/join-bot
   battle        Battle          @relation(fields: [battleId], references: [id])
   user          User            @relation(fields: [userId], references: [id])
   pokemons      BattlePokemon[]

@@ -4,6 +4,7 @@ import { BattleService } from './services/battle.services';
 import { GetUser } from 'src/common/guard/getuser.decorator';
 import { CreateBattleDto } from './dto/create-battle.dto';
 import { JoinBattleDto } from './dto/join-battle.dto';
+import { JoinBattleBotDto } from './dto/join-battle-bot.dto';
 import { Throttle } from '@nestjs/throttler';
 import { AllowTestRole } from 'src/common/auth/allow-test-role.decorator';
 
@@ -37,6 +38,22 @@ export class BattleController {
             battleId,
             userId,
             teamName: dto.teamName,
+        });
+    }
+
+    @Post(':id/join-bot')
+    @HttpCode(200)
+    @AllowTestRole()
+    @ApiOperation({ summary: 'Entra na batalha com um treinador de teste (bot) como oponente' })
+    async joinBattleWithBot(
+        @Param('id') battleId: string,
+        @GetUser('id') userId: string,
+        @Body() dto: JoinBattleBotDto,
+    ) {
+        return this.battleService.joinBattleWithBot({
+            battleId,
+            userId,
+            trainerId: dto.trainerId,
         });
     }
 
