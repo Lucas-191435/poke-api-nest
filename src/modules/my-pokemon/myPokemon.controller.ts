@@ -8,6 +8,12 @@ import {
 } from '@nestjs/swagger';
 import { Public } from 'src/common/auth/public.decorator';
 import { CapturePokemonDto, UpdatePokemonMovesDto, UpdatePokemonTeamDto } from './dto';
+import {
+    LeavePokemonResponseDto,
+    MyPokemonDto,
+    MyPokemonWithSpeciesDto,
+    UpdatePokemonTeamResponseDto,
+} from './dto/myPokemonResponse.dto';
 import { GetUser } from 'src/common/guard/getuser.decorator';
 
 @ApiTags('my-pokemon')
@@ -18,7 +24,7 @@ export class MyPokemonController {
     @Get()
     @HttpCode(200)
     @ApiOperation({ summary: 'Obtém todos os Pokémons de um usuário' })
-    @ApiResponse({ status: 200, description: 'Pokémons obtidos com sucesso' })
+    @ApiResponse({ status: 200, description: 'Pokémons obtidos com sucesso', type: MyPokemonWithSpeciesDto, isArray: true })
     @ApiResponse({ status: 400, description: 'Erro ao obter Pokémons' })
     getAllPokemonsOfUser(@GetUser('id') id: string) {
         return this.myPokemonService.getAllPokemonsOfUser({ userId: id });
@@ -27,7 +33,7 @@ export class MyPokemonController {
     @Post('capture')
     @HttpCode(200)
     @ApiOperation({ summary: 'Captura um Pokémon' })
-    @ApiResponse({ status: 200, description: 'Pokémon capturado com sucesso' })
+    @ApiResponse({ status: 200, description: 'Pokémon capturado com sucesso', type: MyPokemonDto })
     @ApiResponse({ status: 400, description: 'Erro ao capturar Pokémon' })
     capturePokemon(@Body() dto: CapturePokemonDto,@GetUser('id') id: string) {
         return this.myPokemonService.capturePokemon({
@@ -40,7 +46,7 @@ export class MyPokemonController {
     @Delete('leave/:id')
     @HttpCode(200)
     @ApiOperation({ summary: 'Libera um Pokémon' })
-    @ApiResponse({ status: 200, description: 'Pokémon liberado com sucesso' })
+    @ApiResponse({ status: 200, description: 'Pokémon liberado com sucesso', type: LeavePokemonResponseDto })
     @ApiResponse({ status: 400, description: 'Erro ao liberar Pokémon' })
     leavePokemon(@Param('id') id: string, @GetUser('id') userId: string) {
         return this.myPokemonService.leavePokemon({ pokemonId: id, userId });
@@ -50,7 +56,7 @@ export class MyPokemonController {
     @Put('update-team')
     @HttpCode(200)
     @ApiOperation({ summary: 'Atualiza o time de Pokémons' })
-    @ApiResponse({ status: 200, description: 'Time atualizado com sucesso' })
+    @ApiResponse({ status: 200, description: 'Time atualizado com sucesso', type: UpdatePokemonTeamResponseDto })
     @ApiResponse({ status: 400, description: 'Erro ao atualizar o time' })
     updatePokemonTeam(@Body() dto: UpdatePokemonTeamDto ,  @GetUser('id') userId: string) {
         return this.myPokemonService.updatePokemonTeam({
@@ -62,7 +68,7 @@ export class MyPokemonController {
     @Put('update-moves')
     @HttpCode(200)
     @ApiOperation({ summary: 'Atualiza os movimentos de um Pokémon' })
-    @ApiResponse({ status: 200, description: 'Movimentos atualizados com sucesso' })
+    @ApiResponse({ status: 200, description: 'Movimentos atualizados com sucesso', type: MyPokemonDto })
     @ApiResponse({ status: 400, description: 'Erro ao atualizar os movimentos' })
     updatePokemonMoves(@Body() dto: UpdatePokemonMovesDto,  @GetUser('id') userId: string) {
         return this.myPokemonService.updatePokemonMoves({ data: dto, userId });

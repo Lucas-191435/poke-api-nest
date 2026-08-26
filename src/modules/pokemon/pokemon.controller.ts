@@ -8,6 +8,7 @@ import {
 } from '@nestjs/swagger';
 import { Public } from 'src/common/auth/public.decorator';
 import { Throttle } from '@nestjs/throttler';
+import { FindPokemonsResponseDto, PokemonDetailResponseDto } from './dto/pokemonResponse.dto';
 
 
 @ApiTags('pokemon')
@@ -57,6 +58,7 @@ export class PokemonController {
   @ApiResponse({
     status: 200,
     description: 'Lista de Pokémon retornada com sucesso',
+    type: FindPokemonsResponseDto,
   })
   async getPokemons(
     @Query('page') page?: number,
@@ -72,6 +74,7 @@ export class PokemonController {
   @ApiResponse({
     status: 200,
     description: 'Detalhes do Pokémon retornados com sucesso',
+    type: PokemonDetailResponseDto,
   })
   @ApiOperation({ summary: 'Detalhes de um Pokémon' })
   async getPokemon(@Param('id') id: string) {
