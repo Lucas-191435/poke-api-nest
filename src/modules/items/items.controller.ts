@@ -8,6 +8,7 @@ import {
 import { Public } from 'src/common/auth/public.decorator';
 import { ItemsService } from './items.service';
 import { Throttle } from '@nestjs/throttler';
+import { FindItemsResponseDto } from './dto/itemResponse.dto';
 
 
 @ApiTags('items')
@@ -50,7 +51,8 @@ export class ItemsController {
   })
   @ApiResponse({
     status: 200,
-    description: 'Lista de Pokémon retornada com sucesso',
+    description: 'Lista de itens retornada com sucesso',
+    type: FindItemsResponseDto,
   })
   async getItems(
     @Query('page') page: string,
