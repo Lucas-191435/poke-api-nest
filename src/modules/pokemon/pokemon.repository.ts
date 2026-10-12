@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/common/database/prisma.service";
 import { Prisma } from "src/generated/prisma/client";
+import { Region } from "src/generated/prisma/enums";
 import { transformPokemonData } from "./util";
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 @Injectable()
@@ -13,8 +14,8 @@ export class PokemonRepository {
         pageSize = 10,
         query = '',
         types,
-        weight,
-    }: { page?: number; pageSize?: number; query?: string; types?: string[]; weight?: string }) {
+        regions,
+    }: { page?: number; pageSize?: number; query?: string; types?: string[]; regions?: Region[] }) {
         const conditions: Array<Record<string, any>> = [];
         if (query) {
             conditions.push({
@@ -28,38 +29,20 @@ export class PokemonRepository {
             });
         }
         if (types && types.length > 0) {
+            // types é salvo como JSON (ex: ["fire","flying"]); as aspas garantem match exato
             conditions.push({
                 OR: types.map((type) => ({
                     types: {
-                        contains: type,
+                        contains: `"${type}"`,
                     },
                 })),
             });
         }
 
-        if (weight) {
-            // if (weight === 'small') {
-            //     conditions.push({
-            //         weight: {
-            //             gte: 0,
-            //             lte: 300,
-            //         }
-            //     });
-            // } else if (weight === 'medium') {
-            //     conditions.push({
-            //         weight: {
-            //             gte: 300,
-            //             lte: 850,
-            //         }
-            //     });
-            // } else if (weight === 'large') {
-            //     conditions.push({
-            //         weight: {
-            //             gte: 850,
-            //             // lte: 900,
-            //         }
-            //     });
-            // }
+        if (regions && regions.length > 0) {
+            conditions.push({
+                region: { in: regions },
+            });
         }
 
         const where: Prisma.PokemonFindManyArgs["where"] = {

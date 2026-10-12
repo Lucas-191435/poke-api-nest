@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PokemonRepository } from './pokemon.repository';
 import { PokeApiService } from './pokeApi/pokeApi.service';
+import { GetPokemonsQueryDto } from './dto/getPokemonsQuery.dto';
 
 @Injectable()
 export class PokemonService {
@@ -15,14 +16,14 @@ export class PokemonService {
         pageSize = 30,
         query = '',
         types,
-        weight,
-    }: { page?: number; pageSize?: number; query?: string; types?: string[]; weight?: string }) {
+        regions,
+    }: GetPokemonsQueryDto) {
         const pokemons = await this.pokemonRepository.getPokemons({
-            page: parseInt(String(page)),
-            pageSize: parseInt(String(pageSize)),
+            page,
+            pageSize,
             query,
             types,
-            weight
+            regions,
         });
         return pokemons;
     }
