@@ -124,13 +124,16 @@ export interface ResolveTurnInput {
 export type StatusBlockedReason = "asleep" | "paralyzed" | "frozen" | "confused-hit";
 
 export type TurnLogEntry =
-    | { event: "switch"; participantId: string; battlePokemonId: string }
+    /** `forced` = troca por desmaio do titular (fora da resolução normal do turno), não uma ação SWITCH. */
+    | { event: "switch"; participantId: string; battlePokemonId: string; forced: boolean }
     | { event: "forfeit"; participantId: string }
     | { event: "move-failed"; participantId: string; moveId: string; reason: "no-pp" | "invalid-target" }
     | {
         event: "move";
         participantId: string;
         moveId: string;
+        /** Repassado de Move.damage_class — o front usa pra não narrar efetividade em golpe de status. */
+        damageClass: DamageClass | null;
         targetParticipantId: string;
         targetBattlePokemonId: string;
         missed: boolean;
@@ -246,6 +249,7 @@ export class BattleEngineService {
                 event: "move",
                 participantId: submitted.participantId,
                 moveId,
+                damageClass: usedMove.move.damageClass,
                 targetParticipantId: defenderParticipant.participantId,
                 targetBattlePokemonId: defender.battlePokemonId,
                 missed,
@@ -625,7 +629,7 @@ export class BattleEngineService {
             if (!target || target.fainted) continue;
 
             participant.activeSlot = target.position;
-            log.push({ event: "switch", participantId: participant.participantId, battlePokemonId: target.battlePokemonId });
+            log.push({ event: "switch", participantId: participant.participantId, battlePokemonId: target.battlePokemonId, forced: false });
         }
     }
 

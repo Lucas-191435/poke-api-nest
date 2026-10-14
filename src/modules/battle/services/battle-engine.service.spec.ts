@@ -447,4 +447,26 @@ describe('BattleEngineService', () => {
         expect(result.winnerParticipantId).toBe('A');
         expect(result.finished).toBe(true);
     });
+
+    it('log do move carrega o damageClass do golpe e a troca voluntária sai como não forçada', () => {
+        const growl = buildMove({ id: 'move-growl', power: null, damageClass: 'status', statChanges: [{ stat: 'atk', stages: -1 }] });
+        const attacker = buildPokemon({
+            battlePokemonId: 'a1',
+            moves: [{ battlePokemonMoveId: 'bpm-growl', currentPp: 10, move: growl }],
+        });
+        const defender = buildPokemon({ battlePokemonId: 'b1' });
+
+        const spy = mockRandomSequence([0.01]); // missed(hit)
+
+        const result = service.resolveTurn({
+            turnNumber: 1,
+            participants: [buildParticipant('A', attacker), buildParticipant('B', defender)],
+            actions: [{ participantId: 'A', action: { type: 'MOVE', moveId: 'move-growl' } }, switchToSelf('B', 'b1')],
+        } satisfies ResolveTurnInput);
+
+        spy.mockRestore();
+
+        expect(findMoveEntry(result.log, 'A').damageClass).toBe('status');
+        expect(result.log).toContainEqual({ event: 'switch', participantId: 'B', battlePokemonId: 'b1', forced: false });
+    });
 });

@@ -434,6 +434,8 @@ export class BattleRepository {
             throw new BadRequestException("Não é possível escolher um Pokémon desmaiado.");
         }
 
+        const logEntry: TurnLogEntry = { event: "switch", participantId, battlePokemonId, forced: true };
+
         return this.prisma.$transaction(async (tx) => {
             const participant = await tx.battleParticipant.update({
                 where: { id: participantId },
@@ -446,11 +448,13 @@ export class BattleRepository {
                     turnNumber,
                     actorParticipantId: participantId,
                     actionType: BattleActionType.SWITCH,
-                    payload: { event: "switch", participantId, battlePokemonId },
+                    payload: logEntry,
                 },
             });
 
-            return participant;
+            // Devolve a entrada de log pra quem chamou poder emiti-la ao vivo (o front toca a
+            // animação de entrada do substituto a partir dela).
+            return { participant, logEntry };
         });
     }
 

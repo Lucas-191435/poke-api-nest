@@ -7,6 +7,7 @@ import {
     EngineAction,
     EngineParticipant,
     ResolveTurnResult,
+    TurnLogEntry,
 } from './battle-engine.service';
 import { BattleAiService } from './battle-ai.service';
 import { parsePokemonTypes } from './type-chart';
@@ -21,7 +22,7 @@ export type SubmitActionInput = {
 
 export type SubmitActionResult =
     | { status: 'waiting-for-opponent' }
-    | { status: 'forced-switch-resolved' }
+    | { status: 'forced-switch-resolved'; participantId: string; log: TurnLogEntry[] }
     | (ResolveTurnResult & { status: 'turn-resolved'; turnNumber: number; winnerUserId: string | null });
 
 @Injectable()
@@ -192,7 +193,7 @@ export class BattleService {
             }
 
             const battle = await this.battleRepository.getBattleSnapshot(battleId);
-            await this.battleRepository.applyForcedSwitch({
+            const { logEntry } = await this.battleRepository.applyForcedSwitch({
                 battleId,
                 turnNumber: battle.turnNumber,
                 participantId: participant.id,
@@ -203,7 +204,7 @@ export class BattleService {
                 `Troca forçada resolvida battleId=${battleId} participantId=${participant.id} novoPokemon=${action.targetPokemonId}`,
             );
 
-            return { status: 'forced-switch-resolved' };
+            return { status: 'forced-switch-resolved', participantId: participant.id, log: [logEntry] };
         }
 
         // Ação já enviada: se a resolução do turno falhou antes (a transação reverte e o participante
@@ -318,6 +319,7 @@ export class BattleService {
         // Se o bot ficou com o ativo desmaiado, resolve a troca forçada dele agora mesmo — o humano
         // nunca vê "forced-switch-required" pro lado do bot (ver docs/battle-bot-trainer-plan.md seção 5.3).
         const remainingForcedSwitchIds: string[] = [];
+        const botSwitchEntries: TurnLogEntry[] = [];
         for (const participantId of result.forcedSwitchParticipantIds) {
             const participant = [p1, p2].find((p) => p.id === participantId);
             if (!participant?.isBot) {
@@ -332,12 +334,15 @@ export class BattleService {
             )!;
 
             const target = this.battleAiService.decideSwitch(botEngineParticipant, opponentActive);
-            await this.battleRepository.applyForcedSwitch({
+            const { logEntry } = await this.battleRepository.applyForcedSwitch({
                 battleId,
                 turnNumber: updatedBattle.turnNumber,
                 participantId,
                 battlePokemonId: target,
             });
+            // Entra no log emitido no turn-resolved (já persistido à parte pelo applyForcedSwitch)
+            // pra que o front narre e anime a entrada do substituto depois do desmaio.
+            botSwitchEntries.push(logEntry);
 
             this.logger.log(
                 `Troca forçada do bot resolvida battleId=${battleId} participantId=${participantId} novoPokemon=${target}`,
@@ -346,6 +351,7 @@ export class BattleService {
 
         return {
             ...result,
+            log: [...result.log, ...botSwitchEntries],
             forcedSwitchParticipantIds: remainingForcedSwitchIds,
             status: 'turn-resolved',
             turnNumber: battle.turnNumber,

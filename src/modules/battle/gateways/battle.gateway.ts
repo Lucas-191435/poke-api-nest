@@ -175,7 +175,13 @@ export class BattleGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         }
 
         if (result.status === 'forced-switch-resolved') {
+            // Mantido por compatibilidade; o front novo usa o log de forced-switch-resolved pra
+            // narrar/animar a entrada do substituto.
             this.server.to(room).emit('battle-updated', { userId: user.id, forcedSwitchResolved: true });
+            this.server.to(room).emit('forced-switch-resolved', {
+                participantId: result.participantId,
+                log: result.log,
+            });
             return { received: true };
         }
 
