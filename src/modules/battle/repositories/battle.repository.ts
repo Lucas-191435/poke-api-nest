@@ -5,7 +5,10 @@ import { PrismaService } from "src/common/database/prisma.service";
 import { Move, MyPokemon, Pokemon, Prisma } from "src/generated/prisma/client";
 import { BattleActionType, BattleStatus, BattleTurnState } from "src/generated/prisma/enums";
 import { RECENT_TURN_LOGS_LIMIT } from "../battle.constants";
-import { ResolveTurnResult, TurnLogEntry } from "../services/battle-engine.service";
+import { EngineParticipant, ResolveTurnResult, TurnLogEntry } from "../services/battle-engine.service";
+
+// Margem pra latência do banco remoto; o padrão do Prisma (5s) não cobre turnos com muitos updates.
+const TURN_TRANSACTION_TIMEOUT_MS = 15_000;
 
 export type TeamName = "teamAlpha" | "teamBeta" | "teamGamma";
 
@@ -451,18 +454,29 @@ export class BattleRepository {
         });
     }
 
-    /** Persiste o resultado do battle-engine numa transação: HP/PP/fainted, log do turno e o avanço da batalha. */
+    /**
+     * Persiste o resultado do battle-engine numa transação: HP/PP/fainted, log do turno e o avanço da batalha.
+     * Só grava Pokémon e golpes que mudaram em relação a `previousParticipants` (o input do engine):
+     * gravar os 6 Pokémon × 4 golpes dos dois lados a cada turno estourava o timeout da transação
+     * com o banco remoto.
+     */
     async persistTurnResolution({
         battleId,
         turnNumber,
         result,
+        previousParticipants,
         participantUserIds,
     }: {
         battleId: string;
         turnNumber: number;
         result: ResolveTurnResult;
+        previousParticipants: EngineParticipant[];
         participantUserIds: Record<string, string>;
     }) {
+        const previousPokemons = new Map(
+            previousParticipants.flatMap((p) => p.pokemons).map((pokemon) => [pokemon.battlePokemonId, pokemon]),
+        );
+
         return this.prisma.$transaction(async (tx) => {
             for (const participant of result.participants) {
                 const turnState = result.finished
@@ -481,18 +495,34 @@ export class BattleRepository {
                 });
 
                 for (const pokemon of participant.pokemons) {
-                    await tx.battlePokemon.update({
-                        where: { id: pokemon.battlePokemonId },
-                        data: {
-                            currentHp: pokemon.currentHp,
-                            fainted: pokemon.fainted,
-                            statusCondition: pokemon.statusCondition,
-                            statusCounter: pokemon.statusCounter,
-                            statStages: pokemon.statStages,
-                        },
-                    });
+                    const previous = previousPokemons.get(pokemon.battlePokemonId);
+                    const pokemonChanged =
+                        !previous ||
+                        previous.currentHp !== pokemon.currentHp ||
+                        previous.fainted !== pokemon.fainted ||
+                        previous.statusCondition !== pokemon.statusCondition ||
+                        previous.statusCounter !== pokemon.statusCounter ||
+                        JSON.stringify(previous.statStages) !== JSON.stringify(pokemon.statStages);
+
+                    if (pokemonChanged) {
+                        await tx.battlePokemon.update({
+                            where: { id: pokemon.battlePokemonId },
+                            data: {
+                                currentHp: pokemon.currentHp,
+                                fainted: pokemon.fainted,
+                                statusCondition: pokemon.statusCondition,
+                                statusCounter: pokemon.statusCounter,
+                                statStages: pokemon.statStages,
+                            },
+                        });
+                    }
 
                     for (const move of pokemon.moves) {
+                        const previousPp = previous?.moves.find(
+                            (m) => m.battlePokemonMoveId === move.battlePokemonMoveId,
+                        )?.currentPp;
+                        if (previousPp === move.currentPp) continue;
+
                         await tx.battlePokemonMove.update({
                             where: { id: move.battlePokemonMoveId },
                             data: { currentPp: move.currentPp },
@@ -530,7 +560,7 @@ export class BattleRepository {
                 },
                 include: battleSnapshotInclude,
             });
-        });
+        }, { timeout: TURN_TRANSACTION_TIMEOUT_MS });
     }
 
     private mapLogEventToActionType(entry: Exclude<TurnLogEntry, { event: "battle-ended" }>): BattleActionType {

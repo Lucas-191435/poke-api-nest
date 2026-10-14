@@ -94,17 +94,18 @@ export class UserRepository {
         avatar?: string;
         description?: string;
     }) => {
-        const existingUser = await this.prisma.user.findUnique({ where: { email } });
-        if (existingUser) {
-            throw new ConflictException("Já existe um usuário com esse e-mail");
+        try {
+            return await this.prisma.user.create({
+                data: { email, password, name, avatar, description },
+                select: userSafeSelect,
+            });
+        } catch (error) {
+            // P2002 = violação de unique; garante 409 mesmo com cadastros simultâneos
+            if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+                throw new ConflictException("Já existe um usuário com esse e-mail");
+            }
+            throw error;
         }
-
-        const user = await this.prisma.user.create({
-            data: { email, password, name, avatar, description },
-            select: userSafeSelect,
-        });
-
-        return user;
     }
 
     updateUser = async ({ id, name, description, avatar }: {

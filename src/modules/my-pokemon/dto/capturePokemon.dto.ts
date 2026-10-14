@@ -1,11 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString, MinLength } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class CapturePokemonDto {
     @ApiProperty()
+    @IsString()
     pokemonId!: string;
 
     @ApiProperty()
+    @IsOptional()
+    @IsString()
     nickname!: string;
 }
-

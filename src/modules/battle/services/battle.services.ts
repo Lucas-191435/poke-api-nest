@@ -206,6 +206,13 @@ export class BattleService {
             return { status: 'forced-switch-resolved' };
         }
 
+        // Ação já enviada: se a resolução do turno falhou antes (a transação reverte e o participante
+        // fica preso em ACTION_SUBMITTED), tenta resolver de novo com as ações já gravadas.
+        // A nova ação é ignorada; se o oponente ainda não jogou, só retorna "aguardando".
+        if (participant.turnState === BattleTurnState.ACTION_SUBMITTED) {
+            return this.tryResolveTurn(battleId);
+        }
+
         if (participant.turnState !== BattleTurnState.WAITING_ACTION) {
             throw new BadRequestException('Não é possível enviar uma ação agora.');
         }
@@ -277,9 +284,15 @@ export class BattleService {
 
         this.logger.log(`Resolvendo turno battleId=${battleId} turnNumber=${battle.turnNumber}`);
 
+        // O engine clona o input, então `previousParticipants` continua sendo o estado antes do turno.
+        const previousParticipants: [EngineParticipant, EngineParticipant] = [
+            this.toEngineParticipant(p1),
+            this.toEngineParticipant(p2),
+        ];
+
         const result = this.battleEngineService.resolveTurn({
             turnNumber: battle.turnNumber,
-            participants: [this.toEngineParticipant(p1), this.toEngineParticipant(p2)],
+            participants: previousParticipants,
             actions: [
                 { participantId: p1.id, action: actionsByParticipantId[p1.id] ?? { type: 'FORFEIT' } },
                 { participantId: p2.id, action: actionsByParticipantId[p2.id] ?? { type: 'FORFEIT' } },
@@ -290,6 +303,7 @@ export class BattleService {
             battleId,
             turnNumber: battle.turnNumber,
             result,
+            previousParticipants,
             participantUserIds: { [p1.id]: p1.userId, [p2.id]: p2.userId },
         });
 
