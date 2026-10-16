@@ -118,6 +118,12 @@ export class BattleService {
         return result;
     }
 
+    async cancelBattle({ battleId, userId }: { battleId: string; userId: string }) {
+        const result = await this.battleRepository.cancelWaitingBattle({ battleId, userId });
+        this.logger.log(`Sala cancelada pelo criador battleId=${battleId} userId=${userId}`);
+        return result;
+    }
+
     async findBattleRooms({
         page,
         pageSize,

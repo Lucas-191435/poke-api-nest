@@ -3,6 +3,9 @@ export const MAX_TEAM_SIZE = 6;
 export const FIXED_LEVEL = 50;
 export const RECENT_TURN_LOGS_LIMIT = 20;
 
+/** Batalhas não finalizadas sem atualização há mais que isso são apagadas pelo BattleCleanupService. */
+export const STALE_BATTLE_TIMEOUT_MS = 60 * 60 * 1000;
+
 /** Multiplicador global aplicado a todo dano calculado, para deixar as batalhas menos rápidas. */
 export const DAMAGE_MULTIPLIER = 0.35;
 

@@ -1,6 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { ScheduleModule } from '@nestjs/schedule';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PokemonModule } from './modules/pokemon/pokemon.module';
@@ -23,6 +24,7 @@ import { UserModule } from './modules/user/user.module';
         limit: 10,
       },
     ]),
+    ScheduleModule.forRoot(),
     PrismaModule,
     JwtGuardModule,
     AuthModule,

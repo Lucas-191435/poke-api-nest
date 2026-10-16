@@ -299,6 +299,60 @@ export class BattleRepository {
         });
     }
 
+    /**
+     * Apaga batalhas abandonadas: qualquer status diferente de FINISHED sem atualização desde `inactiveSince`.
+     * FINISHED fica de fora porque alimenta as estatísticas de vitórias/derrotas do usuário.
+     */
+    async deleteStaleBattles(inactiveSince: Date) {
+        return this.prisma.$transaction(async (tx) => {
+            const staleBattles = await tx.battle.findMany({
+                where: {
+                    status: { not: BattleStatus.FINISHED },
+                    updatedAt: { lt: inactiveSince },
+                },
+                select: { id: true },
+            });
+            const battleIds = staleBattles.map((battle) => battle.id);
+
+            if (battleIds.length === 0) {
+                return { count: 0, battleIds };
+            }
+
+            const count = await this.deleteBattlesCascade(tx, battleIds);
+            return { count, battleIds };
+        }, { timeout: TURN_TRANSACTION_TIMEOUT_MS });
+    }
+
+    /** Cancela uma sala que ainda está aguardando oponente; só quem criou pode cancelar. */
+    async cancelWaitingBattle({ battleId, userId }: { battleId: string; userId: string }) {
+        return this.prisma.$transaction(async (tx) => {
+            const battle = await tx.battle.findUnique({ where: { id: battleId } });
+
+            if (!battle) {
+                throw new NotFoundException("Batalha não encontrada.");
+            }
+            if (battle.playerAId !== userId) {
+                throw new ForbiddenException("Só quem criou a batalha pode cancelá-la.");
+            }
+            if (battle.status !== BattleStatus.WAITING_OPPONENT) {
+                throw new BadRequestException("A batalha já começou e não pode mais ser cancelada.");
+            }
+
+            await this.deleteBattlesCascade(tx, [battleId]);
+            return { id: battleId };
+        });
+    }
+
+    private async deleteBattlesCascade(tx: Prisma.TransactionClient, battleIds: string[]) {
+        const participantFilter = { participant: { battleId: { in: battleIds } } };
+        await tx.battlePokemonMove.deleteMany({ where: { battlePokemon: participantFilter } });
+        await tx.battlePokemon.deleteMany({ where: participantFilter });
+        await tx.battleTurnLog.deleteMany({ where: { battleId: { in: battleIds } } });
+        await tx.battleParticipant.deleteMany({ where: { battleId: { in: battleIds } } });
+        const { count } = await tx.battle.deleteMany({ where: { id: { in: battleIds } } });
+        return count;
+    }
+
     async findBattleRooms({
         page = 1,
         pageSize = 10,

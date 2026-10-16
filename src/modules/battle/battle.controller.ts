@@ -9,6 +9,7 @@ import { Throttle } from '@nestjs/throttler';
 import { AllowTestRole } from 'src/common/auth/allow-test-role.decorator';
 import {
     BattleSnapshotResponseDto,
+    CancelBattleResponseDto,
     CreateOrJoinBattleResponseDto,
     DeleteAllBattlesResponseDto,
     FindBattleRoomsResponseDto,
@@ -75,6 +76,19 @@ export class BattleController {
     @ApiResponse({ status: 200, description: 'Batalhas excluídas com sucesso', type: DeleteAllBattlesResponseDto })
     async deleteAllBattles() {
         return this.battleService.deleteAllBattles();
+    }
+
+    // Declarada depois de `DELETE all` pra não capturar "all" como :id.
+    @Delete(':id')
+    @HttpCode(200)
+    @AllowTestRole()
+    @ApiOperation({ summary: 'Cancela uma sala que ainda está aguardando oponente (só o criador)' })
+    @ApiResponse({ status: 200, description: 'Sala cancelada com sucesso', type: CancelBattleResponseDto })
+    async cancelBattle(
+        @Param('id') battleId: string,
+        @GetUser('id') userId: string,
+    ) {
+        return this.battleService.cancelBattle({ battleId, userId });
     }
 
     @Get('rooms')

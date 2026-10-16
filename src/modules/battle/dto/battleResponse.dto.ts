@@ -21,6 +21,11 @@ export class DeleteAllBattlesResponseDto {
   count!: number;
 }
 
+export class CancelBattleResponseDto {
+  @ApiProperty()
+  id!: string;
+}
+
 export class BattleRoomPlayerDto {
   @ApiProperty()
   id!: string;
