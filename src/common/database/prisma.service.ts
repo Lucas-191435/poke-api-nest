@@ -21,6 +21,9 @@ export class PrismaService
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
       connectionLimit: 5,
+      // MySQL 8 (caching_sha2_password) sem SSL precisa buscar a chave RSA do servidor
+      // quando o cache de autenticação está vazio (ex.: logo após o MySQL reiniciar)
+      allowPublicKeyRetrieval: true,
     });
     super({
       adapter,
